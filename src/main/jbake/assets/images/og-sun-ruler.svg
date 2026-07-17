@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" font-family="Inter, system-ui, sans-serif">
+  <rect width="1200" height="630" fill="#064e3b"/>
+  <text x="600" y="200" text-anchor="middle" fill="#d1fae5" font-size="56" font-weight="800" letter-spacing="-1">Can I pray now?</text>
+  <text x="600" y="288" text-anchor="middle" fill="#d1fae5" font-size="150" font-weight="800" letter-spacing="-6">YES</text>
+  <rect x="100" y="420" width="1000" height="22" rx="10" fill="#10b981" opacity="0.5"/>
+  <rect x="100" y="420" width="90" height="22" rx="8" fill="#f59e0b" opacity="0.6"/>
+  <rect x="190" y="420" width="60" height="22" rx="8" fill="#ef4444" opacity="0.85"/>
+  <rect x="560" y="420" width="34" height="22" rx="8" fill="#ef4444" opacity="0.85"/>
+  <rect x="940" y="420" width="60" height="22" rx="8" fill="#f59e0b" opacity="0.6"/>
+  <rect x="1000" y="420" width="60" height="22" rx="8" fill="#ef4444" opacity="0.85"/>
+  <circle cx="760" cy="431" r="16" fill="none" stroke="#10b981" stroke-width="6"/>
+  <circle cx="760" cy="431" r="8" fill="#ffffff"/>
+  <text x="600" y="540" text-anchor="middle" fill="#94e2c5" font-size="30">Live prohibited-time verdict · by madhhab and prayer type · canipraynow.com</text>
+</svg>

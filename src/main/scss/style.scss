@@ -1,0 +1,1363 @@
+/*
+ * Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+ *
+ * canipraynow.com design system (spec §5). Calm, precise, premium.
+ * The coloured verdict states ARE the theme: the whole canvas answers.
+ * Dark always; WCAG AA on all text; motion respects reduced-motion.
+ *
+ * Token policy (same as asymm-corporate): nothing below the token block
+ * hardcodes a colour, a font size, or a spacing value. If a component needs
+ * a new value, add a token - do not reach for a bespoke number.
+ *
+ * @author Fahim Farook
+ */
+
+:root {
+    /* ============================================================
+       Palette - raw values. Never referenced by components directly;
+       the semantic layer below is what components consume.
+       ============================================================ */
+    /* Four verdict grounds, deliberately four DISTINCT hues so CAUTION and YES*
+       can never be confused (the old amber #78350f and orange #7c2d12 were ~15°
+       apart - indistinguishable). Progression: emerald -> crimson -> gold ->
+       terracotta. Each fg is the light tint of its own hue (AA on the ground). */
+    --color-emerald-900: #0b6e50;   /* PERMITTED canvas - vivid emerald */
+    --color-emerald-100: #d1fae5;
+    --color-red-900:     #9b1c3d;   /* PROHIBITED canvas - clear wine-crimson */
+    --color-red-100:     #ffdfe4;
+    --color-amber-900:   #7d6007;   /* DISLIKED canvas - bright gold, clearly yellow */
+    --color-amber-100:   #fff0b8;
+    --color-orange-900:  #b1440f;   /* PERMITTED_WITH_WARNING - clear terracotta-orange */
+    --color-orange-100:  #ffe4c4;
+
+    --color-slate-950:   #0b1220;   /* page surface (neutral / content pages) */
+    --color-slate-900:   #111827;   /* cards, drawer */
+    --color-slate-300:   #cbd5e1;   /* prose on dark */
+    --color-slate-200:   #e2e8f0;   /* default fg on neutral */
+    --color-slate-400:   #94a3b8;   /* muted */
+    --color-white:       #ffffff;
+
+    --color-ring-red:    #ef4444;   /* strict windows on the ruler */
+    --color-ring-amber:  #f59e0b;   /* extended windows */
+    --color-ring-green:  #10b981;   /* clear time */
+    --color-ruler-other: #475569;   /* timeline "other slot" (X): muted slate */
+
+    /* Ink for text sitting ON a ring colour (methodology badges) - each is the
+       darkest shade of its own hue, so the badge reads as one material. */
+    --color-ink-on-green: #04241a;
+    --color-ink-on-red:   #2b0707;
+    --color-ink-on-amber: #2b1803;
+
+    /* ============================================================
+       Semantic tokens - what components actually use.
+       --state-* are retargeted per verdict by the body classes below;
+       that single indirection is what makes the canvas "answer".
+       ============================================================ */
+    --permitted-bg: var(--color-emerald-900);
+    --permitted-fg: var(--color-emerald-100);
+    --prohibited-bg: var(--color-red-900);
+    --prohibited-fg: var(--color-red-100);
+    --disliked-bg: var(--color-amber-900);
+    --disliked-fg: var(--color-amber-100);
+    --warning-bg: var(--color-orange-900);
+    --warning-fg: var(--color-orange-100);
+
+    --surface: var(--color-slate-950);
+    --surface-card: var(--color-slate-900);
+    --surface-sidebar: rgba(0, 0, 0, 0.22);
+    --surface-sunken: rgba(0, 0, 0, 0.3);
+    --surface-raised: rgba(255, 255, 255, 0.06);
+    --surface-raised-strong: rgba(255, 255, 255, 0.92);
+
+    --text-primary: var(--color-slate-200);
+    --text-prose: var(--color-slate-300);
+    --text-muted: var(--color-slate-400);
+    --text-on-light: var(--color-slate-950);
+
+    --border-subtle: rgba(255, 255, 255, 0.12);
+    --border-control: rgba(255, 255, 255, 0.22);
+    --border-control-hover: rgba(255, 255, 255, 0.6);
+
+    --ring-red: var(--color-ring-red);
+    --ring-amber: var(--color-ring-amber);
+    --ring-green: var(--color-ring-green);
+    --ruler-other: var(--color-ruler-other);
+
+    /* Active verdict state - default neutral, overridden by body.state-* */
+    --state-bg: var(--surface);
+    --state-fg: var(--text-primary);
+    --state-ring: var(--ring-green);
+
+    /* ============================================================
+       Typography tokens - naming: --t-<property>-<specific>
+       ============================================================ */
+    --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-arabic: 'Scheherazade New', 'Amiri', 'Noto Naskh Arabic', 'Traditional Arabic', serif;
+
+    /* Sizes */
+    --t-size-answer:     clamp(4rem, 22vw, 11rem);      /* the Big Answer */
+    --t-size-display-l:  clamp(1.9rem, 5vw, 2.8rem);    /* page h1 */
+    --t-size-display-m:  1.35rem;                       /* section h2 */
+    --t-size-display-s:  1.05rem;                       /* h3 */
+    --t-size-reason:     clamp(1.05rem, 2.4vw, 1.35rem);
+    --t-size-body:       1rem;
+    --t-size-ui:         0.95rem;
+    --t-size-caption:    0.85rem;
+    --t-size-kicker:     0.78rem;
+    --t-size-micro:      0.72rem;
+    --t-size-ayah:       clamp(1rem, 2.4vw, 1.35rem);
+    --t-size-ruler-label: 11px;   /* SVG user units, not rem - viewBox scaled */
+    --t-size-ruler-now:  13px;
+
+    /* Line-heights */
+    --t-lh-answer:  0.95;
+    --t-lh-tight:   1.1;
+    --t-lh-snug:    1.25;
+    --t-lh-body:    1.55;
+    --t-lh-relaxed: 1.7;
+    --t-lh-ayah:    2;
+
+    /* Letter-spacings */
+    --t-ls-answer:  -0.045em;
+    --t-ls-display: -0.03em;
+    --t-ls-kicker:   0.18em;
+    --t-ls-caps:     0.22em;
+
+    /* Weights */
+    --t-weight-regular: 400;
+    --t-weight-medium:  600;
+    --t-weight-bold:    800;
+
+    /* ============================================================
+       Spacing tokens
+       ============================================================ */
+    --space-2xs: 0.25rem;
+    --space-xs:  0.5rem;
+    --space-sm:  0.75rem;
+    --space-md:  1rem;
+    --space-lg:  1.5rem;
+    --space-xl:  2rem;
+    --space-2xl: 3rem;
+
+    /* ============================================================
+       Layout, radius, motion
+       ============================================================ */
+    --layout-canvas-split: 70%;
+    --layout-sidebar-split: 30%;
+    --layout-prose-width: 46rem;
+    --layout-ruler-width: 62rem;
+    --layout-reason-width: 52ch;   /* wide enough that one-line reasons stay on one line */
+    --layout-drawer-width: min(24rem, 100vw);
+    --layout-breakpoint-md: 768px;
+
+    /* Ad slot: height reserved up-front so a late unit cannot shift layout
+       (spec §9: CLS < 0.02). Change here, not in the component. */
+    --ad-slot-height: 250px;
+    --ad-slot-height-mobile: 100px;
+
+    --radius-sm: 0.4rem;
+    --radius-md: 0.6rem;
+    --radius-lg: 0.9rem;
+    --radius-pill: 999px;
+
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --transition-state: 600ms ease;       /* canvas colour change */
+    --transition-control: 200ms var(--ease-out);
+    --transition-drawer: 350ms var(--ease-out);
+}
+
+@font-face {
+    font-family: 'Inter Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+    src: url('/fonts/inter-latin-wght-normal.woff2') format('woff2-variations');
+}
+
+/* ---------------------------------------------------------------- reset */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+    margin: 0;
+    min-height: 100dvh;
+    font-family: var(--font-sans);
+    font-size: var(--t-size-body);
+    line-height: var(--t-lh-body);
+    background: var(--state-bg);
+    color: var(--state-fg);
+    transition: background-color var(--transition-state), color var(--transition-state);
+    -webkit-font-smoothing: antialiased;
+}
+
+img, svg { max-width: 100%; display: block; }
+button { font: inherit; cursor: pointer; }
+input, select { font: inherit; }
+a { color: inherit; }
+
+/* ---------------------------------------------------------------- states */
+
+body.state-permitted  { --state-bg: var(--permitted-bg); --state-fg: var(--permitted-fg); --state-ring: var(--ring-green); }
+body.state-prohibited { --state-bg: var(--prohibited-bg); --state-fg: var(--prohibited-fg); --state-ring: var(--ring-red); }
+body.state-disliked   { --state-bg: var(--disliked-bg); --state-fg: var(--disliked-fg); --state-ring: var(--ring-amber); }
+body.state-warning    { --state-bg: var(--warning-bg); --state-fg: var(--warning-fg); --state-ring: var(--ring-amber); }
+body.state-neutral,
+body.state-degraded   { --state-bg: var(--surface); --state-fg: var(--text-primary); --state-ring: var(--ring-amber); }
+
+/* ---------------------------------------------------------------- banner */
+
+.preview-banner {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    padding: var(--space-2xs) var(--space-md);
+    text-align: center;
+    font-size: var(--t-size-micro);
+    font-weight: var(--t-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--ring-amber);
+    color: var(--text-on-light);
+}
+
+/* ---------------------------------------------------------------- layout */
+
+.app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+}
+
+.canvas {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xl);   /* the answer, the chips and the ruler each need air */
+    padding: var(--space-xl) var(--space-md);
+    text-align: center;
+}
+
+.sidebar {
+    padding: 0 var(--space-md) var(--space-2xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    width: 100%;
+    max-width: 30rem;
+    margin: 0 auto;
+}
+
+@media (min-width: 769px) {
+    .app-shell { flex-direction: row; }
+
+    .canvas {
+        flex: 0 0 var(--layout-canvas-split);
+        min-height: 100dvh;
+        padding: var(--space-2xl);
+    }
+
+    .sidebar {
+        flex: 0 0 var(--layout-sidebar-split);
+        max-width: none;
+        margin: 0;
+        padding: var(--space-2xl) var(--space-xl);
+        background: var(--surface-sidebar);
+        justify-content: center;
+    }
+}
+
+/* ---------------------------------------------------------------- ayah */
+
+/* Lives in the side pane: it frames the tool without competing with the
+   answer. Separated from the widgets below by a rule, not just space. */
+.ayah {
+    margin: 0 0 var(--space-xs);
+    padding: 0 0 var(--space-lg);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    opacity: 0.8;
+}
+
+.ayah-ar {
+    margin: 0;
+    font-family: var(--font-arabic);
+    font-size: var(--t-size-ayah);
+    line-height: var(--t-lh-ayah);
+    font-weight: var(--t-weight-regular);
+    text-align: right;
+}
+
+.ayah-en {
+    font-size: var(--t-size-micro);
+    line-height: var(--t-lh-body);
+    opacity: 0.7;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    /* Aligned with the Arabic it translates, which is right-set. */
+    text-align: right;
+
+    cite { font-style: normal; opacity: 0.8; }
+}
+
+/* ---------------------------------------------------------------- status */
+
+.status-kicker {
+    margin: 0;
+    font-size: var(--t-size-caption);
+    font-weight: var(--t-weight-medium);
+    letter-spacing: var(--t-ls-caps);
+    text-transform: uppercase;
+    opacity: 0.72;
+}
+
+/* The four lines of the verdict need air between them, and a clear hierarchy:
+   ANSWER (huge) > reason (readable sentence) > prayer time + countdown (meta).
+   Without an explicit gap the <p>s stack margin-0 against each other, which is
+   what made the block read as one grey mass. */
+.status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    max-width: 100%;
+}
+
+.answer {
+    margin: 0 0 var(--space-2xs);
+    font-size: var(--t-size-answer);
+    font-weight: var(--t-weight-bold);
+    letter-spacing: var(--t-ls-answer);
+    line-height: var(--t-lh-answer);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Wide enough that a one-sentence reason stays on ONE line at desktop widths;
+   `pretty` only prevents orphans, unlike `balance` which deliberately splits
+   a line in two to even them out. */
+.reason {
+    margin: 0;
+    max-width: var(--layout-reason-width);
+    font-size: var(--t-size-reason);
+    font-weight: var(--t-weight-regular);
+    line-height: var(--t-lh-snug);
+    opacity: 0.92;
+    text-wrap: pretty;
+}
+
+.status-notes {
+    margin: 0;
+    max-width: 46ch;
+    font-size: var(--t-size-caption);
+    opacity: 0.75;
+}
+
+.countdown {
+    margin: var(--space-2xs) 0 0;
+    font-size: var(--t-size-caption);
+    opacity: 0.75;
+
+    strong {
+        font-variant-numeric: tabular-nums;
+        font-weight: var(--t-weight-medium);
+        font-size: 1.15em;
+    }
+}
+
+.fard-note {
+    margin: 0;
+    font-size: var(--t-size-caption);
+    opacity: 0.6;
+}
+
+.grace-pulse { animation: grace 2s ease-in-out infinite; }
+
+@keyframes grace {
+    0%, 100% { opacity: 0.92; }
+    50% { opacity: 0.55; }
+}
+
+/* A control, not a caption: clicking it opens the city picker. */
+/* ---------------------------------------------------------------- location slot */
+
+/* The city is a control. Collapsed it is a pill (the chip); tapping it swaps
+   IN PLACE to an inline search - no full-screen overlay. One system used on the
+   canvas, the sidebar, and in the settings drawer. */
+.location-slot {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 22rem;
+    width: 100%;
+    margin: 0 auto;
+    text-align: left;
+}
+
+/* The chip carries a visible border always, so it reads as a control at rest;
+   the "Change" hint only appears on hover/focus. Its width is the slot width,
+   so when it is swapped for the input the input sits in exactly the same box -
+   the chip appears to BECOME the search field, not spawn a panel over it. */
+.location-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    width: 100%;
+    padding: var(--space-xs) var(--space-md);
+    border: 1px solid var(--border-control);
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.05);
+    color: inherit;
+    font-size: var(--t-size-caption);
+    font-weight: var(--t-weight-medium);
+    letter-spacing: 0.04em;
+    transition: border-color var(--transition-control), background-color var(--transition-control);
+
+    .pin { width: 1em; height: 1em; opacity: 0.8; flex: 0 0 auto; }
+    &[hidden] { display: none; }
+    &:hover { border-color: var(--border-control-hover); background: rgba(255, 255, 255, 0.08); }
+    &:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
+    .location-name { flex: 1 1 auto; }
+}
+
+/* "Change" hint, revealed on hover/focus so the chip reads as tappable. */
+.location-change {
+    margin-left: auto;
+    font-size: var(--t-size-micro);
+    font-weight: var(--t-weight-regular);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity var(--transition-control);
+}
+.location-chip:hover .location-change,
+.location-chip:focus-visible .location-change { opacity: 0.6; }
+
+/* The search sits IN FLOW where the chip was (relative anchor for the dropdown).
+   The input is the same pill as the chip, in the same spot - so opening the
+   search transforms the chip in place rather than floating a box over it. */
+.location-search {
+    position: relative;
+    display: block;
+
+    &[hidden] { display: none; }
+
+    input {
+        width: 100%;
+        padding: var(--space-xs) var(--space-md);
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--border-control-hover);
+        background: rgba(255, 255, 255, 0.08);
+        color: inherit;
+        font-size: var(--t-size-caption);
+
+        &::placeholder { color: currentColor; opacity: 0.5; }
+        &:focus-visible { outline: none; border-color: currentColor; }
+    }
+}
+
+/* Only the RESULTS + detect drop below the input as a small frosted panel, so
+   nothing shoves the answer down the page. Frosted so it reads over any verdict
+   colour. In the drawer it flows inline (overridden below). */
+.location-dropdown {
+    position: absolute;
+    top: calc(100% + var(--space-2xs));
+    left: 0;
+    right: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding: var(--space-xs);
+    border-radius: var(--radius-md);
+    background: rgba(8, 13, 22, 0.62);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+    color: var(--color-white);
+
+    /* Empty until the user types or needs the detect button: keep it tidy. */
+    &:has(.city-results:empty) { gap: 0; }
+}
+
+.location-slot-sidebar { align-items: flex-start; margin: 0; }
+.location-slot-sidebar .location-chip {
+    font-size: var(--t-size-display-s);
+    letter-spacing: var(--t-ls-display);
+}
+
+/* In the settings drawer the dropdown flows inline (the drawer scrolls) rather
+   than floating - no need to avoid pushing content there. */
+.location-slot-drawer .location-dropdown {
+    position: static;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 0;
+    box-shadow: none;
+    padding: var(--space-xs) 0 0;
+    color: inherit;
+}
+
+.city-results {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 15rem;
+    overflow-y: auto;
+
+    &:empty { display: none; }
+
+    button {
+        width: 100%;
+        text-align: left;
+        padding: var(--space-xs) var(--space-sm);
+        border: 0;
+        border-radius: var(--radius-sm);
+        background: transparent;
+        color: inherit;
+        font-size: var(--t-size-caption);
+
+        span { opacity: 0.55; margin-left: var(--space-2xs); }
+        &:hover, &:focus-visible { background: rgba(255, 255, 255, 0.12); }
+    }
+}
+
+.location-detect {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: inherit;
+
+    &:hover { border-color: rgba(255, 255, 255, 0.6); }
+}
+.location-slot-drawer .location-detect {
+    border-color: var(--border-control);
+    &:hover { border-color: var(--border-control-hover); }
+}
+
+/* Which obligatory prayer's time this actually is. A quiet pill under the
+   answer: the big YES/NO is about the selected prayer type, this is the clock.
+   Given its own shape so it reads as a separate fact, not a subtitle. */
+/* Filled with the verdict ring colour - the SAME colour Y the timeline paints
+   the current slot, so the pill and "you are here" on the ruler read as one. */
+.now-prayer {
+    margin: 0;
+    padding: var(--space-2xs) var(--space-sm);
+    border: 1px solid var(--state-ring);
+    background: color-mix(in srgb, var(--state-ring) 22%, transparent);
+    border-radius: var(--radius-pill);
+    font-size: var(--t-size-micro);
+    font-weight: var(--t-weight-medium);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+
+    &:empty { display: none; }
+}
+
+/* ---------------------------------------------------------------- chips */
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xs);
+}
+
+.chip {
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-control);
+    background: transparent;
+    color: inherit;
+    font-size: var(--t-size-caption);
+    font-weight: var(--t-weight-medium);
+    transition: background-color var(--transition-control),
+                border-color var(--transition-control),
+                transform 150ms var(--ease-out);
+
+    &:hover { border-color: var(--border-control-hover); }
+    &:active { transform: scale(0.97); }
+    &:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+}
+
+.chip-active {
+    background: var(--surface-raised-strong);
+    border-color: transparent;
+    color: var(--text-on-light);
+}
+
+/* ---------------------------------------------------------------- ruler */
+
+.ruler {
+    margin: 0;
+    width: 100%;
+    max-width: var(--layout-ruler-width);
+    position: relative;   /* tooltip anchor */
+}
+
+.sun-ruler { width: 100%; height: auto; overflow: visible; }
+
+.ruler-night { fill: rgba(255, 255, 255, 0.12); }
+
+/* The current slot (colour Y = the verdict colour, matching the now-prayer
+   pill). A thin bright edge separates it from the red/other fills beneath. */
+.ruler-current {
+    stroke: var(--color-white);
+    stroke-width: 0.75;
+    stroke-opacity: 0.5;
+}
+
+.ruler-tick {
+    stroke: rgba(255, 255, 255, 0.65);
+    stroke-width: 1;
+}
+
+.ruler-tick-minor {
+    stroke: rgba(255, 255, 255, 0.35);
+    stroke-dasharray: 2 2;
+}
+
+.ruler-label {
+    font-size: var(--t-size-ruler-label);
+    font-weight: var(--t-weight-medium);
+    fill: currentColor;
+    opacity: 0.85;
+}
+
+.ruler-label-minor {
+    font-weight: var(--t-weight-regular);
+    opacity: 0.55;
+}
+
+.ruler-label-night {
+    font-weight: var(--t-weight-regular);
+    opacity: 0.45;
+}
+
+.ruler-now {
+    font-size: var(--t-size-ruler-now);
+    font-weight: var(--t-weight-medium);
+    fill: currentColor;
+    font-variant-numeric: tabular-nums;
+}
+
+/* The now-marker: a tall hairline with a small arrowhead pointing at the
+   track. A filled dot would cover the very zone the user is asking about.
+   pointer-events:none - it sits over the hover layer and moves every second,
+   so without this it would steal hover from the segment underneath it. */
+.cursor-line,
+.cursor-arrow,
+.ruler-now {
+    pointer-events: none;
+}
+
+.cursor-line {
+    stroke: var(--color-white);
+    stroke-width: 1.5;
+    opacity: 0.9;
+}
+
+.cursor-arrow {
+    fill: var(--color-white);
+    stroke: var(--state-ring);
+    stroke-width: 1;
+    animation: cursor-pulse 2s ease-in-out infinite;
+}
+
+@keyframes cursor-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+}
+
+/* Invisible hover/focus targets covering the whole track (one per segment).
+   No `cursor: help` - the question-mark cursor is ugly and says nothing the
+   highlight does not already say. */
+.ruler-hit {
+    fill: transparent;
+
+    &:hover, &:focus-visible { fill: rgba(255, 255, 255, 0.14); }
+    &:focus-visible { outline: none; }
+}
+
+/* The unfamiliar terms (Ishrāq, Zenith, Isfirār) explain themselves on hover. */
+.ruler-label-tip {
+    cursor: pointer;
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+
+    &:hover, &:focus-visible { opacity: 1; }
+}
+
+.ruler-tip {
+    position: absolute;
+    bottom: 100%;
+    transform: translate(-50%, -0.4rem);
+    z-index: 20;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    font-size: var(--t-size-micro);
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+
+    &[hidden] { display: none; }
+}
+
+/* ---------------------------------------------------------------- sidebar widgets */
+
+
+.widget-title {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--t-size-kicker);
+    font-weight: var(--t-weight-medium);
+    letter-spacing: var(--t-ls-kicker);
+    text-transform: uppercase;
+    opacity: 0.65;
+}
+
+.prayer-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.prayer-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    border-left: 3px solid transparent;
+    font-size: var(--t-size-ui);
+}
+
+.prayer-active {
+    border-left-color: var(--state-ring);
+    background: var(--surface-raised);
+    font-weight: var(--t-weight-medium);
+}
+
+.prayer-name { flex: 0 0 auto; }
+
+.prayer-rel {
+    font-size: var(--t-size-micro);
+    opacity: 0.65;
+}
+
+.prayer-time {
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------- sponsor + ad slot */
+
+.sponsor-card {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-lg);
+    background: var(--surface-sunken);
+    border: 1px solid var(--border-subtle);
+    text-decoration: none;
+    min-height: 5rem;   /* reserved - zero CLS */
+    position: relative;
+
+    img { border-radius: var(--radius-sm); }
+}
+
+.sponsor-label {
+    position: absolute;
+    top: var(--space-2xs);
+    right: var(--space-xs);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.55;
+}
+
+.sponsor-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    font-size: var(--t-size-caption);
+
+    span { opacity: 0.75; }
+}
+
+/* Height is reserved even while empty, so filling it later shifts nothing. */
+.ad-slot {
+    min-height: var(--ad-slot-height-mobile);
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-lg);
+    border: 1px dashed var(--border-subtle);
+    overflow: hidden;
+
+    &[hidden] { display: none; }
+}
+
+@media (min-width: 769px) {
+    .ad-slot { min-height: var(--ad-slot-height); }
+}
+
+/* ---------------------------------------------------------------- settings */
+
+.settings-btn {
+    position: fixed;
+    right: var(--space-md);
+    bottom: var(--space-md);
+    z-index: 40;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 1px solid var(--border-control);
+    background: var(--surface-sunken);
+    color: inherit;
+    display: grid;
+    place-items: center;
+    backdrop-filter: blur(6px);
+    transition: transform var(--transition-control);
+
+    &:hover { transform: rotate(30deg); }
+    svg { width: 1.3rem; height: 1.3rem; }
+}
+
+.drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    width: var(--layout-drawer-width);
+    background: var(--surface-card);
+    color: var(--text-primary);
+    transform: translateX(102%);
+    transition: transform var(--transition-drawer);
+    overflow-y: auto;
+    box-shadow: -12px 0 40px rgba(0, 0, 0, 0.45);
+}
+
+.drawer-open { transform: translateX(0); }
+
+.drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-lg) var(--space-lg) var(--space-xs);
+
+    h2 { margin: 0; font-size: var(--t-size-display-s); }
+}
+
+.drawer-close {
+    background: none;
+    border: 0;
+    color: inherit;
+    font-size: var(--t-size-display-s);
+    opacity: 0.7;
+
+    &:hover { opacity: 1; }
+}
+
+.drawer-body { padding: var(--space-xs) var(--space-lg) var(--space-xl); }
+
+.setting {
+    margin: var(--space-lg) 0;
+
+    h3 {
+        margin: 0 0 var(--space-xs);
+        font-size: var(--t-size-kicker);
+        font-weight: var(--t-weight-medium);
+        letter-spacing: var(--t-ls-kicker);
+        text-transform: uppercase;
+        opacity: 0.65;
+    }
+
+    select, input[type='search'] {
+        width: 100%;
+        margin-top: var(--space-2xs);
+        padding: var(--space-xs) var(--space-sm);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-control);
+        background: var(--surface-raised);
+        color: inherit;
+    }
+}
+
+.setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+
+    label { font-size: var(--t-size-ui); }
+
+    input[type='checkbox'] {
+        width: 1.15rem;
+        height: 1.15rem;
+        accent-color: var(--ring-green);
+    }
+}
+
+.setting-current {
+    margin: 0 0 var(--space-xs);
+    font-weight: var(--t-weight-medium);
+}
+
+.setting-note {
+    font-size: var(--t-size-micro);
+    opacity: 0.6;
+    margin: var(--space-xs) 0 0;
+}
+
+/* An honest admission that we are showing another school's rulings. Amber,
+   because it is a caveat the reader must actually see - not fine print. */
+.setting-warn {
+    margin: var(--space-xs) 0 0;
+    padding: var(--space-xs) var(--space-sm);
+    border-left: 3px solid var(--ring-amber);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    background: rgba(245, 158, 11, 0.1);
+    font-size: var(--t-size-micro);
+    line-height: var(--t-lh-body);
+}
+
+.seg {
+    display: inline-flex;
+    border: 1px solid var(--border-control);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+/* Three options do not fit a row cleanly in the drawer; stack them. */
+.seg-stack {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .seg-btn { text-align: left; border-bottom: 1px solid var(--border-control); }
+    .seg-btn:last-child { border-bottom: 0; }
+}
+
+.seg-btn {
+    padding: var(--space-xs) var(--space-md);
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-weight: var(--t-weight-medium);
+    font-size: var(--t-size-caption);
+}
+
+.seg-active {
+    background: var(--surface-raised-strong);
+    color: var(--text-on-light);
+}
+
+.btn-primary, .btn-secondary {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-lg);
+    border-radius: var(--radius-md);
+    border: 0;
+    font-weight: var(--t-weight-medium);
+}
+
+.btn-primary {
+    background: var(--color-white);
+    color: var(--text-on-light);
+}
+
+.btn-secondary {
+    background: var(--surface-raised);
+    color: inherit;
+    border: 1px solid var(--border-control);
+    margin-bottom: var(--space-2xs);
+}
+
+.city-results {
+    list-style: none;
+    margin: var(--space-2xs) 0 0;
+    padding: 0;
+
+    button {
+        width: 100%;
+        text-align: left;
+        padding: var(--space-xs) var(--space-sm);
+        border: 0;
+        border-radius: var(--radius-sm);
+        background: transparent;
+        color: inherit;
+
+        span {
+            opacity: 0.55;
+            font-size: var(--t-size-caption);
+            margin-left: var(--space-2xs);
+        }
+
+        &:hover, &:focus-visible { background: var(--surface-raised); }
+    }
+}
+
+.drawer-footer {
+    margin-top: var(--space-xl);
+    font-size: var(--t-size-caption);
+
+    a { opacity: 0.8; }
+}
+
+
+
+/* ---------------------------------------------------------------- footer / toast */
+
+.app-footer {
+    padding: var(--space-md) var(--space-md) var(--space-lg);
+    text-align: center;
+    font-size: var(--t-size-micro);
+    opacity: 0.55;
+
+    a { text-decoration: underline; }
+}
+
+/* Hidden by opacity+visibility, not by a translate: an empty toast is only
+   ~16px tall, so translateY(200%) did not clear the fold - it peeked above
+   the viewport edge as a stray white pill and forced the page to scroll. */
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: var(--space-lg);
+    transform: translate(-50%, 1rem);
+    z-index: 70;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-md);
+    background: var(--text-primary);
+    color: var(--text-on-light);
+    font-size: var(--t-size-caption);
+    font-weight: var(--t-weight-medium);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 300ms var(--ease-out), opacity 300ms var(--ease-out), visibility 300ms;
+    pointer-events: none;
+}
+
+.toast-show {
+    transform: translate(-50%, 0);
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ---------------------------------------------------------------- content pages */
+
+.page {
+    background: var(--surface);
+    color: var(--text-primary);
+}
+
+.site-nav {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-lg) var(--space-md);
+    max-width: var(--layout-prose-width);
+    margin: 0 auto;
+
+    .brand {
+        font-weight: var(--t-weight-bold);
+        letter-spacing: var(--t-ls-display);
+        text-decoration: none;
+        font-size: var(--t-size-display-s);
+    }
+
+    a:not(.brand) {
+        font-size: var(--t-size-caption);
+        opacity: 0.7;
+
+        &:hover { opacity: 1; }
+    }
+}
+
+.page-wrap {
+    max-width: var(--layout-prose-width);
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md) var(--space-2xl);
+
+    h1 {
+        font-size: var(--t-size-display-l);
+        font-weight: var(--t-weight-bold);
+        letter-spacing: var(--t-ls-display);
+        line-height: var(--t-lh-tight);
+        margin: var(--space-xs) 0 var(--space-md);
+    }
+
+    h2 {
+        margin-top: var(--space-xl);
+        font-size: var(--t-size-display-m);
+        letter-spacing: var(--t-ls-display);
+    }
+
+    h3 {
+        margin-top: var(--space-lg);
+        font-size: var(--t-size-display-s);
+    }
+
+    p, li {
+        color: var(--text-prose);
+        line-height: var(--t-lh-relaxed);
+    }
+
+    strong { color: var(--text-primary); }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: var(--t-size-caption);
+        margin: var(--space-md) 0;
+    }
+
+    th, td {
+        text-align: left;
+        padding: var(--space-xs) var(--space-sm);
+        border-bottom: 1px solid var(--border-subtle);
+        vertical-align: top;
+    }
+
+    th { font-weight: var(--t-weight-medium); opacity: 0.85; }
+
+    code {
+        background: var(--surface-raised);
+        border-radius: var(--radius-sm);
+        padding: 0.1rem 0.35rem;
+        font-size: 0.85em;
+    }
+
+    .table-scroll { overflow-x: auto; }
+}
+
+.kicker {
+    font-size: var(--t-size-kicker);
+    font-weight: var(--t-weight-medium);
+    letter-spacing: var(--t-ls-kicker);
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+
+.widget-cta {
+    display: block;
+    margin: var(--space-xl) 0;
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    background: var(--permitted-bg);
+    color: var(--permitted-fg);
+    text-decoration: none;
+    font-weight: var(--t-weight-medium);
+    border: 1px solid var(--border-subtle);
+    transition: transform var(--transition-control);
+
+    &:hover { transform: translateY(-2px); }
+
+    span {
+        display: block;
+        font-weight: var(--t-weight-regular);
+        font-size: var(--t-size-caption);
+        opacity: 0.8;
+        margin-top: var(--space-2xs);
+    }
+}
+
+.verdict-badge {
+    display: inline-block;
+    padding: 0.1rem 0.55rem;
+    border-radius: var(--radius-pill);
+    font-size: var(--t-size-micro);
+    font-weight: var(--t-weight-bold);
+    letter-spacing: 0.06em;
+}
+
+.badge-permitted { background: var(--ring-green); color: var(--color-ink-on-green); }
+.badge-prohibited { background: var(--ring-red); color: var(--color-ink-on-red); }
+.badge-disliked { background: var(--ring-amber); color: var(--color-ink-on-amber); }
+
+/* ---------------------------------------------------------------- city pages */
+
+/* Pulls the live answer to the middle of the screen from the SEO article
+   above it, without auto-scrolling the reader anywhere unasked. */
+.jump-to-answer {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin: var(--space-md) 0 var(--space-lg);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-control);
+    background: var(--surface-raised);
+    font-size: var(--t-size-caption);
+    font-weight: var(--t-weight-medium);
+    text-decoration: none;
+    transition: border-color var(--transition-control), transform var(--transition-control);
+
+    svg { width: 1em; height: 1em; }
+
+    &:hover { border-color: var(--border-control-hover); transform: translateY(1px); }
+}
+
+#answer-canvas { scroll-margin-top: var(--space-md); }
+
+.nearby {
+    list-style: none;
+    margin: var(--space-sm) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2xs);
+
+    li {
+        display: flex;
+        align-items: baseline;
+        gap: var(--space-xs);
+        font-size: var(--t-size-ui);
+    }
+
+    span {
+        margin-left: auto;
+        font-size: var(--t-size-micro);
+        opacity: 0.5;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+/* City index: a directory, so it is laid out as columns to scan, not a wall
+   of links. Country headings stick so you always know where you are. */
+.city-index {
+    list-style: none;
+    margin: 0 0 var(--space-lg);
+    padding: 0;
+    columns: 3 16rem;
+    column-gap: var(--space-lg);
+
+    li { break-inside: avoid; margin-bottom: var(--space-2xs); }
+
+    a {
+        display: block;
+        padding: var(--space-2xs) var(--space-xs);
+        border-radius: var(--radius-sm);
+        font-size: var(--t-size-ui);
+        text-decoration: none;
+        color: var(--text-prose);
+
+        &:hover { background: var(--surface-raised); color: var(--text-primary); }
+    }
+}
+
+/* Question index: ten entries, each a question plus its own answer teaser, so
+   it stays one column and reuses the .city-index link treatment rather than
+   its 3-column directory layout. */
+.q-index {
+    list-style: none;
+    margin: 0 0 var(--space-lg);
+    padding: 0;
+    display: grid;
+    gap: var(--space-2xs);
+
+    a {
+        display: block;
+        padding: var(--space-xs);
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        color: var(--text-prose);
+
+        &:hover { background: var(--surface-raised); }
+    }
+
+    strong {
+        display: block;
+        font-size: var(--t-size-ui);
+        color: var(--text-primary);
+    }
+
+    span {
+        display: block;
+        margin-top: var(--space-2xs);
+        font-size: var(--t-size-caption);
+        line-height: var(--t-lh-relaxed);
+        opacity: 0.7;
+    }
+}
+
+.page-wrap h2.country-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    margin-top: var(--space-xl);
+    padding: var(--space-xs) 0;
+    background: var(--surface);
+    font-size: var(--t-size-display-s);
+    letter-spacing: var(--t-ls-kicker);
+    text-transform: uppercase;
+    opacity: 0.7;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Filter box on the city index: a directory of 110 needs a way in. */
+.city-filter {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    padding: var(--space-sm) 0;
+    background: var(--surface);
+
+    input {
+        width: 100%;
+        padding: var(--space-sm) var(--space-md);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-control);
+        background: var(--surface-raised);
+        color: inherit;
+        font-size: var(--t-size-ui);
+    }
+}
+
+.city-empty {
+    padding: var(--space-lg) 0;
+    opacity: 0.6;
+    font-size: var(--t-size-ui);
+}
+
+/* ---------------------------------------------------------------- settings: city control */
+
+/* The city IS the control: collapsed it shows where you are, clicking it
+   turns it back into a search field. */
+
+
+
+/* ---------------------------------------------------------------- a11y / motion */
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+:focus-visible { outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

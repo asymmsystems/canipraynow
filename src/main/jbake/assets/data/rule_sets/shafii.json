@@ -1,0 +1,52 @@
+{
+  "id": "shafii",
+  "label": "Shāfiʿī",
+  "version": "shafii-0.1.0-draft",
+  "verified_by": null,
+  "verified_at": null,
+  "params": {
+    "P_sunrise": { "value": 20, "unit": "minutes", "range": [12, 20], "basis": "Until the sun has risen a spear's length; conventional interval, scholar to set final value.", "verified_by": null, "verified_at": null },
+    "P_zenith": { "value": 10, "unit": "minutes", "range": [5, 15], "basis": "Istiwāʾ window before zawāl; scholar to set final value.", "verified_by": null, "verified_at": null },
+    "P_isfirar": { "value": 20, "unit": "minutes", "range": [20, 40], "basis": "Shāfiʿī prohibition strictly attaches to the setting itself; window parameter kept for display symmetry, scholar to confirm.", "verified_by": null, "verified_at": null },
+    "anchor_convention": { "value": "prayer-time-entry", "basis": "Shāfiʿī basis is after performing Fajr/Asr; anchored conservatively to prayer-time entry. Scholar to confirm.", "verified_by": null, "verified_at": null }
+  },
+  "asrShadowFactor": 1,
+  "exceptions": ["FRIDAY_ZENITH", "MAKKAH_HARAM"],
+  "matrix": {
+    "AFTER_FAJR": {
+      "fardCurrent": { "status": "PERMITTED", "basis": "Obligatory prayer is never barred by the prohibited times." },
+      "qada": { "status": "PERMITTED", "basis": "Prayers with a cause (dhāt sabab) are valid in the prohibited times; qaḍāʾ has a prior cause." },
+      "janazah": { "status": "PERMITTED", "basis": "Janāzah has a present cause; valid in the prohibited times." },
+      "causalNafl": { "status": "PERMITTED", "basis": "Nafl with a cause (taḥiyyat al-masjid, sunnah of wuḍūʾ) is valid in the prohibited times." },
+      "pureNafl": { "status": "PROHIBITED", "invalid": true, "basis": "Pure nafl with no cause is invalid in the prohibited times." }
+    },
+    "SUNRISE": {
+      "fardCurrent": { "status": "PROHIBITED", "notes": ["FAJR_EXPIRED"], "basis": "Fajr's time ends at sunrise; it is made up as qaḍāʾ. Never rendered as a bare NO (spec §3.6)." },
+      "qada": { "status": "PERMITTED", "basis": "Prayers with a prior cause are valid in the prohibited times." },
+      "janazah": { "status": "PERMITTED", "basis": "Janāzah has a present cause; valid in the prohibited times." },
+      "causalNafl": { "status": "PERMITTED", "basis": "Nafl with a cause is valid in the prohibited times." },
+      "pureNafl": { "status": "PROHIBITED", "invalid": true, "basis": "Pure nafl is invalid in the prohibited times." }
+    },
+    "ZENITH": {
+      "fardCurrent": { "status": "PERMITTED", "unreachable": true, "basis": "No obligatory prayer's window naturally falls at istiwāʾ; defined defensively as PERMITTED." },
+      "qada": { "status": "PERMITTED", "basis": "Prayers with a prior cause are valid in the prohibited times." },
+      "janazah": { "status": "PERMITTED", "basis": "Janāzah has a present cause; valid in the prohibited times." },
+      "causalNafl": { "status": "PERMITTED", "basis": "Nafl with a cause is valid in the prohibited times." },
+      "pureNafl": { "status": "PROHIBITED", "invalid": true, "basis": "Pure nafl is invalid in the prohibited times." }
+    },
+    "AFTER_ASR": {
+      "fardCurrent": { "status": "PERMITTED", "basis": "Obligatory prayer is never barred by the prohibited times." },
+      "qada": { "status": "PERMITTED", "basis": "Prayers with a prior cause are valid in the prohibited times." },
+      "janazah": { "status": "PERMITTED", "basis": "Janāzah has a present cause; valid in the prohibited times." },
+      "causalNafl": { "status": "PERMITTED", "basis": "Nafl with a cause is valid in the prohibited times." },
+      "pureNafl": { "status": "PROHIBITED", "invalid": true, "basis": "Pure nafl is invalid in the prohibited times." }
+    },
+    "SUNSET": {
+      "fardCurrent": { "status": "PERMITTED_WITH_WARNING", "notes": ["TODAYS_ASR"], "basis": "That day's unperformed Asr must still be prayed before Maghrib; valid, though the delay was sinful." },
+      "qada": { "status": "PERMITTED", "basis": "Prayers with a prior cause are valid in the prohibited times." },
+      "janazah": { "status": "PERMITTED", "basis": "Janāzah has a present cause; valid in the prohibited times." },
+      "causalNafl": { "status": "PERMITTED", "basis": "Nafl with a cause is valid in the prohibited times." },
+      "pureNafl": { "status": "PROHIBITED", "invalid": true, "basis": "Pure nafl is invalid in the prohibited times." }
+    }
+  }
+}

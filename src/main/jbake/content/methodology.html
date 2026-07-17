@@ -1,0 +1,98 @@
+title=Methodology
+seo_title=Methodology - How Can I Pray Now Computes the Prohibited Prayer Times
+description=The full rule matrix, boundary parameters, astronomical conventions, and verification status behind Can I Pray Now - the prohibited and disliked times for prayer (awqat al-nahy) by madhhab.
+type=page
+status=published
+~~~~~~
+<span class="kicker">The trust asset</span>
+<h1>Methodology</h1>
+
+<p><strong>Verification status: DRAFT.</strong> Every rule below is pending sign-off by a named scholar. Until a scholar's name and verification date appear on this page, the whole product displays a PREVIEW banner and should not be relied upon. That gate is enforced in the application code, not by policy alone.</p>
+
+<h2>What this tool answers</h2>
+<p>Standard prayer apps answer <em>when to pray</em>. This tool answers the inverse: whether the current moment falls inside one of the classically defined <strong>prohibited or disliked times for prayer (awqāt al-nahy)</strong> - and it conditions the answer on <strong>what</strong> you want to pray, because the ruling genuinely differs by that.</p>
+
+<h2>Ruling basis</h2>
+<p>The default is <strong>evidence-based</strong>: the ruling derived directly from the Qurʾān and Sunnah, issued as one ruling for everyone rather than by school. On the prohibited times this is the position of the ahl al-hadith - anchored to Ibn Taymiyyah, Ibn Bāz, Ibn ʿUthaymīn, and al-Albānī (via <a href="https://islamqa.info/en/answers/112114" rel="noopener">IslamQA</a>) - and it happens to coincide with the Shāfiʿī outcome on almost every cell. The core rule is simple: <strong>a prayer with a cause is allowed in every window</strong> (a due obligatory prayer, a missed prayer being made up, or any voluntary prayer with a reason such as the mosque greeting); <strong>only voluntary prayer with no cause is withheld</strong>, and the funeral prayer is best delayed a few minutes past the three sun-times unless there is need.</p>
+<p>Two schools ship as explicit alternatives for those who follow them, and choosing one also sets the Asr time: <strong>Ḥanafī</strong> (which additionally withholds making-up and causal prayers in the strict times, and uses the later Asr) and <strong>Shāfiʿī</strong>. Mālikī and Ḥanbalī matrices are not yet shipped; the evidence-based default serves everyone in the meantime.</p>
+
+<h2>The six states</h2>
+<div class="table-scroll">
+<table>
+<tr><th>Window</th><th>Start</th><th>End</th><th>Class</th></tr>
+<tr><td>Clear</td><td colspan="2">everything not covered below</td><td>permitted baseline</td></tr>
+<tr><td>After Fajr</td><td>Fajr time entry &#185;</td><td>sunrise</td><td>extended (nafl-restricted)</td></tr>
+<tr><td>Sunrise</td><td>sunrise</td><td>sunrise + P<sub>sunrise</sub> (default 20 min)</td><td>strict</td></tr>
+<tr><td>Zenith (istiwāʾ)</td><td>solar noon &#8722; P<sub>zenith</sub> (default 10 min)</td><td>Dhuhr time (zawāl passed) &#178;</td><td>strict</td></tr>
+<tr><td>After Asr</td><td>Asr time entry &#185;</td><td>start of isfirār</td><td>extended (nafl-restricted)</td></tr>
+<tr><td>Sunset (isfirār)</td><td>Maghrib &#8722; P<sub>isfirar</sub> (default 20 min) &#179;</td><td>Maghrib</td><td>strict</td></tr>
+</table>
+</div>
+<p>&#185; The scholarly basis is "after <em>performing</em> Fajr/Asr". The app cannot know whether you have prayed, so it anchors conservatively to the prayer-time entry. This convention is itself a scholar-reviewed parameter.<br>
+&#178; The zenith window is computed from <strong>astronomical solar noon</strong>, never from a mosque adhan or timetable - mosques delay adhans. It ends when zawāl has passed (the calculated Dhuhr time).<br>
+&#179; Different Ḥanafī timetables use different isfirār conventions (20-40 minutes); the value is data, not code, and will be set by the reviewing scholar.</p>
+
+<h2>Rule matrix - Evidence-based / default (draft)</h2>
+<div class="table-scroll">
+<table>
+<tr><th></th><th>Obligatory due</th><th>Missed (qaḍāʾ)</th><th>Funeral</th><th>With a cause</th><th>Voluntary (no cause)</th></tr>
+<tr><td><strong>After Fajr</strong></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span></td></tr>
+<tr><td><strong>Sunrise</strong></td><td>see &#8309;</td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-disliked">DISLIKED</span> &#8314;</td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span></td></tr>
+<tr><td><strong>Zenith</strong></td><td><span class="verdict-badge badge-permitted">PERMITTED</span> &#8311;</td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-disliked">DISLIKED</span> &#8314;</td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span></td></tr>
+<tr><td><strong>After Asr</strong></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span></td></tr>
+<tr><td><strong>Sunset</strong></td><td><span class="verdict-badge badge-permitted">YES, with warning</span> &#8312;</td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-disliked">DISLIKED</span> &#8314;</td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span></td></tr>
+</table>
+</div>
+<p>&#8314; The funeral prayer in the three sun-times (sunrise, zenith, sunset) is best delayed a few minutes; pray it there only if there is need (al-Albānī, <em>Aḥkām al-Janāʾiz</em>). The Uqbah ibn ʿĀmir hadith names burial in exactly these three moments. Everything else with a cause - the two rakʿahs of Fajr made up after it, a missed obligatory prayer, the mosque greeting, the prayer after wuḍūʾ, the ṭawāf prayer - is permitted throughout, and only causeless voluntary prayer is withheld.</p>
+
+<h2>Rule matrix - Ḥanafī (draft)</h2>
+<div class="table-scroll">
+<table>
+<tr><th></th><th>Today's fard</th><th>Missed (qaḍāʾ)</th><th>Funeral</th><th>Mosque greeting (causal nafl)</th><th>Voluntary (pure nafl)</th></tr>
+<tr><td><strong>After Fajr</strong></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span> &#8308;</td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span> &#8308;</td></tr>
+<tr><td><strong>Sunrise</strong></td><td>see &#8309;</td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span> (invalid)</td><td><span class="verdict-badge badge-disliked">DISLIKED</span> &#8310;</td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span></td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span></td></tr>
+<tr><td><strong>Zenith</strong></td><td><span class="verdict-badge badge-permitted">PERMITTED</span> &#8311;</td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span> (invalid)</td><td><span class="verdict-badge badge-disliked">DISLIKED</span> &#8310;</td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span></td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span></td></tr>
+<tr><td><strong>After Asr</strong></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span> &#8308;</td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span> &#8308;</td></tr>
+<tr><td><strong>Sunset</strong></td><td><span class="verdict-badge badge-permitted">YES, with warning</span> &#8312;</td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span> (invalid)</td><td><span class="verdict-badge badge-disliked">DISLIKED</span> &#8310;</td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span></td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span></td></tr>
+</table>
+</div>
+<p>&#8308; Ḥanafī fiqh classes this makrūh taḥrīmī (near-prohibited); the app renders it as "NO" with the makrūh-taḥrīmī note. The two rakʿahs of the Fajr sunnah are an explicit exception before Fajr is prayed.<br>
+&#8309; Fajr's time ends at sunrise. A user in the sunrise window who has not prayed Fajr is told to pray it as qaḍāʾ after the sun has fully risen - never shown a bare "NO".<br>
+&#8310; A funeral prayer in the strict windows is disliked if the funeral was ready beforehand, permitted if it became ready within the window.<br>
+&#8311; No obligatory prayer's window naturally falls at the zenith; the cell is defined defensively as permitted.<br>
+&#8312; That day's unperformed Asr <strong>must still be prayed</strong> before Maghrib: the delay was sinful, the prayer is valid and obligatory.</p>
+
+<h2>Rule matrix - Shāfiʿī (draft)</h2>
+<div class="table-scroll">
+<table>
+<tr><th></th><th>Today's fard</th><th>Missed (qaḍāʾ)</th><th>Funeral</th><th>Mosque greeting (causal nafl)</th><th>Voluntary (pure nafl)</th></tr>
+<tr><td><strong>All five windows</strong></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-permitted">PERMITTED</span></td><td><span class="verdict-badge badge-prohibited">PROHIBITED</span> (invalid)</td></tr>
+</table>
+</div>
+<p>In the Shāfiʿī school, prayers with a cause (qaḍāʾ, janāzah, taḥiyyat al-masjid, the sunnah of wuḍūʾ) are valid in the prohibited times; only pure voluntary prayer without a cause is barred. Two exceptions: <strong>Friday at the zenith</strong> carries no prohibition at all, and <strong>within the Makkan Ḥaram</strong> no time is prohibited. The Makkah setting is user-controlled and never assumed from GPS.</p>
+<p>Mālikī and Ḥanbalī matrices are planned; the data schema already carries slots for them.</p>
+
+<h2>Astronomy</h2>
+<ul>
+<li>Prayer times are computed client-side with <a href="https://github.com/batoulapps/adhan-js" rel="noopener">Adhan.js</a>, a high-precision, widely used astronomical library.</li>
+<li>Calculation methods offered: ACJU (Sri Lanka), Muslim World League, ISNA, Egyptian, Umm al-Qura, University of Karachi, Dubai, Kuwait, Qatar, Singapore, Moonsighting Committee, Turkey (Diyanet). The default is chosen by your country and can be changed in settings.</li>
+<li><strong>Your madhhab is also defaulted by country</strong> (Shāfiʿī in Sri Lanka, the Maldives and South-East Asia; Ḥanafī in Turkey, South and Central Asia). It sets the Asr shadow factor as well as the rule matrix, so the default matters: choosing the wrong school moves Asr by about an hour. Your explicit choice always overrides the default.</li>
+<li><strong>Agreement with national authorities.</strong> The prohibited windows depend on sunrise, solar zenith and sunset - astronomical events that calculation conventions do not change. Measured against the All Ceylon Jamiyyathul Ulama's official Colombo timetable, our sunrise matches exactly, our zenith to within one minute, and our sunset to within two. Only Fajr and Isha are convention-dependent (twilight angles); for Sri Lanka we follow the ACJU convention (Fajr 20&deg;, Isha 18&deg;), which reproduces their published times to within one minute. We compute these times ourselves and are not endorsed by any authority; where your local authority publishes a timetable, it is the reference.</li>
+<li>Your madhhab sets the Asr shadow factor as well as the rule matrix: Ḥanafī uses the double-shadow convention, Shāfiʿī the single shadow. Asr <em>time</em> itself moves with this setting.</li>
+<li>Solar noon for the zenith window is calculated from the solar transit (NOAA equation of time), never taken from a timetable.</li>
+<li>All times follow your device clock.</li>
+</ul>
+
+<h2>High latitudes</h2>
+<p>Above roughly 55&#176; latitude in summer the windows distort, and above the polar circles some events do not occur. When the astronomy cannot resolve an event for your date and location, the app says so honestly and shows no verdict - it never invents a window. Residents of such latitudes should follow local scholarly guidance.</p>
+
+<h2>Boundary behaviour</h2>
+<p>Within &#177;60 seconds of any boundary the app shows "starting now / ending now" instead of flickering between verdicts. The verdict itself changes exactly at the computed boundary.</p>
+
+<h2>Hard safety rule</h2>
+<p>A wrong "NO" that stops someone from praying an obligatory prayer is the worst failure this product can have. The engine therefore enforces, as an invariant: <strong>when you select "Today's fard" while that prayer's time is running, the answer is never a bare prohibition</strong> - it is either permitted, permitted-with-warning (the sunset Asr case), or the Fajr-expired guidance to pray qaḍāʾ after sunrise.</p>
+
+<h2>Verification &amp; versioning</h2>
+<p>Rule sets are versioned data files, not code: <code>hanafi-0.1.0-draft</code> and <code>shafii-0.1.0-draft</code>. Each rule cell and each boundary parameter carries its basis and a <code>verified_by</code>/<code>verified_at</code> field, currently empty. When a named scholar signs the matrix, this page will carry their name, the verification date, and the re-review cadence (proposed: annual, or on any parameter change), and only then does the PREVIEW banner come down.</p>
+
+<p><em>Operated by Asymm Systems (Pvt) Ltd. Scholars interested in reviewing the matrix: <a href="mailto:salam@canipraynow.com">salam@canipraynow.com</a>.</em></p>

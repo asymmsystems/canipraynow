@@ -1,0 +1,367 @@
+/*
+ * Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+ *
+ * Boot + render loop (spec §6): render shell instantly -> settings ->
+ * location -> day events -> 1000 ms tick against precomputed boundaries.
+ * Full re-render only on window/state change; countdown and cursor are the
+ * cheap per-second path.
+ *
+ * @author Fahim Farook
+ */
+
+import { computeDayEvents, currentPeriod, nextEvent } from './astronomy.js';
+import { computeWindows } from './engine/windows.js';
+import { computeVerdict, isVerified, ruleParams } from './engine/verdict.js';
+import { storage } from './storage.js';
+import { loadStrings, t } from './strings.js';
+import { renderStatus, renderDegraded, renderNeutral, renderCountdown } from './ui/status.js';
+import { renderChips } from './ui/chips.js';
+import { renderRuler, updateCursor, rulerSummary, rulerA11yList, bindRulerTooltip } from './ui/ruler.js';
+import { renderPrayers } from './ui/prayers.js';
+import { renderSponsor } from './ui/sponsor.js';
+import { initSettings, syncSettings, initLocationSlot, autoLocate } from './ui/settings.js';
+import { isFridayIn, distanceKm } from './utils.js';
+
+const state = {
+    location: null,      // {name, lat, lng, tz, cc}
+    method: null,        // resolved lazily from method-defaults.json by country
+    madhhab: 'hanafi',
+    clock24: false,
+    makkah: false,
+    prayerType: 'pureNafl',
+    ruleSets: {},        // hanafi/shafii parsed JSON
+    today: null,         // DayEvents
+    tomorrow: null,      // DayEvents (for the post-Isha green countdown)
+    degraded: false,
+    lastSig: null,
+    lastMinute: null,
+    deviceTz: Intl.DateTimeFormat().resolvedOptions().timeZone
+};
+
+/**
+ * Adopt a new location: set it and persist it. Nothing else - the method is a
+ * pure derivation of (methodChoice, country) recomputed on every recompute()
+ * via resolveDefaults(), so changing the city always re-derives the method and
+ * an unchosen one can never strand on the previous country (New York keeping
+ * Karachi). An explicit choice in state.methodChoice always wins.
+ */
+function adoptLocation(loc) {
+    state.location = loc;
+    storage.setLocation(loc);
+}
+
+boot();
+
+async function boot() {
+    const [, evidence, hanafi, shafii] = await Promise.all([
+        loadStrings('en'),
+        fetch('/data/rule_sets/evidence.json').then((r) => r.json()),
+        fetch('/data/rule_sets/hanafi.json').then((r) => r.json()),
+        fetch('/data/rule_sets/shafii.json').then((r) => r.json())
+    ]);
+    state.ruleSets = { evidence, hanafi, shafii };
+
+    state.madhhab = storage.getMadhhab();
+    state.clock24 = storage.getClock24();
+    state.makkah = storage.getMakkah();
+    state.prayerType = storage.getPrayerType();
+    // The user's explicit method choice (null until they pick one). state.method
+    // is DERIVED from this plus the country on every recompute - never stored,
+    // never stale.
+    state.methodChoice = storage.getMethodChoice();
+    state.location = storage.getLocation();
+
+    // City/question pages preset a location for visitors without one (spec §8);
+    // never persisted - it is the page's city, not necessarily the user's.
+    const ds = document.body.dataset;
+    if (!state.location && ds.presetLat) {
+        state.location = {
+            name: ds.presetName,
+            country: ds.presetCountry || null,
+            lat: Number(ds.presetLat),
+            lng: Number(ds.presetLng),
+            tz: ds.presetTz,
+            cc: ds.presetCc || null,
+            preset: true
+        };
+    }
+
+    renderFooter();
+    renderChips(document.getElementById('chips'), state.prayerType, (type) => {
+        state.prayerType = type;
+        storage.setPrayerType(type);
+        state.lastSig = null; // force full re-render
+        tick();
+    });
+    initSettings({
+        settings: state,
+        onChange(patch) {
+            Object.assign(state, patch);
+            if ('location' in patch) {
+                adoptLocation(patch.location);
+                state.location.preset = false;
+            }
+            if ('method' in patch) { state.methodChoice = patch.method; storage.setMethodChoice(patch.method); }
+            if ('madhhab' in patch) { storage.setMadhhab(patch.madhhab); renderFooter(); }
+            if ('clock24' in patch) storage.setClock24(patch.clock24);
+            if ('makkah' in patch) storage.setMakkah(patch.makkah);
+            recompute();
+        }
+    });
+    // The city is shown on the canvas and the sidebar; both are inline search
+    // slots (no full-screen overlay). Picking a city there flows through the
+    // same adoptLocation path as the settings drawer.
+    const pick = (loc) => { adoptLocation(loc); recompute(); };
+    initLocationSlot(document.getElementById('location-slot-canvas'), pick);
+    initLocationSlot(document.getElementById('location-slot-sidebar'), pick);
+    renderSponsor(document.getElementById('sponsor'));
+    registerSw();
+
+    if (!state.location) {
+        // Auto-fetch on first load (spec §6). Neutral canvas while we look, then
+        // adopt whatever we find - IP hint first (instant, no prompt), GPS if
+        // needed. Only if BOTH fail do we ask the user to pick a city. The first
+        // screen is never a manual "pick a city" prompt.
+        renderNeutral();
+        const detected = await autoLocate();
+        if (detected) {
+            adoptLocation(detected);
+        } else {
+            initLocationSlot(document.getElementById('location-slot-canvas'), pick, { openNow: true });
+            return;
+        }
+    }
+    await recompute();
+}
+
+/**
+ * Ruleset ids with a shipped matrix. 'evidence' is the DEFAULT: the Salafi /
+ * ahl al-hadith position issued as one ruling for everyone, so the app does not
+ * put a madhhab choice in the user's way (they can still pick one). Ḥanafī and
+ * Shāfiʿī remain as explicit alternatives.
+ */
+const RULESETS = ['evidence', 'hanafi', 'shafii'];
+const DEFAULT_RULESET = 'evidence';
+
+/**
+ * Country default for the calculation METHOD only. The ruleset is NOT
+ * country-derived: everyone gets the evidence-based default unless they choose
+ * otherwise, which is why the old "44 countries fall back on madhhab" problem
+ * no longer exists - there is nothing to fall back to. An explicit user choice
+ * is persisted and always wins.
+ */
+async function resolveDefaults() {
+    let defs = state.methodDefaults;
+    if (!defs) {
+        try {
+            defs = await (await fetch('/data/method-defaults.json')).json();
+            state.methodDefaults = defs;
+        } catch (e) { /* offline first-run: fall back to the shipped constants */ }
+    }
+    // Method = pure function of (explicit choice, country), recomputed EVERY
+    // time. No stored state.method to go stale, so changing New York never
+    // keeps Karachi: with no explicit choice, the US default (ISNA) wins.
+    const cc = state.location && state.location.cc;
+    state.method = state.methodChoice
+        || (defs && cc && defs.byCountry[cc])
+        || (defs && defs.default)
+        || 'MuslimWorldLeague';
+    // Ruleset: evidence-based for everyone by default; the user may override.
+    // A stored value that names no shipped matrix would take the verdict down,
+    // so it is always coerced back to a real one.
+    if (!state.madhhab || !RULESETS.includes(state.madhhab)) {
+        state.madhhab = DEFAULT_RULESET;
+        renderFooter();
+    }
+}
+
+/** Civil-date parts of `now` in the location's timezone. */
+function civilDate(tz, now) {
+    const parts = new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' })
+        .formatToParts(now)
+        .reduce((acc, p) => (acc[p.type] = p.value, acc), {});
+    return { y: Number(parts.year), m: Number(parts.month), d: Number(parts.day), key: `${parts.year}-${parts.month}-${parts.day}` };
+}
+
+/** Adhan reads y/m/d from a device-local Date; noon avoids DST-edge day shifts. */
+function dateFor(cd) {
+    return new Date(cd.y, cd.m - 1, cd.d, 12, 0, 0);
+}
+
+/** Full recompute (spec §4 triggers): location/method/madhhab change, midnight, tz change. */
+async function recompute() {
+    if (!state.location) return;
+    await resolveDefaults();
+    // The drawer renders before the country defaults are known, so re-render it
+    // from live state: it must show the city, method and madhhab the app is
+    // ACTUALLY computing with, not what it guessed at boot.
+    syncSettings(state, state.methodDefaults);
+    const now = new Date();
+    const cd = civilDate(state.location.tz, now);
+    state.dateKey = cd.key;
+    const coords = { lat: state.location.lat, lng: state.location.lng };
+    const today = computeDayEvents(dateFor(cd), coords, state.method, state.madhhab);
+    if (!today.valid) {
+        // A degraded day is a property of THIS date and place: at high latitude
+        // the very next day may compute fine. Keep watching for the rollover
+        // (and for device travel) instead of freezing until a page reload.
+        state.degraded = true;
+        state.today = null;
+        renderDegraded();
+        startLoop();
+        return;
+    }
+    const tomorrowRef = new Date(dateFor(cd).getTime() + 26 * 3600000);
+    const tomorrow = computeDayEvents(tomorrowRef, coords, state.method, state.madhhab);
+    state.degraded = false;
+    state.today = today.events;
+    state.tomorrow = tomorrow.valid ? tomorrow.events : null;
+    state.lastSig = null;
+    startLoop();
+    tick();
+}
+
+/**
+ * The device's timezone changed - it travelled. The saved coordinates are now
+ * suspect: recomputing them under a new timezone would produce confidently
+ * wrong times (Colombo's sun, London's clock). So re-detect the position and
+ * adopt it if it really moved; if detection is refused or fails, say plainly
+ * that the location may be stale rather than silently pretending otherwise.
+ */
+async function relocate() {
+    const detected = await detectLocation();
+    if (detected && distanceKm(detected, state.location) > MOVED_KM) {
+        adoptLocation(detected);
+        toast(t('toast.LOCATION_CHANGED', { city: detected.name }));
+    } else if (!detected) {
+        toast(t('toast.TZ_CHANGED_CHECK'));
+    } else {
+        toast(t('toast.TZ_CHANGED'));   // same place, clock shifted (DST)
+    }
+    recompute();
+}
+
+/** Below this, treat it as the same locality: prayer times shift by well under a minute. */
+const MOVED_KM = 50;
+
+let timer = null;
+function startLoop() {
+    if (!timer) timer = setInterval(tick, 1000);
+}
+
+function tick() {
+    if (!state.location) return;
+    const now = new Date();
+
+    // Midnight rollover + device-travel timezone change (spec §12). Checked
+    // before the degraded guard, so a degraded day can recover on rollover.
+    const cd = civilDate(state.location.tz, now);
+    if (cd.key !== state.dateKey) { recompute(); return; }
+    const devTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (devTz !== state.deviceTz) {
+        state.deviceTz = devTz;
+        relocate();   // the device travelled: recomputing the OLD coordinates would be worse than useless
+        return;
+    }
+    if (state.degraded || !state.today) return;
+
+    const ruleSet = state.ruleSets[state.madhhab];
+    const verdict = computeVerdict(now, state.today, ruleSet, {
+        prayerType: state.prayerType,
+        isFriday: isFridayIn(state.location.tz, now),
+        inMakkahHaram: state.makkah
+    });
+    // Post-Isha: the day's boundaries are exhausted; the next change is
+    // tomorrow's Fajr (W1 opens).
+    if (!verdict.nextBoundary && state.tomorrow) verdict.nextBoundary = state.tomorrow.fajr;
+
+    const minuteKey = Math.floor(now.getTime() / 60000);
+    const period = currentPeriod(now, state.today, state.tomorrow, state.madhhab);
+    const windows = computeWindows(state.today, ruleParams(ruleSet));
+    const ev = nextEvent(now, state.today, windows, state.tomorrow);
+    // The period is part of the signature: crossing into Dhuhr's time changes
+    // the "which prayer is due" line even when the verdict itself is unchanged.
+    const sig = [verdict.window, verdict.status, verdict.reason, verdict.grace && verdict.grace.phase,
+        state.prayerType, state.madhhab, period && period.prayer, period && period.endKind, ev && ev.name].join('|');
+    const ctx = {
+        prayerType: state.prayerType,
+        tz: state.location.tz,
+        clock24: state.clock24,
+        sunriseMinutes: ruleParams(ruleSet).P_sunrise,
+        period,
+        nextEvent: ev
+    };
+
+    // The ruler is rebuilt ONLY when the verdict state changes. Rebuilding it
+    // per minute would destroy the tooltip and any keyboard focus mid-use; the
+    // cursor and its clock label are updated below without a re-render.
+    if (sig !== state.lastSig) {
+        renderStatus(verdict, ctx);
+        const rulerHost = document.getElementById('ruler');
+        ctx.summary = rulerSummary(windows, verdict, now, ctx);
+        rulerHost.innerHTML = renderRuler(state.today, windows, ruleSet, now, ctx)
+            + rulerA11yList(state.today, windows, ruleSet, ctx);
+        bindRulerTooltip(rulerHost);
+        renderLocationChip();
+        renderFardNote(period);
+        state.lastSig = sig;
+    }
+    // The prayer list carries relative times ("in 1 h 12 m"), so it ticks per
+    // minute - it has no hover state to lose.
+    if (minuteKey !== state.lastMinute) {
+        renderPrayers(document.getElementById('prayers'), state.today, now, ctx);
+        state.lastMinute = minuteKey;
+    }
+    renderCountdown(verdict, now, ctx);
+    const svg = document.querySelector('#ruler svg');
+    if (svg) updateCursor(svg, state.today, now, ctx);
+}
+
+
+function renderFooter() {
+    const ruleSet = state.ruleSets[state.madhhab];
+    const el = document.getElementById('ruleset-version');
+    if (!el || !ruleSet) return;   // re-rendered once the madhhab default resolves
+    // Honest provenance without an alarm: the rulings are draft (verified_at is
+    // null - never faked) but backed by cited evidence, so say that plainly and
+    // point to the methodology rather than shouting "do not rely".
+    el.textContent = isVerified(ruleSet)
+        ? t('footer.VERIFIED', { scholar: ruleSet.verified_by, date: ruleSet.verified_at, version: ruleSet.version })
+        : t('footer.DRAFT', { version: ruleSet.version });
+}
+
+/** The city drives every number on screen, so it is named in every slot. */
+function renderLocationChip() {
+    if (!state.location) return;
+    const name = state.location.name || '';
+    for (const el of document.querySelectorAll('.location-name')) el.textContent = name;
+}
+
+/**
+ * The safety caption only earns its place while the big answer is about some
+ * OTHER prayer type - selecting "Today's fard" answers it directly.
+ */
+function renderFardNote(period) {
+    const el = document.getElementById('fard-note');
+    if (!el) return;
+    el.textContent = period
+        ? t('note.FARD_ALWAYS', { prayer: t('prayer.' + period.prayer) })
+        : t('note.FARD_NONE');
+    el.hidden = state.prayerType === 'fardCurrent';
+}
+
+let toastTimer = null;
+function toast(msg) {
+    const el = document.getElementById('toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('toast-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('toast-show'), 4000);
+}
+
+function registerSw() {
+    if ('serviceWorker' in navigator && location.protocol === 'https:') {
+        navigator.serviceWorker.register('/sw.js').catch(() => { /* offline still fine without SW */ });
+    }
+}

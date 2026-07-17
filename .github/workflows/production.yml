@@ -1,0 +1,59 @@
+name: Deploy Production
+
+on:
+  push:
+    tags:
+      - '*'
+
+# Never interrupt an in-flight production release; queue instead.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # full history so we can verify the tag is on main
+
+      # GitHub cannot scope a tag trigger to a branch, so we accept any tag
+      # ('*') and verify here that the tagged commit is reachable from main.
+      # Tags created off any other branch are skipped (the run stays green).
+      - name: Verify tag is on main
+        id: guard
+        run: |
+          git fetch --no-tags --quiet origin main
+          if git merge-base --is-ancestor "$GITHUB_SHA" FETCH_HEAD; then
+            echo "on_main=true" >> "$GITHUB_OUTPUT"
+            echo "Tag $GITHUB_REF_NAME is on main — deploying to production."
+          else
+            echo "on_main=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Tag $GITHUB_REF_NAME is not on main — skipping production deploy."
+          fi
+
+      - name: Set up Java 25
+        if: steps.guard.outputs.on_main == 'true'
+        uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: 25
+          cache: maven
+
+      - name: Build site
+        if: steps.guard.outputs.on_main == 'true'
+        run: ./mvnw -Pproduction clean process-resources --batch-mode --no-transfer-progress
+
+      - name: Deploy to Cloudflare Pages (production)
+        if: steps.guard.outputs.on_main == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy target/site --project-name=can-i-pray-now-code-pfw --branch=main
