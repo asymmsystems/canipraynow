@@ -78,15 +78,27 @@
     --border-control: rgba(255, 255, 255, 0.22);
     --border-control-hover: rgba(255, 255, 255, 0.6);
 
-    --ring-red: var(--color-ring-red);
-    --ring-amber: var(--color-ring-amber);
-    --ring-green: var(--color-ring-green);
+    /* Ink & Signal accents: the verdict is carried by these on a CONSTANT ink
+       ground (the canvas never floods), so they are brighter than a fill would
+       be - they must read as a signal on dark. */
+    --signal-yes:     #34d399;
+    --signal-no:      #fb7185;
+    --signal-caution: #fbbf24;
+    --signal-warn:    #fb923c;
+    --signal-muted:   #94a3b8;
+
+    /* The ruler's strict "prohibited" fill matches the NO signal, so red on the
+       timeline and a red answer are the same red. */
+    --ring-red: var(--signal-no);
+    --ring-amber: var(--signal-caution);
+    --ring-green: var(--signal-yes);
     --ruler-other: var(--color-ruler-other);
 
-    /* Active verdict state - default neutral, overridden by body.state-* */
+    /* Ground and text are CONSTANT in this theme; only --state-ring changes per
+       verdict (set by the body.state-* classes below). */
     --state-bg: var(--surface);
     --state-fg: var(--text-primary);
-    --state-ring: var(--ring-green);
+    --state-ring: var(--signal-yes);
 
     /* ============================================================
        Typography tokens - naming: --t-<property>-<specific>
@@ -192,6 +204,19 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* The top signal bar - a thin line of the verdict colour across the whole
+   viewport. On the constant ink ground this is the first, quietest cue of the
+   state, before you even read the answer. */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 4px;
+    z-index: 80;
+    background: var(--state-ring);
+    transition: background-color var(--transition-state);
+}
+
 img, svg { max-width: 100%; display: block; }
 button { font: inherit; cursor: pointer; }
 input, select { font: inherit; }
@@ -199,12 +224,16 @@ a { color: inherit; }
 
 /* ---------------------------------------------------------------- states */
 
-body.state-permitted  { --state-bg: var(--permitted-bg); --state-fg: var(--permitted-fg); --state-ring: var(--ring-green); }
-body.state-prohibited { --state-bg: var(--prohibited-bg); --state-fg: var(--prohibited-fg); --state-ring: var(--ring-red); }
-body.state-disliked   { --state-bg: var(--disliked-bg); --state-fg: var(--disliked-fg); --state-ring: var(--ring-amber); }
-body.state-warning    { --state-bg: var(--warning-bg); --state-fg: var(--warning-fg); --state-ring: var(--ring-amber); }
+/* Ink & Signal: the ground stays ink for every verdict; only the accent
+   (--state-ring) changes. It colours the big answer, the top signal bar, the
+   ruler's current slot, and the now-prayer pill - so the state is unmistakable
+   without a red screen ever shouting. */
+body.state-permitted  { --state-ring: var(--signal-yes); }
+body.state-prohibited { --state-ring: var(--signal-no); }
+body.state-disliked   { --state-ring: var(--signal-caution); }
+body.state-warning    { --state-ring: var(--signal-warn); }
 body.state-neutral,
-body.state-degraded   { --state-bg: var(--surface); --state-fg: var(--text-primary); --state-ring: var(--ring-amber); }
+body.state-degraded   { --state-ring: var(--signal-muted); }
 
 /* ---------------------------------------------------------------- banner */
 
@@ -329,6 +358,8 @@ body.state-degraded   { --state-bg: var(--surface); --state-fg: var(--text-prima
     max-width: 100%;
 }
 
+/* The big answer carries the verdict colour (Ink & Signal): the word itself is
+   the signal, on the constant ink ground. */
 .answer {
     margin: 0 0 var(--space-2xs);
     font-size: var(--t-size-answer);
@@ -336,6 +367,8 @@ body.state-degraded   { --state-bg: var(--surface); --state-fg: var(--text-prima
     letter-spacing: var(--t-ls-answer);
     line-height: var(--t-lh-answer);
     font-variant-numeric: tabular-nums;
+    color: var(--state-ring);
+    transition: color var(--transition-state);
 }
 
 /* Wide enough that a one-sentence reason stays on ONE line at desktop widths;
@@ -488,7 +521,14 @@ body.state-degraded   { --state-bg: var(--surface); --state-fg: var(--text-prima
     &:has(.city-results:empty) { gap: 0; }
 }
 
-.location-slot-sidebar { align-items: flex-start; margin: 0; }
+/* In the sidebar the slot fills the pane: chip AND search box both full width,
+   and the search must not shrink when it replaces the chip (align-items:stretch,
+   no max-width cap). */
+.location-slot-sidebar {
+    align-items: stretch;
+    max-width: none;
+    margin: 0;
+}
 .location-slot-sidebar .location-chip {
     font-size: var(--t-size-display-s);
     letter-spacing: var(--t-ls-display);
