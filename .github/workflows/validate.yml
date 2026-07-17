@@ -36,3 +36,9 @@ jobs:
             | xargs -0 -n1 sh -c 'node --input-type=module --check < "$1" || { echo "SYNTAX: $1"; exit 1; }' _
           find src/main/jbake/assets/data src/main/jbake/assets/js/strings -name '*.json' -print0 \
             | xargs -0 -n1 node -e 'JSON.parse(require("fs").readFileSync(process.argv[1]))'
+
+      # Fiqh engine golden-matrix + hard-invariant suite. Gates every PR: a
+      # rule-data change that breaks a cell or invariant 1 fails here. Needs
+      # only the runner's node (no npm).
+      - name: Run fiqh engine tests
+        run: node scripts/test-engine.mjs
