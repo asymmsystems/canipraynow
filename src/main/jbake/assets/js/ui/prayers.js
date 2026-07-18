@@ -37,5 +37,12 @@ export function renderPrayers(host, events, now, ctx) {
             <span class="prayer-time">${esc(fmtTime(events[key], ctx.tz, ctx.clock24))}</span>
         </li>`;
     }).join('');
-    host.innerHTML = `<h2 class="widget-title">${esc(t('sidebar.TODAY'))}</h2><ul class="prayer-list">${rows}</ul>`;
+    // Name the source when these are an authority's own published times, so the
+    // user sees they match their local timetable - and never imply endorsement.
+    const src = ctx.timesSource
+        ? `<p class="prayer-source">${t('sidebar.SOURCE', { authority: esc(ctx.timesSource.source) })}
+             <a href="${esc(ctx.timesSource.sourceUrl)}" rel="noopener" target="_blank">${esc(ctx.timesSource.zone)}</a></p>`
+        : `<p class="prayer-source">${t('sidebar.SOURCE_COMPUTED')}</p>`;
+    host.innerHTML = `<h2 class="widget-title">${esc(t('sidebar.TODAY'))}</h2>`
+        + `<ul class="prayer-list">${rows}</ul>${src}`;
 }
