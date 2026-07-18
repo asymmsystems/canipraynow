@@ -1,9 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Copyright (c) 2026 Asymm Systems (Pvt) Ltd. @author Fahim Farook -->
-  <rect width="512" height="512" rx="112" fill="#064e3b"/>
-  <rect x="96" y="240" width="320" height="32" rx="16" fill="#10b981" opacity="0.55"/>
-  <rect x="300" y="240" width="72" height="32" rx="10" fill="#ef4444" opacity="0.9"/>
-  <circle cx="232" cy="256" r="34" fill="none" stroke="#10b981" stroke-width="14"/>
-  <circle cx="232" cy="256" r="17" fill="#ffffff"/>
-  <path d="M232 132v40M232 340v40" stroke="#d1fae5" stroke-width="14" stroke-linecap="round" opacity="0.7"/>
+  <rect width="512" height="512" fill="#ffffff"/>
+  <circle cx="256" cy="256" r="150" fill="#10b981"/>
+  <path d="M362.06 149.94 A150 150 0 0 1 149.94 362.06 Z" fill="#ef4444"/>
+  <line x1="362.06" y1="149.94" x2="149.94" y2="362.06" stroke="#ffffff" stroke-width="30"/>
 </svg>
