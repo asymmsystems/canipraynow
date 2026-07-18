@@ -9,7 +9,7 @@
  * @author Fahim Farook
  */
 
-import { computeDayEvents, currentPeriod, nextEvent } from './astronomy.js';
+import { computeDayEvents, assembleAuthorityEvents, currentPeriod, nextEvent } from './astronomy.js';
 import { computeWindows } from './engine/windows.js';
 import { computeVerdict, isVerified, ruleParams } from './engine/verdict.js';
 import { storage } from './storage.js';
@@ -21,6 +21,7 @@ import { renderPrayers } from './ui/prayers.js';
 import { renderSponsor } from './ui/sponsor.js';
 import { initSettings, syncSettings, initLocationSlot, autoLocate } from './ui/settings.js';
 import { isFridayIn, distanceKm } from './utils.js';
+import { hasAuthorityTimetable, authorityDayEvents } from './timetables.js';
 
 const state = {
     location: null,      // {name, lat, lng, tz, cc}
@@ -200,8 +201,8 @@ async function recompute() {
     const cd = civilDate(state.location.tz, now);
     state.dateKey = cd.key;
     const coords = { lat: state.location.lat, lng: state.location.lng };
-    const today = computeDayEvents(dateFor(cd), coords, state.method, state.madhhab);
-    if (!today.valid) {
+    const today = await dayEvents(dateFor(cd), coords);
+    if (!today.result.valid) {
         // A degraded day is a property of THIS date and place: at high latitude
         // the very next day may compute fine. Keep watching for the rollover
         // (and for device travel) instead of freezing until a page reload.
@@ -212,13 +213,31 @@ async function recompute() {
         return;
     }
     const tomorrowRef = new Date(dateFor(cd).getTime() + 26 * 3600000);
-    const tomorrow = computeDayEvents(tomorrowRef, coords, state.method, state.madhhab);
+    const tomorrow = await dayEvents(tomorrowRef, coords);
     state.degraded = false;
-    state.today = today.events;
-    state.tomorrow = tomorrow.valid ? tomorrow.events : null;
+    state.today = today.result.events;
+    state.tomorrow = tomorrow.result.valid ? tomorrow.result.events : null;
+    state.timesSource = today.source;   // the authority whose times we used, or null
     state.lastSig = null;
     startLoop();
     tick();
+}
+
+/**
+ * One civil day's events, preferring the national authority's OWN published
+ * times where we have them (Sri Lanka / ACJU today), falling back to Adhan.js
+ * computation for every other place and for any day the table does not cover.
+ * @returns {Promise<{result: import('./astronomy.js').DayResult, source: Object|null}>}
+ */
+async function dayEvents(date, coords) {
+    if (hasAuthorityTimetable(state.location.cc)) {
+        const auth = await authorityDayEvents(date, { ...coords, cc: state.location.cc });
+        if (auth) {
+            const result = assembleAuthorityEvents(auth.events, date, coords.lng);
+            if (result.valid) return { result, source: auth };
+        }
+    }
+    return { result: computeDayEvents(date, coords, state.method, state.madhhab), source: null };
 }
 
 /**
@@ -289,7 +308,8 @@ function tick() {
         clock24: state.clock24,
         sunriseMinutes: ruleParams(ruleSet).P_sunrise,
         period,
-        nextEvent: ev
+        nextEvent: ev,
+        timesSource: state.timesSource
     };
 
     // The ruler is rebuilt ONLY when the verdict state changes. Rebuilding it

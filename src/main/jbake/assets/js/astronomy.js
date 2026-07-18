@@ -134,6 +134,30 @@ export function computeDayEvents(date, coords, methodKey, madhhab) {
 }
 
 /**
+ * Assemble a DayEvents from an AUTHORITY's five published prayer times plus a
+ * computed solar noon (authorities do not publish the zenith). Same shape and
+ * same strict-ordering guard as computeDayEvents, so downstream code cannot
+ * tell whether the times were published or computed - only that they are valid.
+ *
+ * @param {{fajr:Date,sunrise:Date,dhuhr:Date,asr:Date,maghrib:Date,isha:Date}} pub
+ * @param {Date} date
+ * @param {number} lng
+ * @returns {DayResult}
+ */
+export function assembleAuthorityEvents(pub, date, lng) {
+    const events = {
+        fajr: pub.fajr, sunrise: pub.sunrise, solarNoon: solarNoon(date, lng),
+        dhuhr: pub.dhuhr, asr: pub.asr, maghrib: pub.maghrib, isha: pub.isha
+    };
+    const ordered = [events.fajr, events.sunrise, events.dhuhr, events.asr, events.maghrib, events.isha];
+    for (let i = 0; i < ordered.length; i++) {
+        if (!(ordered[i] instanceof Date) || !isFinite(ordered[i].getTime())) return { valid: false, events: null };
+        if (i > 0 && ordered[i].getTime() <= ordered[i - 1].getTime()) return { valid: false, events: null };
+    }
+    return { valid: true, events };
+}
+
+/**
  * When Isha's time ends - which is two different answers, and conflating them
  * is why "Isha until Fajr" is misleading guidance.
  *

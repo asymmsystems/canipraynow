@@ -102,10 +102,20 @@ def main() -> None:
         })
 
     emit(rows, len(cities))
+    write_web_page(rows)
+
+
+# Countries whose authority timetable has actually been scraped and baked
+# (assets/data/timetables/<cc>/). The app serves these EXACT published times.
+_TT = HERE.parent / "src/main/jbake/assets/data/timetables"
+EXTRACTED = {p.name.upper() for p in _TT.iterdir()
+             if p.is_dir() and any(p.glob("zone-*.json"))} if _TT.exists() else set()
 
 
 def source_of(r: dict) -> str:
     """How the times for this country are actually obtained today."""
+    if r["cc"] in EXTRACTED:
+        return "extracted-official"
     if r["method"] == "ACJU":
         return "fitted-to-authority"
     return "computed"
@@ -154,10 +164,12 @@ def emit(rows: list[dict], total_cities: int) -> None:
     out("")
     out("| Type | Meaning | Countries today |")
     out("|---|---|---|")
+    extracted = [r for r in rows if source_of(r) == "extracted-official"]
     fitted = [r for r in rows if source_of(r) == "fitted-to-authority"]
     computed = [r for r in covered if source_of(r) == "computed"]
-    out(f"| `extracted-official` | The authority's own published timetable, parsed and baked. "
-        f"**Nothing uses this yet.** | 0 |")
+    out(f"| `extracted-official` | The authority's own published timetable, scraped and baked; "
+        f"the app serves these exact times. | {len(extracted)} "
+        f"({', '.join(r['cc'] for r in extracted) or 'none'}) |")
     out(f"| `fitted-to-authority` | Adhan.js with angles fitted to the authority's published "
         f"tables, with the residual error measured. | {len(fitted)} "
         f"({', '.join(r['cc'] for r in fitted) or 'none'}) |")
@@ -279,6 +291,57 @@ def emit(rows: list[dict], total_cities: int) -> None:
         "Users in those countries are served the nearest shipped matrix, which is a "
         "substitution the UI does not currently disclose.")
     out("")
+
+
+WEB_PAGE = HERE.parent / "src/main/jbake/content/data-sources.html"
+
+SOURCE_LABEL = {
+    "extracted-official": "Official timetable",
+    "fitted-to-authority": "Fitted to authority",
+    "computed": "Computed",
+}
+
+
+def write_web_page(rows: list[dict]) -> None:
+    """Emit the public /data-sources page (a JBake content file) - the same
+    coverage table, on the website, so anyone can see where each country's
+    times come from. Covered countries only (those with at least one city)."""
+    covered = sorted([r for r in rows if r["cities"] > 0], key=lambda x: (-x["cities"], x["name"]))
+    extracted = [r for r in covered if source_of(r) == "extracted-official"]
+    out = ["title=Where the prayer times come from",
+           "seo_title=Prayer-Time Data Sources by Country - Can I Pray Now",
+           "description=Where canipraynow.com sources prayer times for each country: "
+           "official authority timetables where available, otherwise astronomical computation.",
+           "type=page", "status=published", "~~~~~~",
+           '<span class="kicker">Transparency</span>',
+           "<h1>Where the prayer times come from</h1>",
+           "<p>For every country, this is how canipraynow.com gets its prayer times. Where a "
+           "national authority publishes its own timetable and we have been able to scrape it, "
+           "the app serves those <strong>exact official times</strong>. Everywhere else the times "
+           "are <strong>computed astronomically</strong> for your coordinates - which agrees with "
+           "the local authority to within about two minutes on the times that drive the "
+           "prohibited-window answer (sunrise, zenith, sunset).</p>"]
+    if extracted:
+        names = ", ".join(f"{r['name']}" for r in extracted)
+        out.append(f"<p><strong>Official timetables in use:</strong> {names}. More are added "
+                   "as their authorities' timetables are scraped (a yearly refresh).</p>")
+    out.append('<div class="table-scroll"><table>')
+    out.append("<tr><th>Country</th><th>Cities</th><th>Times source</th><th>Method / convention</th>"
+               "<th>Authority</th></tr>")
+    for r in covered:
+        a = r["authority"]
+        auth = (f'<a href="{a["url"]}" rel="noopener">{a["name"]}</a>'
+                if a and a.get("has_authority") and a.get("url")
+                else ("_none_" if a is not None and not a.get("has_authority") else "-"))
+        badge = SOURCE_LABEL[source_of(r)]
+        out.append(f"<tr><td>{r['name']}</td><td>{r['cities']}</td><td>{badge}</td>"
+                   f"<td>{r['method']}</td><td>{auth}</td></tr>")
+    out.append("</table></div>")
+    out.append('<p>The full per-country breakdown, including countries with no city page yet and '
+               'the machine-readable feed each authority offers, is in the project\'s coverage '
+               'report. Times never leave your device; nothing here is fetched from a third-party '
+               'API at runtime.</p>')
+    WEB_PAGE.write_text("\n".join(out) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":
