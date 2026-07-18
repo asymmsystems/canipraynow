@@ -118,6 +118,9 @@ function render(drawer, opts) {
         <section class="setting">
             <h3><label for="setting-method">${esc(t('settings.METHOD'))}</label></h3>
             <select id="setting-method">${methodOptions(settings, methodDefaults)}</select>
+            ${settings.timesSource
+                ? `<p class="setting-note">${esc(t('settings.METHOD_AUTHORITY_NOTE', { authority: settings.timesSource.source }))}</p>`
+                : ''}
         </section>
         <section class="setting">
             <h3>${esc(t('settings.BASIS'))}</h3>

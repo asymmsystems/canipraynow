@@ -1273,6 +1273,65 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
 
 #answer-canvas { scroll-margin-top: var(--space-md); }
 
+/* ------------------------------------------------------- question pages */
+
+/* On a question page the question is one screen and the live answer the next,
+   so a reader is never handed the ruling and its long-tail explanation crammed
+   into a single viewport. The hero fills the screen and centres the question;
+   the app shell below already reserves 100dvh, so the YES/NO answer and the Sun
+   Ruler land as their own screen. A bouncing cue signals the scroll. */
+.q-page .q-hero {
+    min-height: calc(100dvh - 5rem);   /* less the nav above it */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding-bottom: calc(var(--space-2xl) + 3rem);   /* clearance for the cue */
+}
+
+.q-hero .q-lead { margin-top: var(--space-lg); }
+
+/* Down-chevron affordance: a link (so it also works as a jump), pinned to the
+   hero's foot, gently bouncing. prefers-reduced-motion stills it globally. */
+.scroll-cue {
+    position: absolute;
+    left: 50%;
+    bottom: var(--space-xl);
+    transform: translateX(-50%);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2xs);
+    text-decoration: none;
+    color: var(--text-prose);
+    font-size: var(--t-size-caption);
+    font-weight: var(--t-weight-medium);
+    letter-spacing: var(--t-ls-kicker);
+    text-transform: uppercase;
+    opacity: 0.7;
+    transition: opacity var(--transition-control);
+
+    &:hover { opacity: 1; }
+
+    svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        animation: scroll-bounce 1.8s ease-in-out infinite;
+    }
+}
+
+@keyframes scroll-bounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+}
+
+/* Citations move below the interactive answer as supporting material. */
+.q-sources {
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--border-subtle);
+}
+
 .nearby {
     list-style: none;
     margin: var(--space-sm) 0 0;

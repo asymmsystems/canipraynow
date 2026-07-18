@@ -70,6 +70,19 @@ flowchart TD
 
 The **ruling basis** is data, not code. The default `evidence` ruleset is the ahl-al-hadith / evidence-based position (one ruling for everyone); Ḥanafī and Shāfiʿī ship as explicit alternatives. Each matrix cell carries its `basis` prose and an `evidence` list of primary-source ids, resolved from the ruleset's `evidences` map (Qurʾān + Sahih hadith, each with a sunnah.com/quran.com URL). A build-time test fails on any cell that cites a source not in the map.
 
+## Architecture & decisions
+
+The full architecture (system context, build pipeline, runtime data flow, module
+map, deploy) with diagrams lives in the project workspace, alongside product and
+research, mirroring the sibling M360 project's layout:
+
+- `canipraynow/architecture/architecture.md` - the documented architecture.
+- `canipraynow/architecture/decision/` - the ADRs (why each decision was made):
+  on-device/no-API, npm-free stack, authority timetables, evidence-based ruleset,
+  calculation methods, offline PWA, GitFlow, and the mobile-app strategy.
+- `canipraynow/architecture/calculation-methods-matrix.md` - the 14 methods, their
+  angles, whether any API is called (none), and each country's default method.
+
 ## Build
 
 ```sh

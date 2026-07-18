@@ -193,15 +193,17 @@ function dateFor(cd) {
 async function recompute() {
     if (!state.location) return;
     await resolveDefaults();
-    // The drawer renders before the country defaults are known, so re-render it
-    // from live state: it must show the city, method and madhhab the app is
-    // ACTUALLY computing with, not what it guessed at boot.
-    syncSettings(state, state.methodDefaults);
     const now = new Date();
     const cd = civilDate(state.location.tz, now);
     state.dateKey = cd.key;
     const coords = { lat: state.location.lat, lng: state.location.lng };
     const today = await dayEvents(dateFor(cd), coords);
+    state.timesSource = today.source;   // the authority whose times we used, or null
+    // The drawer renders before the country defaults and time-source are known,
+    // so re-render it from live state now: it must show the city, method, madhhab
+    // AND the authority the app is ACTUALLY computing with, not what it guessed
+    // at boot. In particular the method note depends on timesSource being set.
+    syncSettings(state, state.methodDefaults);
     if (!today.result.valid) {
         // A degraded day is a property of THIS date and place: at high latitude
         // the very next day may compute fine. Keep watching for the rollover
@@ -217,7 +219,6 @@ async function recompute() {
     state.degraded = false;
     state.today = today.result.events;
     state.tomorrow = tomorrow.result.valid ? tomorrow.result.events : null;
-    state.timesSource = today.source;   // the authority whose times we used, or null
     state.lastSig = null;
     startLoop();
     tick();
