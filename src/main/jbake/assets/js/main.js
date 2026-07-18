@@ -322,12 +322,12 @@ function renderFooter() {
     const ruleSet = state.ruleSets[state.madhhab];
     const el = document.getElementById('ruleset-version');
     if (!el || !ruleSet) return;   // re-rendered once the madhhab default resolves
-    // Honest provenance without an alarm: the rulings are draft (verified_at is
-    // null - never faked) but backed by cited evidence, so say that plainly and
-    // point to the methodology rather than shouting "do not rely".
+    // Footer provenance: a named scholar's line once verified, otherwise the
+    // plain sources + version line. verified_at is never faked, so the scholar
+    // form only appears when a real sign-off is present in the rule set.
     el.textContent = isVerified(ruleSet)
         ? t('footer.VERIFIED', { scholar: ruleSet.verified_by, date: ruleSet.verified_at, version: ruleSet.version })
-        : t('footer.DRAFT', { version: ruleSet.version });
+        : t('footer.PROVENANCE', { version: ruleSet.version });
 }
 
 /** The city drives every number on screen, so it is named in every slot. */

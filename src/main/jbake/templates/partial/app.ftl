@@ -3,8 +3,7 @@
 
   The live app shell (spec §5.2-5.6): Status Canvas + chips + Sun Ruler +
   sidebar. Shared by the home page and the city/question SEO pages; main.js
-  hydrates it. The PREVIEW banner ships VISIBLE (spec §3.6 inv 4) - JS may
-  hide it only when the active rule set carries a scholar's verified_at.
+  hydrates it.
 
   @author Fahim Farook
 -->
@@ -94,7 +93,7 @@
 <div id="toast" class="toast" role="status"></div>
 
 <noscript>
-    <div class="preview-banner">This tool needs JavaScript to compute prayer windows for your location.</div>
+    <div class="notice-banner">This tool needs JavaScript to compute prayer windows for your location.</div>
 </noscript>
 
 <script type="module" src="/js/main.js"></script>

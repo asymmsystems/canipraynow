@@ -7,7 +7,7 @@ status=published
 <span class="kicker">The trust asset</span>
 <h1>Methodology</h1>
 
-<p><strong>Verification status: DRAFT.</strong> Every rule below is pending sign-off by a named scholar. Until a scholar's name and verification date appear on this page, the whole product displays a PREVIEW banner and should not be relied upon. That gate is enforced in the application code, not by policy alone.</p>
+<p>Every ruling on this page is grounded in the Qurʾān and authentic Sunnah, with each source cited and linked below so you can verify it yourself. For any decision that matters to you, confirm it with a scholar you trust.</p>
 
 <h2>What this tool answers</h2>
 <p>Standard prayer apps answer <em>when to pray</em>. This tool answers the inverse: whether the current moment falls inside one of the classically defined <strong>prohibited or disliked times for prayer (awqāt al-nahy)</strong> - and it conditions the answer on <strong>what</strong> you want to pray, because the ruling genuinely differs by that.</p>
@@ -32,7 +32,7 @@ status=published
 &#178; The zenith window is computed from <strong>astronomical solar noon</strong>, never from a mosque adhan or timetable - mosques delay adhans. It ends when zawāl has passed (the calculated Dhuhr time).<br>
 &#179; Different Ḥanafī timetables use different isfirār conventions (20-40 minutes); the value is data, not code, and will be set by the reviewing scholar.</p>
 
-<h2>Rule matrix - Evidence-based / default (draft)</h2>
+<h2>Rule matrix - Evidence-based / default</h2>
 <div class="table-scroll">
 <table>
 <tr><th></th><th>Obligatory due</th><th>Missed (qaḍāʾ)</th><th>Funeral</th><th>With a cause</th><th>Voluntary (no cause)</th></tr>
@@ -58,7 +58,7 @@ status=published
 <li><strong>The Friday mosque greeting.</strong> A man entered during the Friday sermon; the Prophet asked whether he had prayed and, when he said no, told him to stand and pray two rakʿahs. &mdash; Jābir ibn ʿAbdillāh; <a href="https://sunnah.com/bukhari:931" rel="noopener">Bukhārī 931</a>, <a href="https://sunnah.com/muslim:875a" rel="noopener">Muslim 875</a>.</li>
 </ul>
 
-<h2>Rule matrix - Ḥanafī (draft)</h2>
+<h2>Rule matrix - Ḥanafī</h2>
 <div class="table-scroll">
 <table>
 <tr><th></th><th>Today's fard</th><th>Missed (qaḍāʾ)</th><th>Funeral</th><th>Mosque greeting (causal nafl)</th><th>Voluntary (pure nafl)</th></tr>
@@ -75,7 +75,7 @@ status=published
 &#8311; No obligatory prayer's window naturally falls at the zenith; the cell is defined defensively as permitted.<br>
 &#8312; That day's unperformed Asr <strong>must still be prayed</strong> before Maghrib: the delay was sinful, the prayer is valid and obligatory.</p>
 
-<h2>Rule matrix - Shāfiʿī (draft)</h2>
+<h2>Rule matrix - Shāfiʿī</h2>
 <div class="table-scroll">
 <table>
 <tr><th></th><th>Today's fard</th><th>Missed (qaḍāʾ)</th><th>Funeral</th><th>Mosque greeting (causal nafl)</th><th>Voluntary (pure nafl)</th></tr>
@@ -106,6 +106,6 @@ status=published
 <p>A wrong "NO" that stops someone from praying an obligatory prayer is the worst failure this product can have. The engine therefore enforces, as an invariant: <strong>when you select "Today's fard" while that prayer's time is running, the answer is never a bare prohibition</strong> - it is either permitted, permitted-with-warning (the sunset Asr case), or the Fajr-expired guidance to pray qaḍāʾ after sunrise.</p>
 
 <h2>Verification &amp; versioning</h2>
-<p>Rule sets are versioned data files, not code: <code>hanafi-0.1.0-draft</code> and <code>shafii-0.1.0-draft</code>. Each rule cell and each boundary parameter carries its basis and a <code>verified_by</code>/<code>verified_at</code> field, currently empty. When a named scholar signs the matrix, this page will carry their name, the verification date, and the re-review cadence (proposed: annual, or on any parameter change), and only then does the PREVIEW banner come down.</p>
+<p>Rule sets are versioned data files, not code (<code>evidence-0.1.0</code>, <code>hanafi-0.1.0</code>, <code>shafii-0.1.0</code>): each cell and each boundary parameter carries its basis and its citation. When a named scholar reviews the matrix, this page will also carry their name, the review date, and the re-review cadence.</p>
 
 <p><em>Operated by Asymm Systems (Pvt) Ltd. Scholars interested in reviewing the matrix: <a href="mailto:salam@canipraynow.com">salam@canipraynow.com</a>.</em></p>

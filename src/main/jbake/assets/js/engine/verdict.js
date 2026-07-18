@@ -143,8 +143,9 @@ export function computeVerdict(now, events, ruleSet, settings, probe = false) {
 }
 
 /**
- * True when this rule set has been signed off by a named scholar.
- * Pre-verification builds must render the PREVIEW banner (spec §3.6 inv 4).
+ * True when this rule set has been signed off by a named scholar. Until then
+ * the footer shows the plain provenance line (sources + version), not a scholar
+ * name - it never fabricates verification.
  */
 export function isVerified(ruleSet) {
     return Boolean(ruleSet.verified_at);
