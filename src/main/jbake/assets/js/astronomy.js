@@ -20,24 +20,34 @@ const CUSTOM_METHODS = {
     // Fitted against ACJU's official 2025 Colombo-district monthly tables:
     // mean error Fajr 0.74 min, Isha 0.97 min across July. ACJU's own
     // calculation follows the late Al-'Alim M.I. Abdus Samad Makdoomi.
-    ACJU: { fajrAngle: 20, ishaAngle: 18 }
+    ACJU: { fajrAngle: 20, ishaAngle: 18 },
+    // Indonesia's Ministry of Religious Affairs. Kemenag publishes Subuh 20 /
+    // Isya 18 (same angles as the MUIS/Singapore preset); its published tables
+    // additionally apply a small ihtiyat safety margin that Adhan.js does not,
+    // so this matches the convention, not the printed minute exactly.
+    Kemenag: { fajrAngle: 20, ishaAngle: 18 }
 };
 
-/** Calculation-method keys exposed in settings (spec §4). */
+/**
+ * Calculation methods exposed in settings (spec §4). Labels name the AUTHORITY
+ * each convention belongs to, since that is what a user recognises and trusts;
+ * ACJU and Kemenag are fitted customs, the rest are Adhan.js presets.
+ */
 export const METHODS = Object.freeze([
     { key: 'ACJU', label: 'ACJU (Sri Lanka)' },
+    { key: 'Kemenag', label: 'Kemenag (Indonesia)' },
     { key: 'MuslimWorldLeague', label: 'Muslim World League' },
     { key: 'NorthAmerica', label: 'ISNA (North America)' },
-    { key: 'Egyptian', label: 'Egyptian General Authority' },
-    { key: 'UmmAlQura', label: 'Umm al-Qura (Makkah)' },
-    { key: 'Karachi', label: 'University of Karachi' },
-    { key: 'Tehran', label: 'Institute of Geophysics, Tehran' },
-    { key: 'Dubai', label: 'Dubai' },
-    { key: 'Kuwait', label: 'Kuwait' },
-    { key: 'Qatar', label: 'Qatar' },
-    { key: 'Singapore', label: 'Singapore' },
-    { key: 'MoonsightingCommittee', label: 'Moonsighting Committee' },
-    { key: 'Turkey', label: 'Turkey (Diyanet)' }
+    { key: 'Egyptian', label: 'Egyptian General Authority of Survey' },
+    { key: 'UmmAlQura', label: 'Umm al-Qura (Saudi Arabia)' },
+    { key: 'Karachi', label: 'University of Islamic Sciences, Karachi' },
+    { key: 'Tehran', label: 'Institute of Geophysics, Tehran (Iran)' },
+    { key: 'Dubai', label: 'Dubai (UAE)' },
+    { key: 'Kuwait', label: 'Kuwait (Awqaf)' },
+    { key: 'Qatar', label: 'Qatar (Calendar House)' },
+    { key: 'Singapore', label: 'MUIS (Singapore)' },
+    { key: 'Turkey', label: 'Diyanet (Turkey)' },
+    { key: 'MoonsightingCommittee', label: 'Moonsighting Committee Worldwide' }
 ]);
 
 /**
