@@ -134,6 +134,36 @@ for (const [n, lat, lng] of LOCS) {
     ck(e && e.preferred < e.valid, `${n}: isha preferred must precede dawn`);
 }
 
+// 6. Authority timetables (ACJU): the baked tables assemble into valid events,
+// and the published Colombo times survive the pipeline to the minute.
+{
+    const { assembleAuthorityEvents } = await import(path.join(JS, 'astronomy.js'));
+    const ttDir = path.join(DATA, 'timetables/lk');
+    const zones = JSON.parse(readFileSync(path.join(ttDir, 'zones.json'), 'utf8')).zones;
+    ck(zones.length === 13, `ACJU zones: expected 13, got ${zones.length}`);
+    const z1 = JSON.parse(readFileSync(path.join(ttDir, 'zone-01.json'), 'utf8'));
+    const row = z1.times['7-1'];   // 1 July, Colombo
+    ck(Array.isArray(row) && row.length === 6, 'Colombo 1-Jul row present');
+    if (row) {
+        const day = new Date(2026, 6, 1);
+        const at = (m) => new Date(2026, 6, 1, 0, m, 0);
+        const pub = { fajr: at(row[0]), sunrise: at(row[1]), dhuhr: at(row[2]), asr: at(row[3]), maghrib: at(row[4]), isha: at(row[5]) };
+        const r = assembleAuthorityEvents(pub, day, 79.8612);
+        ck(r.valid, 'assembled ACJU events are valid (strictly increasing + solar noon)');
+        ck(row[0] === 4 * 60 + 34, `ACJU Colombo Fajr 1-Jul = 04:34 (got ${Math.floor(row[0] / 60)}:${row[0] % 60})`);
+    }
+    // Every zone table's rows must be well-formed (6 fields, increasing).
+    let badRows = 0;
+    for (const z of zones) {
+        let zt;
+        try { zt = JSON.parse(readFileSync(path.join(ttDir, `zone-${z.id}.json`), 'utf8')); } catch { continue; }
+        for (const v of Object.values(zt.times)) {
+            if (v.length !== 6 || v.some((x, i) => i > 0 && x <= v[i - 1])) badRows++;
+        }
+    }
+    ck(badRows === 0, `${badRows} malformed timetable rows`);
+}
+
 console.log(`invariant sweep: ${sweeps} samples, ${viol} violations`);
 console.log(`PASS ${pass}  FAIL ${fail}`);
 if (bad.length) {

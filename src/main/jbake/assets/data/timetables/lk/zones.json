@@ -1,0 +1,22 @@
+{
+  "_comment": "ACJU (All Ceylon Jamiyyathul Ulama) prayer-time zones for Sri Lanka. Each zone groups districts and carries a representative centroid; a location is matched to the nearest centroid. Times are ACJU's own published values, scraped by scripts/fetch-timetables.mjs and stored in zone-NN.json (minutes from local midnight, per day of year). Source: https://www.acju.lk/prayer-times/",
+  "authority": "ACJU",
+  "authorityName": "All Ceylon Jamiyyathul Ulama",
+  "authorityUrl": "https://www.acju.lk/prayer-times/",
+  "country": "LK",
+  "zones": [
+    { "id": "01", "name": "Colombo, Gampaha, Kalutara", "lat": 6.9271, "lng": 79.8612 },
+    { "id": "02", "name": "Jaffna (Nallur)", "lat": 9.6615, "lng": 80.0255 },
+    { "id": "03", "name": "Mullaitivu, Kilinochchi, Vavuniya", "lat": 8.7514, "lng": 80.4971 },
+    { "id": "04", "name": "Mannar, Puttalam", "lat": 8.0362, "lng": 79.8283 },
+    { "id": "05", "name": "Anuradhapura, Polonnaruwa", "lat": 8.3114, "lng": 80.4037 },
+    { "id": "06", "name": "Kurunegala", "lat": 7.4863, "lng": 80.3623 },
+    { "id": "07", "name": "Kandy, Matale, Nuwara Eliya", "lat": 7.2906, "lng": 80.6337 },
+    { "id": "08", "name": "Batticaloa, Ampara", "lat": 7.7170, "lng": 81.7000 },
+    { "id": "09", "name": "Trincomalee", "lat": 8.5874, "lng": 81.2152 },
+    { "id": "10", "name": "Badulla, Monaragala", "lat": 6.9934, "lng": 81.0550 },
+    { "id": "11", "name": "Ratnapura, Kegalle", "lat": 6.6828, "lng": 80.3992 },
+    { "id": "12", "name": "Galle, Matara", "lat": 6.0535, "lng": 80.2210 },
+    { "id": "13", "name": "Hambantota", "lat": 6.1241, "lng": 81.1185 }
+  ]
+}

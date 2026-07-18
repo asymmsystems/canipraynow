@@ -34,3 +34,6 @@ Thumbs.db
 # Source of truth is the dataset; never hand-edit or commit these.
 src/main/jbake/content/*/
 !src/main/jbake/content/q/
+
+# Dev-only tool deps (pdfjs for scripts/fetch-timetables.mjs) - never committed
+node_modules/
