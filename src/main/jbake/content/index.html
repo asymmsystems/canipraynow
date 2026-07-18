@@ -7,13 +7,33 @@ status=published
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Can I Pray Now?",
-  "url": "https://canipraynow.com/",
-  "applicationCategory": "UtilitiesApplication",
-  "operatingSystem": "Any",
-  "description": "Live answer to whether it is permissible to pray right now, based on the classically defined prohibited times for prayer (awqat al-nahy), conditioned on madhhab and prayer type.",
-  "offers": { "@type": "Offer", "price": "0" },
-  "publisher": { "@type": "Organization", "name": "Asymm Systems (Pvt) Ltd" }
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://canipraynow.com/#org",
+      "name": "Can I Pray Now?",
+      "url": "https://canipraynow.com/",
+      "logo": "https://canipraynow.com/images/icon-192.svg",
+      "description": "Can I Pray Now? computes the prohibited and disliked Islamic prayer times (awqat al-nahy) live for a visitor's location and the current minute."
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://canipraynow.com/#website",
+      "url": "https://canipraynow.com/",
+      "name": "Can I Pray Now?",
+      "publisher": { "@id": "https://canipraynow.com/#org" }
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Can I Pray Now?",
+      "url": "https://canipraynow.com/",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any",
+      "description": "Live answer to whether it is permissible to pray right now, based on the classically defined prohibited times for prayer (awqat al-nahy), conditioned on madhhab and prayer type.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@id": "https://canipraynow.com/#website" },
+      "publisher": { "@id": "https://canipraynow.com/#org" }
+    }
+  ]
 }
 </script>
