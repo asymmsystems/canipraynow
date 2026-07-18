@@ -86,6 +86,7 @@
   "settings.METHOD_RECOMMENDED_FOR": "Recommended for {country}",
   "settings.METHOD_RECOMMENDED": "Recommended",
   "settings.METHOD_OTHER": "Other methods",
+  "settings.METHOD_AUTHORITY_NOTE": "Your times come straight from the {authority} published timetable, so the calculation method does not change them here. It is used only for dates the timetable does not cover.",
   "settings.CHANGE": "Change",
   "settings.BASIS": "Ruling basis",
   "settings.BASIS_NOTE": "The default follows the Qurʾān and Sunnah directly, not a school. Choose a school only if you follow one - it also sets the Asr time.",

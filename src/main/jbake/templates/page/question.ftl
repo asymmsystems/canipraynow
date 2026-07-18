@@ -32,17 +32,36 @@
 }
 </script>
 </head>
-<body class="state-neutral">
+<body class="state-neutral q-page">
 <nav class="site-nav">
     <a class="brand" href="/index.html">Can I Pray Now?</a>
     <a href="/q/index.html">Questions</a>
     <a href="/methodology.html">Methodology</a>
 </nav>
-<article class="page-wrap">
+<#--
+  The question is its OWN screen and the live answer is the next one, so the
+  reader isn't handed the ruling and its long-tail explanation crammed into one
+  viewport. We split the body at its "Sources" heading (every question page has
+  exactly one): the question + explanation form the full-height hero, the
+  citations move BELOW the interactive answer as supporting material. If the
+  heading ever changes, the split simply no-ops and the whole body stays in the
+  hero - degraded, never broken.
+-->
+<#assign parts = content.body?split("<h2>Sources</h2>")>
+<article class="page-wrap q-hero">
 <span class="kicker"><a href="/q/index.html">Question</a></span>
-${content.body}
-<p><em>Rulings differ by madhhab and by what you intend to pray - the live answer below is conditioned on both. see the <a href="/methodology.html">methodology</a>.</em></p>
+${parts[0]}
+<p class="q-lead"><em>Rulings differ by madhhab and by what you intend to pray - the live answer below is conditioned on both. See the <a href="/methodology.html">methodology</a>.</em></p>
+<a class="scroll-cue" href="#answer-canvas" aria-label="Scroll to the live answer">
+    <span>See the live answer</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+</a>
 </article>
 <#include "/partial/app.ftl">
+<#if parts?size gt 1>
+<section class="page-wrap q-sources">
+<h2>Sources</h2>${parts[1]}
+</section>
+</#if>
 </body>
 </html>
