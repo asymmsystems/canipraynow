@@ -66,8 +66,20 @@ and follows your madhhab and what you intend to pray.</p>
 </ul>
 </#if>
 
+<#-- City -> question cross-links. Every city page links the full question set,
+     so each /q/ answer is reachable from anywhere and gains real inbound links
+     rather than the single link from the hub. Reuses .city-index (no new CSS).
+     Auto-syncs with the question set the same way page/questions.ftl does. -->
+<#assign cityQuestions = published_content?filter(c -> (c.type!"") == "question")?sort_by("title")>
+<#if cityQuestions?has_content>
+<h2>Common questions</h2>
+<ul class="city-index">
+<#list cityQuestions as q>    <li><a href="/${q.uri}">${q.title?html}</a></li>
+</#list></ul>
+</#if>
+
 <p><em>The verdict below updates live for ${cityName} (${content.city_tz}) and follows your selected
-madhhab and prayer type. Draft pending scholar verification; see the
+madhhab and prayer type. See the
 <a href="/methodology.html">methodology</a>.</em></p>
 </article>
 <#include "/partial/app.ftl">

@@ -22,6 +22,21 @@
 <html lang="en">
 <head>
 <#include "/partial/header.ftl">
+<#-- FAQPage built from the same question set the page lists, so the two never
+     drift. Each answer is the question page's own summary line. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+<#list questions as q>    {
+      "@type": "Question",
+      "name": "${q.title?json_string}",
+      "acceptedAnswer": { "@type": "Answer", "text": "${(q.description!"")?json_string}" }
+    }<#if q_has_next>,</#if>
+</#list>  ]
+}
+</script>
 </head>
 <body class="page">
 <nav class="site-nav">
