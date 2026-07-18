@@ -47,8 +47,8 @@
 <article class="page-wrap">
 <span class="kicker">Questions</span>
 <h1>Questions about the prohibited times</h1>
-<p>The times in which prayer is withheld are fixed in the sources but move with the sun, and what
-they forbid depends on your madhhab and on what you intend to pray. These are the questions that
+<p>The times in which prayer (salah, or namaz) is withheld are fixed in the sources but move with the
+sun, and what they forbid depends on your madhhab and on what you intend to pray. These are the questions that
 follow from that, answered directly.</p>
 
 <a class="widget-cta" href="/index.html">Can I pray now?<span>The live answer for your own location.</span></a>

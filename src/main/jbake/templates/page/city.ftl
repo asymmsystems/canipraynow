@@ -56,6 +56,11 @@ windows in which voluntary prayer waits. A fixed timetable cannot answer &ldquo;
 the verdict below is computed astronomically for ${cityName} (${content.city_tz}) this very minute,
 and follows your madhhab and what you intend to pray.</p>
 
+<p>The tool also lays out today&rsquo;s five daily prayer times for ${cityName}, Fajr, Dhuhr, Asr,
+Maghrib and Isha, on the timeline and the prayer list, so you can see exactly where each prohibited
+window falls between them. Whether you call the prayer salah, salat or namaz, the ruling on when it
+may be offered is the same, and it is computed here for your location and madhhab.</p>
+
 <#if (content.nearby)?? && content.nearby?has_content>
 <h2>Nearby cities</h2>
 <ul class="nearby">
