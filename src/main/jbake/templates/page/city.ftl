@@ -57,9 +57,9 @@ the verdict below is computed astronomically for ${cityName} (${content.city_tz}
 and follows your madhhab and what you intend to pray.</p>
 
 <p>The tool also lays out today&rsquo;s five daily prayer times for ${cityName}, Fajr, Dhuhr, Asr,
-Maghrib and Isha, on the timeline and the prayer list, so you can see where each restricted window
-falls between them. Salah (also written salat, or namaz) is what those windows restrict, and the
-answer above shows, for ${cityName}, whether one is open right now.</p>
+Maghrib and Isha, on the timeline and the prayer list. The open stretches between them are when
+salah, or namaz, may be prayed, and the restricted windows are when it may not; the live answer
+shows where ${cityName} stands this minute.</p>
 
 <#if (content.nearby)?? && content.nearby?has_content>
 <h2>Nearby cities</h2>
