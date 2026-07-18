@@ -106,6 +106,25 @@ for (const [cc, m] of Object.entries(md.predominantMadhhab || {})) {
     ck(sh === 'PERMITTED', 'shafii: janazah permitted at zenith (the divergence)');
 }
 
+// 4c. Evidence integrity: every primary-source id a cell cites must exist in
+// the ruleset's evidences map, and every evidence must carry a URL. A dangling
+// citation in a religious app is exactly the kind of error to fail the build on.
+{
+    const ev = rs.evidence.evidences || {};
+    ck(Object.keys(ev).length > 0, 'evidence ruleset must carry an evidences map');
+    for (const [id, e] of Object.entries(ev)) {
+        ck(typeof e.url === 'string' && e.url.length > 0, `evidence ${id} has no url`);
+        ck(e.type === 'quran' || e.type === 'hadith', `evidence ${id} bad type`);
+    }
+    for (const [w, types] of Object.entries(rs.evidence.matrix)) {
+        for (const [pt, cell] of Object.entries(types)) {
+            for (const id of cell.evidence || []) {
+                ck(Boolean(ev[id]), `evidence ruleset ${w}/${pt} cites unknown source "${id}"`);
+            }
+        }
+    }
+}
+
 // 5. Isha preferred end precedes true dawn everywhere it resolves.
 for (const [n, lat, lng] of LOCS) {
     const a = computeDayEvents(day, { lat, lng }, 'MuslimWorldLeague', 'hanafi');

@@ -6,56 +6,391 @@
   "verified_by": null,
   "verified_at": null,
   "_basis": "The Salafi / ahl al-hadith position on awqāt al-nahy, issued as ONE ruling for everyone rather than by school. Anchored to IslamQA (Ibn Bāz, Ibn ʿUthaymīn) and al-Albānī. Coincides with the Shāfiʿī outcome except that the funeral prayer in the three solar windows is discouraged-unless-needed (al-Albānī, Aḥkām al-Janāʾiz) rather than freely permitted. See research/salafi-awqat-al-nahy.md. This is the shipped DEFAULT so the user need not pick a madhhab.",
-  "sources": [
+  "params": {
+    "P_sunrise": {
+      "value": 20,
+      "unit": "minutes",
+      "range": [
+        12,
+        20
+      ],
+      "basis": "Until the sun has risen a spear's length (~15-20 min); scholar to set final value.",
+      "verified_by": null,
+      "verified_at": null
+    },
+    "P_zenith": {
+      "value": 10,
+      "unit": "minutes",
+      "range": [
+        5,
+        15
+      ],
+      "basis": "Istiwāʾ until zawāl; a few minutes; scholar to set final value.",
+      "verified_by": null,
+      "verified_at": null
+    },
+    "P_isfirar": {
+      "value": 20,
+      "unit": "minutes",
+      "range": [
+        20,
+        40
+      ],
+      "basis": "From the sun yellowing until it fully sets; scholar to confirm.",
+      "verified_by": null,
+      "verified_at": null
+    },
+    "anchor_convention": {
+      "value": "prayer-time-entry",
+      "basis": "The after-Fajr/after-Asr bar attaches to having PRAYED (IslamQA-preferred); the app cannot know that, so it anchors conservatively to the prayer-time entry. Scholar to confirm.",
+      "verified_by": null,
+      "verified_at": null
+    }
+  },
+  "asrShadowFactor": 1,
+  "exceptions": [
+    "FRIDAY_ZENITH",
+    "MAKKAH_HARAM"
+  ],
+  "matrix": {
+    "AFTER_FAJR": {
+      "fardCurrent": {
+        "status": "PERMITTED",
+        "basis": "A due obligatory prayer is never barred by the prohibited times.",
+        "evidence": [
+          "salah-timed"
+        ]
+      },
+      "qada": {
+        "status": "PERMITTED",
+        "basis": "\"Let him pray it when he remembers\" (Bukhārī/Muslim); a make-up is a prayer with a cause.",
+        "evidence": [
+          "qada-when-remembered"
+        ]
+      },
+      "janazah": {
+        "status": "PERMITTED",
+        "basis": "The funeral prayer has a present cause; the burial prohibition names only the three solar times.",
+        "evidence": [
+          "three-solar-times"
+        ]
+      },
+      "causalNafl": {
+        "status": "PERMITTED",
+        "basis": "Dhawāt al-asbāb (taḥiyyat al-masjid, wuḍūʾ, ṭawāf, kusūf...) are permitted; Ibn Taymiyyah, adopted by IslamQA.",
+        "evidence": [
+          "friday-khutbah-two-rakahs",
+          "makkah-tawaf-any-hour"
+        ]
+      },
+      "pureNafl": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "notes": [
+          "SUNNAH_FAJR"
+        ],
+        "basis": "\"No prayer after Fajr until the sun rises\" (Bukhārī/Muslim) - only causeless nafl is blocked.",
+        "evidence": [
+          "no-nafl-after-fajr-asr"
+        ]
+      }
+    },
+    "SUNRISE": {
+      "fardCurrent": {
+        "status": "PROHIBITED",
+        "notes": [
+          "FAJR_EXPIRED"
+        ],
+        "basis": "Fajr's time ends at sunrise; make it up as qaḍāʾ once the sun has risen. Never a bare NO (spec §3.6).",
+        "evidence": [
+          "qada-when-remembered"
+        ]
+      },
+      "qada": {
+        "status": "PERMITTED",
+        "basis": "Making up a missed obligatory prayer is obligatory even here (IslamQA 20013).",
+        "evidence": [
+          "qada-when-remembered"
+        ]
+      },
+      "janazah": {
+        "status": "DISLIKED",
+        "notes": [
+          "JANAZAH_SOLAR"
+        ],
+        "basis": "al-Albānī: avoid in the three solar times except in case of necessity; the Uqbah hadith names burial here.",
+        "evidence": [
+          "three-solar-times"
+        ]
+      },
+      "causalNafl": {
+        "status": "PERMITTED",
+        "basis": "Ibn Bāz / Ibn ʿUthaymīn extend the causal-prayer exception even into the strict solar windows.",
+        "evidence": [
+          "makkah-tawaf-any-hour",
+          "friday-khutbah-two-rakahs"
+        ]
+      },
+      "pureNafl": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "basis": "Causeless nafl is prohibited in the strict times.",
+        "evidence": [
+          "three-solar-times",
+          "no-nafl-after-fajr-asr"
+        ]
+      }
+    },
+    "ZENITH": {
+      "fardCurrent": {
+        "status": "PERMITTED",
+        "unreachable": true,
+        "basis": "No obligatory prayer's window naturally falls at istiwāʾ; defined defensively as PERMITTED.",
+        "evidence": [
+          "salah-timed"
+        ]
+      },
+      "qada": {
+        "status": "PERMITTED",
+        "basis": "Making up a missed obligatory prayer is obligatory even here.",
+        "evidence": [
+          "qada-when-remembered"
+        ]
+      },
+      "janazah": {
+        "status": "DISLIKED",
+        "notes": [
+          "JANAZAH_SOLAR"
+        ],
+        "basis": "al-Albānī: avoid in the three solar times except in case of necessity.",
+        "evidence": [
+          "three-solar-times"
+        ]
+      },
+      "causalNafl": {
+        "status": "PERMITTED",
+        "basis": "Causal prayers are permitted; the Friday-zenith greeting is the clearest case.",
+        "evidence": [
+          "friday-khutbah-two-rakahs"
+        ]
+      },
+      "pureNafl": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "basis": "Causeless nafl is prohibited in the strict times.",
+        "evidence": [
+          "three-solar-times"
+        ]
+      }
+    },
+    "AFTER_ASR": {
+      "fardCurrent": {
+        "status": "PERMITTED",
+        "basis": "A due obligatory prayer is never barred by the prohibited times.",
+        "evidence": [
+          "salah-timed",
+          "asr-rakah-before-sunset"
+        ]
+      },
+      "qada": {
+        "status": "PERMITTED",
+        "basis": "Umm Salamah: the Prophet made up the Dhuhr sunnah after Asr - a causal make-up is allowed here.",
+        "evidence": [
+          "prayer-after-asr-umm-salamah",
+          "qada-when-remembered"
+        ]
+      },
+      "janazah": {
+        "status": "PERMITTED",
+        "basis": "The burial prohibition names only the three solar times; after Asr it is permitted.",
+        "evidence": [
+          "three-solar-times"
+        ]
+      },
+      "causalNafl": {
+        "status": "PERMITTED",
+        "basis": "Dhawāt al-asbāb permitted; the after-Asr bar is on causeless nafl only.",
+        "evidence": [
+          "prayer-after-asr-umm-salamah"
+        ]
+      },
+      "pureNafl": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "basis": "\"No prayer after Asr until the sun sets\" (Bukhārī/Muslim) - causeless nafl only.",
+        "evidence": [
+          "no-nafl-after-fajr-asr"
+        ]
+      }
+    },
+    "SUNSET": {
+      "fardCurrent": {
+        "status": "PERMITTED_WITH_WARNING",
+        "notes": [
+          "TODAYS_ASR"
+        ],
+        "basis": "That day's unperformed Asr must still be prayed before Maghrib; valid, though delaying it was sinful.",
+        "evidence": [
+          "asr-rakah-before-sunset"
+        ]
+      },
+      "qada": {
+        "status": "PERMITTED",
+        "basis": "Making up a missed obligatory prayer is obligatory even here.",
+        "evidence": [
+          "qada-when-remembered"
+        ]
+      },
+      "janazah": {
+        "status": "DISLIKED",
+        "notes": [
+          "JANAZAH_SOLAR"
+        ],
+        "basis": "al-Albānī: avoid in the three solar times except in case of necessity.",
+        "evidence": [
+          "three-solar-times"
+        ]
+      },
+      "causalNafl": {
+        "status": "PERMITTED",
+        "basis": "Ibn Bāz permitted causal prayers even as the sun sets.",
+        "evidence": [
+          "makkah-tawaf-any-hour"
+        ]
+      },
+      "pureNafl": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "basis": "Causeless nafl is prohibited in the strict times.",
+        "evidence": [
+          "three-solar-times"
+        ]
+      }
+    }
+  },
+  "commentary": [
     "IslamQA 112114 (dhawāt al-asbāb permitted; Ibn Taymiyyah)",
     "IslamQA 81978 (causal-prayer exception is the more correct view)",
     "IslamQA 20013 (qaḍāʾ of fard obligatory even in prohibited times)",
     "IslamQA 136695 (W1 tied to the Fajr prayer, not the raw time)",
     "al-Albānī, Aḥkām al-Janāʾiz (janāzah in the 3 solar times: avoid unless necessity)"
   ],
-  "params": {
-    "P_sunrise": { "value": 20, "unit": "minutes", "range": [12, 20], "basis": "Until the sun has risen a spear's length (~15-20 min); scholar to set final value.", "verified_by": null, "verified_at": null },
-    "P_zenith": { "value": 10, "unit": "minutes", "range": [5, 15], "basis": "Istiwāʾ until zawāl; a few minutes; scholar to set final value.", "verified_by": null, "verified_at": null },
-    "P_isfirar": { "value": 20, "unit": "minutes", "range": [20, 40], "basis": "From the sun yellowing until it fully sets; scholar to confirm.", "verified_by": null, "verified_at": null },
-    "anchor_convention": { "value": "prayer-time-entry", "basis": "The after-Fajr/after-Asr bar attaches to having PRAYED (IslamQA-preferred); the app cannot know that, so it anchors conservatively to the prayer-time entry. Scholar to confirm.", "verified_by": null, "verified_at": null }
-  },
-  "asrShadowFactor": 1,
-  "exceptions": ["FRIDAY_ZENITH", "MAKKAH_HARAM"],
-  "matrix": {
-    "AFTER_FAJR": {
-      "fardCurrent": { "status": "PERMITTED", "basis": "A due obligatory prayer is never barred by the prohibited times." },
-      "qada": { "status": "PERMITTED", "basis": "\"Let him pray it when he remembers\" (Bukhārī/Muslim); a make-up is a prayer with a cause." },
-      "janazah": { "status": "PERMITTED", "basis": "The funeral prayer has a present cause; the burial prohibition names only the three solar times." },
-      "causalNafl": { "status": "PERMITTED", "basis": "Dhawāt al-asbāb (taḥiyyat al-masjid, wuḍūʾ, ṭawāf, kusūf...) are permitted; Ibn Taymiyyah, adopted by IslamQA." },
-      "pureNafl": { "status": "PROHIBITED", "invalid": true, "notes": ["SUNNAH_FAJR"], "basis": "\"No prayer after Fajr until the sun rises\" (Bukhārī/Muslim) - only causeless nafl is blocked." }
+  "evidences": {
+    "salah-timed": {
+      "type": "quran",
+      "ref": "an-Nisāʾ 4:103",
+      "url": "https://quran.com/4/103",
+      "text": "Indeed, prayer has been decreed upon the believers a decree of specified times."
     },
-    "SUNRISE": {
-      "fardCurrent": { "status": "PROHIBITED", "notes": ["FAJR_EXPIRED"], "basis": "Fajr's time ends at sunrise; make it up as qaḍāʾ once the sun has risen. Never a bare NO (spec §3.6)." },
-      "qada": { "status": "PERMITTED", "basis": "Making up a missed obligatory prayer is obligatory even here (IslamQA 20013)." },
-      "janazah": { "status": "DISLIKED", "notes": ["JANAZAH_SOLAR"], "basis": "al-Albānī: avoid in the three solar times except in case of necessity; the Uqbah hadith names burial here." },
-      "causalNafl": { "status": "PERMITTED", "basis": "Ibn Bāz / Ibn ʿUthaymīn extend the causal-prayer exception even into the strict solar windows." },
-      "pureNafl": { "status": "PROHIBITED", "invalid": true, "basis": "Causeless nafl is prohibited in the strict times." }
+    "no-nafl-after-fajr-asr": {
+      "type": "hadith",
+      "narrator": "Abū Saʿīd al-Khudrī",
+      "grade": "Ṣaḥīḥ",
+      "collection": "Ṣaḥīḥ al-Bukhārī",
+      "ref": "586",
+      "url": "https://sunnah.com/bukhari:586",
+      "also": [
+        {
+          "collection": "Ṣaḥīḥ Muslim",
+          "ref": "827",
+          "url": "https://sunnah.com/muslim:827"
+        }
+      ],
+      "text": "There is no prayer after the morning prayer till the sun rises, and no prayer after the ʿAsr prayer till the sun sets."
     },
-    "ZENITH": {
-      "fardCurrent": { "status": "PERMITTED", "unreachable": true, "basis": "No obligatory prayer's window naturally falls at istiwāʾ; defined defensively as PERMITTED." },
-      "qada": { "status": "PERMITTED", "basis": "Making up a missed obligatory prayer is obligatory even here." },
-      "janazah": { "status": "DISLIKED", "notes": ["JANAZAH_SOLAR"], "basis": "al-Albānī: avoid in the three solar times except in case of necessity." },
-      "causalNafl": { "status": "PERMITTED", "basis": "Causal prayers are permitted; the Friday-zenith greeting is the clearest case." },
-      "pureNafl": { "status": "PROHIBITED", "invalid": true, "basis": "Causeless nafl is prohibited in the strict times." }
+    "three-solar-times": {
+      "type": "hadith",
+      "narrator": "ʿUqbah ibn ʿĀmir",
+      "grade": "Ṣaḥīḥ",
+      "collection": "Ṣaḥīḥ Muslim",
+      "ref": "831",
+      "url": "https://sunnah.com/muslim:831",
+      "text": "Three times at which the Messenger of Allah forbade us to pray, or to bury our dead: when the sun begins to rise till it is fully up; when it stands at its height at midday till it passes the meridian; and when it draws near to setting till it sets."
     },
-    "AFTER_ASR": {
-      "fardCurrent": { "status": "PERMITTED", "basis": "A due obligatory prayer is never barred by the prohibited times." },
-      "qada": { "status": "PERMITTED", "basis": "Umm Salamah: the Prophet made up the Dhuhr sunnah after Asr - a causal make-up is allowed here." },
-      "janazah": { "status": "PERMITTED", "basis": "The burial prohibition names only the three solar times; after Asr it is permitted." },
-      "causalNafl": { "status": "PERMITTED", "basis": "Dhawāt al-asbāb permitted; the after-Asr bar is on causeless nafl only." },
-      "pureNafl": { "status": "PROHIBITED", "invalid": true, "basis": "\"No prayer after Asr until the sun sets\" (Bukhārī/Muslim) - causeless nafl only." }
+    "qada-when-remembered": {
+      "type": "hadith",
+      "narrator": "Anas ibn Mālik",
+      "grade": "Ṣaḥīḥ",
+      "collection": "Ṣaḥīḥ al-Bukhārī",
+      "ref": "597",
+      "url": "https://sunnah.com/bukhari:597",
+      "also": [
+        {
+          "collection": "Ṣaḥīḥ Muslim",
+          "ref": "684a",
+          "url": "https://sunnah.com/muslim:684a"
+        }
+      ],
+      "text": "Whoever forgets a prayer should pray it when he remembers it; there is no expiation except to pray the same."
     },
-    "SUNSET": {
-      "fardCurrent": { "status": "PERMITTED_WITH_WARNING", "notes": ["TODAYS_ASR"], "basis": "That day's unperformed Asr must still be prayed before Maghrib; valid, though delaying it was sinful." },
-      "qada": { "status": "PERMITTED", "basis": "Making up a missed obligatory prayer is obligatory even here." },
-      "janazah": { "status": "DISLIKED", "notes": ["JANAZAH_SOLAR"], "basis": "al-Albānī: avoid in the three solar times except in case of necessity." },
-      "causalNafl": { "status": "PERMITTED", "basis": "Ibn Bāz permitted causal prayers even as the sun sets." },
-      "pureNafl": { "status": "PROHIBITED", "invalid": true, "basis": "Causeless nafl is prohibited in the strict times." }
+    "asr-rakah-before-sunset": {
+      "type": "hadith",
+      "narrator": "Abū Hurayrah",
+      "grade": "Ṣaḥīḥ",
+      "collection": "Ṣaḥīḥ al-Bukhārī",
+      "ref": "579",
+      "url": "https://sunnah.com/bukhari:579",
+      "also": [
+        {
+          "collection": "Ṣaḥīḥ Muslim",
+          "ref": "608a",
+          "url": "https://sunnah.com/muslim:608a"
+        }
+      ],
+      "text": "Whoever catches one rakʿah of the ʿAsr prayer before sunset has caught the ʿAsr prayer."
+    },
+    "prayer-after-asr-umm-salamah": {
+      "type": "hadith",
+      "narrator": "Umm Salamah",
+      "grade": "Ṣaḥīḥ",
+      "collection": "Ṣaḥīḥ al-Bukhārī",
+      "ref": "1233",
+      "url": "https://sunnah.com/bukhari:1233",
+      "also": [
+        {
+          "collection": "Ṣaḥīḥ Muslim",
+          "ref": "834",
+          "url": "https://sunnah.com/muslim:834"
+        }
+      ],
+      "text": "The Prophet prayed two rakʿahs after ʿAsr, saying they were the two of Zuhr he had missed - a prayer with a cause offered in a prohibited time."
+    },
+    "makkah-tawaf-any-hour": {
+      "type": "hadith",
+      "narrator": "Jubayr ibn Muṭʿim",
+      "grade": "Ṣaḥīḥ (al-Albānī)",
+      "collection": "Sunan Abī Dāwūd",
+      "ref": "1894",
+      "url": "https://sunnah.com/abudawud:1894",
+      "also": [
+        {
+          "collection": "Jāmiʿ at-Tirmidhī",
+          "ref": "868",
+          "url": "https://sunnah.com/tirmidhi:868"
+        },
+        {
+          "collection": "Sunan Ibn Mājah",
+          "ref": "1254",
+          "url": "https://sunnah.com/ibnmajah:1254"
+        }
+      ],
+      "text": "O Banū ʿAbd Manāf, do not prevent anyone from circumambulating this House and praying at any hour he wishes, night or day."
+    },
+    "friday-khutbah-two-rakahs": {
+      "type": "hadith",
+      "narrator": "Jābir ibn ʿAbdillāh",
+      "grade": "Ṣaḥīḥ",
+      "collection": "Ṣaḥīḥ al-Bukhārī",
+      "ref": "931",
+      "url": "https://sunnah.com/bukhari:931",
+      "also": [
+        {
+          "collection": "Ṣaḥīḥ Muslim",
+          "ref": "875a",
+          "url": "https://sunnah.com/muslim:875a"
+        }
+      ],
+      "text": "A man entered while the Prophet was giving the Friday sermon; he asked him whether he had prayed, and when he said no, told him to stand and pray two rakʿahs."
     }
   }
 }
