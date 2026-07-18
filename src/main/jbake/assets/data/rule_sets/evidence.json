@@ -2,7 +2,7 @@
   "id": "evidence",
   "label": "Evidence-based",
   "sublabel": "Qurʾān & Sunnah, not madhhab-bound",
-  "version": "evidence-0.1.0-draft",
+  "version": "evidence-0.1.0",
   "verified_by": null,
   "verified_at": null,
   "_basis": "The Salafi / ahl al-hadith position on awqāt al-nahy, issued as ONE ruling for everyone rather than by school. Anchored to IslamQA (Ibn Bāz, Ibn ʿUthaymīn) and al-Albānī. Coincides with the Shāfiʿī outcome except that the funeral prayer in the three solar windows is discouraged-unless-needed (al-Albānī, Aḥkām al-Janāʾiz) rather than freely permitted. See research/salafi-awqat-al-nahy.md. This is the shipped DEFAULT so the user need not pick a madhhab.",
