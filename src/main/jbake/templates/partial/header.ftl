@@ -47,6 +47,7 @@
 <meta property="og:image" content="${config.site_host}/images/og-sun-ruler.svg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#064e3b">
+<link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/images/icon-192.svg">
 <link rel="manifest" href="/manifest.webmanifest">
