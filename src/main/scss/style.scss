@@ -1191,6 +1191,19 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
     opacity: 0.6;
 }
 
+.evidence-list {
+    list-style: none;
+    margin: var(--space-md) 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+
+    li { line-height: var(--t-lh-relaxed); }
+    q { color: var(--text-primary); font-style: italic; }
+    a { text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
+}
+
 .widget-cta {
     display: block;
     margin: var(--space-xl) 0;
