@@ -21,7 +21,7 @@
 <#assign countryName = content.country_name>
 <#-- Assigned before the header include, which honours them (see header.ftl). -->
 <#assign metaTitle = "Can I Pray Now in ${cityName}? Prohibited Prayer Times Today">
-<#assign metaDescription = "Live answer for ${cityName}, ${countryName}: is it permissible to pray right now? The prohibited and disliked prayer times (sunrise, zenith, sunset and the after-Fajr and after-Asr windows), computed astronomically.">
+<#assign metaDescription = "Live answer for ${cityName}, ${countryName}: is it permissible to pray your salah right now? The prohibited and disliked namaz times (sunrise, zenith, sunset, and the after-Fajr and after-Asr windows), computed for ${cityName}.">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,8 +58,8 @@ and follows your madhhab and what you intend to pray.</p>
 
 <p>The tool also lays out today&rsquo;s five daily prayer times for ${cityName}, Fajr, Dhuhr, Asr,
 Maghrib and Isha, on the timeline and the prayer list. The open stretches between them are when
-salah, or namaz, may be prayed, and the restricted windows are when it may not; the live answer
-shows where ${cityName} stands this minute.</p>
+salah may be offered, and the restricted windows are when it may not; the live answer shows where
+${cityName} stands this minute.</p>
 
 <#if (content.nearby)?? && content.nearby?has_content>
 <h2>Nearby cities</h2>
