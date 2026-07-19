@@ -63,7 +63,7 @@
 <nav class="site-nav">
     <a class="brand" href="/index.html">Can I Pray Now?</a>
     <a href="/cities.html">Cities</a>
-    <a href="/methodology.html">Methodology</a>
+    <a href="/methodology.html">Rulings &amp; evidence</a>
 </nav>
 <article class="page-wrap">
 <span class="kicker">${countryName}</span>
