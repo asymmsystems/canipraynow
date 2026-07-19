@@ -9,7 +9,6 @@
  * @author Fahim Farook
  */
 
-import { t } from '../strings.js';
 import { esc } from '../utils.js';
 
 /** @param {HTMLElement} host */
@@ -27,9 +26,17 @@ export async function renderSponsor(host) {
         return;
     }
     const s = data.slots[0];
+    // label is a required field, either "Sponsored" (paid placement) or
+    // "Affiliate" (commission link). A slot missing it is a config error, so
+    // fail safe and render nothing rather than an unlabelled commercial card.
+    if (!s.label) {
+        host.hidden = true;
+        host.innerHTML = '';
+        return;
+    }
     host.hidden = false;
     host.innerHTML = `<a class="sponsor-card" href="/go/${esc(s.id)}" rel="sponsored noopener">
-        <span class="sponsor-label">${esc(s.label || t('sponsor.LABEL'))}</span>
+        <span class="sponsor-label">${esc(s.label)}</span>
         ${s.img ? `<img src="${esc(s.img)}" alt="" loading="lazy" width="48" height="48">` : ''}
         <span class="sponsor-body"><strong>${esc(s.title)}</strong><span>${esc(s.body)}</span></span>
     </a>`;
