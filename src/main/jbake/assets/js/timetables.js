@@ -23,7 +23,8 @@
  * country here once scripts/fetch-timetables.mjs has baked its tables.
  */
 const AUTHORITY_TIMETABLES = {
-    LK: { folder: 'lk', name: 'ACJU', url: 'https://www.acju.lk/prayer-times/' }
+    LK: { folder: 'lk', name: 'ACJU', url: 'https://www.acju.lk/prayer-times/' },
+    MY: { folder: 'my', name: 'JAKIM', url: 'https://www.e-solat.gov.my/' }
 };
 
 /** Sentinel method value: "serve the country's extracted authority timetable". */
