@@ -55,8 +55,35 @@ public final class GenerateCityPages {
             city_tz=%5$s
             city_cc=%6$s
             nearby=%7$s
+            city_authority=%9$s
+            city_method=%10$s
+            city_madhhab=%11$s
             ~~~~~~
             """;
+
+    /** Method key -> human phrase, so each country page names its own convention. */
+    private static final Map<String, String> METHOD_LABEL = Map.ofEntries(
+            Map.entry("MuslimWorldLeague", "the Muslim World League convention"),
+            Map.entry("NorthAmerica", "the ISNA (North America) convention"),
+            Map.entry("Egyptian", "the Egyptian General Authority of Survey convention"),
+            Map.entry("UmmAlQura", "the Umm al-Qura convention"),
+            Map.entry("Karachi", "the University of Islamic Sciences, Karachi convention"),
+            Map.entry("Tehran", "the Institute of Geophysics, Tehran convention"),
+            Map.entry("Dubai", "the Dubai (UAE) convention"),
+            Map.entry("Kuwait", "the Kuwait convention"),
+            Map.entry("Qatar", "the Qatar convention"),
+            Map.entry("Singapore", "the MUIS (Singapore) convention"),
+            Map.entry("Turkey", "the Diyanet (Turkey) convention"),
+            Map.entry("France", "the UOIF (France) convention"),
+            Map.entry("Russia", "the Spiritual Administration of Muslims of Russia convention"),
+            Map.entry("MoonsightingCommittee", "the Moonsighting Committee Worldwide convention"),
+            Map.entry("ACJU", "the ACJU (Sri Lanka) convention"),
+            Map.entry("Kemenag", "the Kemenag (Indonesia) convention"));
+
+    /** Predominant-madhhab key -> display name. */
+    private static final Map<String, String> MADHHAB_LABEL = Map.of(
+            "maliki", "Mālikī", "hanbali", "Ḥanbalī", "jafari", "Jaʿfarī",
+            "ibadi", "Ibāḍī", "hanafi", "Ḥanafī", "shafii", "Shāfiʿī");
 
     public static void main(String[] args) throws IOException {
         Path basedir = Path.of(args.length > 0 ? args[0] : ".");
@@ -66,6 +93,16 @@ public final class GenerateCityPages {
         Object parsed = Json.parse(Files.readString(cities, StandardCharsets.UTF_8));
         List<?> all = (List<?>) ((Map<?, ?>) parsed).get("cities");
 
+        // Per-country context (authority, method, dominant madhhab), so each city
+        // page carries genuinely unique, factual content rather than templated
+        // near-duplicates - the difference between ranking and being demoted.
+        Map<?, ?> defaults = (Map<?, ?>) Json.parse(
+                Files.readString(basedir.resolve("src/main/jbake/assets/data/method-defaults.json"), StandardCharsets.UTF_8));
+        Map<?, ?> byCountry = (Map<?, ?>) defaults.get("byCountry");
+        Map<?, ?> predominant = (Map<?, ?>) defaults.get("predominantMadhhab");
+        Map<?, ?> authorities = (Map<?, ?>) ((Map<?, ?>) Json.parse(
+                Files.readString(basedir.resolve("scripts/authorities.json"), StandardCharsets.UTF_8))).get("authorities");
+
         int removed = sweep(content);
         int written = 0;
         for (Object entry : all) {
@@ -73,13 +110,22 @@ public final class GenerateCityPages {
             if (!Boolean.TRUE.equals(city.get("page"))) {
                 continue;
             }
+            String cc = str(city, "cc");
+            String methodKey = byCountry.get(cc) instanceof String s ? s : "MuslimWorldLeague";
+            String methodLabel = METHOD_LABEL.getOrDefault(methodKey, "a standard convention");
+            String authority = authorities.get(cc) instanceof Map<?, ?> a
+                    && a.get("name") instanceof String n ? n : "";
+            String madhhab = predominant.get(cc) instanceof String m
+                    ? MADHHAB_LABEL.getOrDefault(m, m) : "";
+
             Path dir = content.resolve(str(city, "countrySlug"));
             Files.createDirectories(dir);
             String stub = STUB.formatted(
                     str(city, "name"), str(city, "country"),
                     num(city, "lat"), num(city, "lng"),
                     str(city, "tz"), str(city, "cc"),
-                    nearby(city, all), MARKER);
+                    nearby(city, all), MARKER,
+                    authority, methodLabel, madhhab);
             Files.writeString(dir.resolve(str(city, "slug") + ".html"), stub, StandardCharsets.UTF_8);
             written++;
         }
