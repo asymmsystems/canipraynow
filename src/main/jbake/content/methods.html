@@ -102,7 +102,7 @@ status=published
 <p>Wherever you are, the app starts from <strong>your country's own recognised prayer-time authority</strong>, because they know their country best and their times are what your local mosque prays by. This works in one of two ways:</p>
 
 <ul>
-<li><strong>Where we have the authority's own published timetable</strong> (Sri Lanka's ACJU today), the app serves those <strong>exact printed times</strong>, matched to your nearest district zone.</li>
+<li><strong>Where we have the authority's own published timetable</strong> (Sri Lanka's ACJU and Malaysia's JAKIM today), the app serves those <strong>exact printed times</strong>, matched to your nearest district zone.</li>
 <li><strong>Everywhere else</strong>, the app <strong>computes</strong> the times using <strong>the very method that authority uses</strong>. This is not a fallback to something generic: most national authorities <em>define</em> their official times by a calculation method (Saudi Arabia by Umm al-Qura, Egypt by the Egyptian Survey, North America by ISNA), so computing with that method reproduces the authority's own times.</li>
 </ul>
 
@@ -163,7 +163,7 @@ status=published
 <tr><td>Sri Lanka</td><td>All Ceylon Jamiyyathul Ulama (ACJU)</td><td>ACJU</td><td><strong>Extracted timetable</strong></td></tr>
 <tr><td>Pakistan, India, Bangladesh, Afghanistan, Nepal, Myanmar</td><td>Karachi convention / national bodies</td><td>Karachi</td><td>Computed (Bangladesh table deviates - extract later)</td></tr>
 <tr><td>Indonesia</td><td>Kemenag - Bimas Islam</td><td>Kemenag</td><td>Computed (adds ~2 min iḥtiyāṭ - extract later)</td></tr>
-<tr><td>Malaysia</td><td>JAKIM (e-solat)</td><td>MUIS</td><td>Computed (per-zone tables - extract next)</td></tr>
+<tr><td>Malaysia</td><td>JAKIM (e-solat)</td><td>MUIS</td><td><strong>Extracted timetable</strong> (60 official zones)</td></tr>
 <tr><td>Singapore</td><td>MUIS</td><td>MUIS</td><td>Computed</td></tr>
 <tr><td>Brunei, Thailand</td><td>Religious Affairs / CICOT</td><td>MUIS</td><td>Computed</td></tr>
 <tr><td>Philippines</td><td>NCMF</td><td>Karachi</td><td>Computed</td></tr>
@@ -194,6 +194,6 @@ status=published
 
 <p>Most national authorities <strong>define their official times by a calculation method</strong>, so computing with that method <em>is</em> using the local authority - exactly, not approximately. Only a minority publish tables that deviate from a pure method (a safety margin, an observational adjustment, a high-latitude rule). For those, we extract the authority's real numbers into a baked table, one authority at a time, the way Sri Lanka's ACJU is done today. Extraction is an offline, once-a-year step; the app itself never calls a prayer-times service.</p>
 
-<p>Authorities queued for extraction, in rough order: Malaysia (JAKIM), Indonesia (Kemenag), Turkey (Diyanet), Bangladesh (Islamic Foundation), the Balkan takvim authorities, the UK and Nordic high-latitude timetables, Morocco (Habous), and the Central Asian boards. Until each is extracted, its country is served by computing with that authority's own method, which is already correct for the great majority.</p>
+<p>Extracted so far: <strong>Sri Lanka (ACJU)</strong> and <strong>Malaysia (JAKIM, 60 official zones)</strong>. Queued next, in rough order: Indonesia (Kemenag), Turkey (Diyanet), Bangladesh (Islamic Foundation), the Balkan takvim authorities, the UK and Nordic high-latitude timetables, Morocco (Habous), and the Central Asian boards. Until each is extracted, its country is served by computing with that authority's own method, which is already correct for the great majority.</p>
 
 <p class="setting-note">Sources for the tables above are the authorities' own publications; the full evidence, per country, is maintained in the project's research record. Times you see on the app are computed astronomically on your device or read from a baked authority table - never fetched live. See the <a href="/methodology.html">methodology</a> and <a href="/data-sources.html">data sources</a>.</p>
