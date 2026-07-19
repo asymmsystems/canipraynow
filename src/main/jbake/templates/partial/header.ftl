@@ -53,3 +53,18 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/style.css">
+<#-- TechArticle for reference pages (front matter: schema_type=TechArticle). Reuses the
+     already-computed metaTitle / metaDescription / canonicalUrl. -->
+<#if (content.schema_type)?? && content.schema_type == "TechArticle">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "${metaTitle?json_string}",
+  "description": "${metaDescription?json_string}",
+  "url": "${canonicalUrl}",
+  "mainEntityOfPage": "${canonicalUrl}",
+  "publisher": { "@type": "Organization", "name": "Can I Pray Now?", "url": "https://canipraynow.com/" }
+}
+</script>
+</#if>
