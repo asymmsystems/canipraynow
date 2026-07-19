@@ -51,7 +51,7 @@
 <article class="page-wrap q-hero">
 <span class="kicker"><a href="/q/index.html">Question</a></span>
 ${parts[0]}
-<p class="q-lead"><em>Rulings differ by madhhab and by what you intend to pray - the live answer below is conditioned on both. See the <a href="/methodology.html">methodology</a>.</em></p>
+<p class="q-lead"><em>Rulings differ by madhhab and by what you intend to pray - the live answer below is conditioned on both. New to the terms? See <a href="/methods.html">how prayer times work</a> and the <a href="/methodology.html">methodology</a>.</em></p>
 <a class="scroll-cue" href="#answer-canvas" aria-label="Scroll to the live answer">
     <span>See the live answer</span>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>

@@ -68,10 +68,17 @@ verify: release  ## Build, then report budgets and broken internal links
 ##
 ## These hit the network and rewrite committed data. Never run by the build.
 
-timetables:  ## Fetch + parse authority timetables -> assets/data/timetables/ (yearly)
+timetables:  ## Fetch + parse an authority's timetable -> assets/data/timetables/ (yearly). AUTH=lk (default) | my | --list
 	@echo "Fetching official timetables. This hits third-party sites and rewrites"
 	@echo "committed data - review the diff before committing."
-	@node scripts/fetch-timetables.mjs
+	@if [ "$(AUTH)" = "lk" ] || [ -z "$(AUTH)" ]; then \
+		node scripts/fetch-timetables.mjs; \
+	else \
+		node scripts/fetch-authority.mjs $(AUTH); \
+	fi
+
+authorities:  ## List every authority and its scrape status (implemented / blocked)
+	@node scripts/fetch-authority.mjs --list
 
 coverage:  ## Regenerate the country coverage report
 	@python3 scripts/coverage-report.py > $(RESEARCH)/prayer-time-coverage.md

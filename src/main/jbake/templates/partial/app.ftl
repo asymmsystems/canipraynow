@@ -77,7 +77,7 @@
         <div class="ad-slot" id="ad-slot-1" data-ad-slot hidden aria-label="Advertisement"></div>
         <footer class="app-footer">
             <span id="ruleset-version"></span>
-            <br><a href="/methodology.html">Methodology</a> &#183; <a href="/cities.html">Cities</a> &#183; <a href="/q/index.html">Questions</a> &#183; <a href="/privacy.html">Privacy</a>
+            <br><a href="/methods.html">Prayer times</a> &#183; <a href="/methodology.html">Methodology</a> &#183; <a href="/cities.html">Cities</a> &#183; <a href="/q/index.html">Questions</a> &#183; <a href="/privacy.html">Privacy</a>
         </footer>
     </aside>
 </div>
