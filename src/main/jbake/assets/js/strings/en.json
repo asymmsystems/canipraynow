@@ -105,6 +105,5 @@
   "sidebar.NEXT_IN": "in",
   "sidebar.SOURCE": "Times: {authority} -",
   "sidebar.SOURCE_COMPUTED": "Times computed astronomically for your location.",
-  "sponsor.LABEL": "Sponsored",
   "device.CLOCK_NOTE": "Times follow your device clock."
 }
