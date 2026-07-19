@@ -1,11 +1,11 @@
-title=Methodology
-seo_title=Methodology - How Can I Pray Now Computes the Prohibited Prayer Times
-description=The full rule matrix, boundary parameters, astronomical conventions, and verification status behind Can I Pray Now - the prohibited and disliked times for prayer (awqat al-nahy) by madhhab.
+title=Rulings & evidence
+seo_title=Rulings & Evidence (Methodology) - The Prohibited Prayer Times and Their Basis
+description=The rulings behind Can I Pray Now: the prohibited and disliked times for prayer (awqat al-nahy) by madhhab, the full rule matrix, the Qurʾān and Sahih hadith each rests on, and the verification status. For how the prayer times are calculated, see /methods.
 type=page
 status=published
 ~~~~~~
 <span class="kicker">The trust asset</span>
-<h1>Methodology</h1>
+<h1>Rulings &amp; evidence</h1>
 
 <p>Every ruling on this page is grounded in the Qurʾān and authentic Sunnah, with each source cited and linked below so you can verify it yourself. For any decision that matters to you, confirm it with a scholar you trust.</p>
 
@@ -87,19 +87,14 @@ status=published
 <p>In the Shāfiʿī school, prayers with a cause (qaḍāʾ, janāzah, taḥiyyat al-masjid, the sunnah of wuḍūʾ) are valid in the prohibited times; only pure voluntary prayer without a cause is barred. Two exceptions: <strong>Friday at the zenith</strong> carries no prohibition at all, and <strong>within the Makkan Ḥaram</strong> no time is prohibited. The Makkah setting is user-controlled and never assumed from GPS.</p>
 <p>Mālikī and Ḥanbalī matrices are planned; the data schema already carries slots for them.</p>
 
-<h2>Astronomy</h2>
+<h2>Prayer times &amp; astronomy</h2>
+<p>How the five prayer times are sourced and calculated - your local authority, the calculation methods, and what a twilight angle is - lives on <a href="/methods.html">how prayer times are calculated</a> (and <a href="/calculation-methods.html">the methods in depth</a>). Three points bear directly on the ruling here:</p>
 <ul>
-<li>Prayer times are computed client-side with <a href="https://github.com/batoulapps/adhan-js" rel="noopener">Adhan.js</a>, a high-precision, widely used astronomical library.</li>
-<li><strong>Your local authority is the default.</strong> Where we hold an authority's own extracted timetable (Sri Lanka's ACJU today), the app serves those exact published times; everywhere else it computes with the very method that authority uses. You can switch to any other method in settings and compare, then switch back. Methods offered: ACJU (Sri Lanka), Kemenag (Indonesia), Muslim World League, ISNA, Egyptian, Umm al-Qura, University of Karachi, Tehran, Dubai, Kuwait, Qatar, MUIS (Singapore), Diyanet (Turkey), UOIF (France), SAMR (Russia), Moonsighting Committee. Every country's authority and method is listed on <a href="/methods.html">How prayer times are calculated</a>.</li>
-<li><strong>Your madhhab is also defaulted by country</strong> (Shāfiʿī in Sri Lanka, the Maldives and South-East Asia; Ḥanafī in Turkey, South and Central Asia). It sets the Asr shadow factor as well as the rule matrix, so the default matters: choosing the wrong school moves Asr by about an hour. Your explicit choice always overrides the default.</li>
-<li><strong>Agreement with national authorities.</strong> The prohibited windows depend on sunrise, solar zenith and sunset - astronomical events that calculation conventions do not change. Measured against the All Ceylon Jamiyyathul Ulama's official Colombo timetable, our sunrise matches exactly, our zenith to within one minute, and our sunset to within two. Only Fajr and Isha are convention-dependent (twilight angles); for Sri Lanka we follow the ACJU convention (Fajr 20&deg;, Isha 18&deg;), which reproduces their published times to within one minute. We compute these times ourselves and are not endorsed by any authority; where your local authority publishes a timetable, it is the reference.</li>
-<li>Your madhhab sets the Asr shadow factor as well as the rule matrix: Ḥanafī uses the double-shadow convention, Shāfiʿī the single shadow. Asr <em>time</em> itself moves with this setting.</li>
-<li>Solar noon for the zenith window is calculated from the solar transit (NOAA equation of time), never taken from a timetable.</li>
-<li>All times follow your device clock.</li>
+<li>The verdict depends only on <strong>sunrise, solar zenith, and sunset</strong> - astronomical events no calculation convention changes - so it is stable across methods and authorities. Only Fajr and Isha (twilight) vary by method, and they affect the prayer list, not the prohibited-window ruling.</li>
+<li>The <strong>zenith window is derived from astronomical solar noon</strong> (the solar transit, NOAA equation of time), never from a timetable - a hard safety rule (below).</li>
+<li>We compute the times ourselves and are <strong>not endorsed by any authority</strong>; where your local authority publishes a timetable it is the reference, and we serve its own numbers where we have them (e.g. Sri Lanka's ACJU, matched to within a minute).</li>
 </ul>
-
-<h2>High latitudes</h2>
-<p>Above roughly 55&#176; latitude in summer the windows distort, and above the polar circles some events do not occur. When the astronomy cannot resolve an event for your date and location, the app says so honestly and shows no verdict - it never invents a window. Residents of such latitudes should follow local scholarly guidance.</p>
+<p>Your <strong>madhhab</strong> setting drives both the Asr time and the rule matrix below, so the default matters (choosing the wrong school moves Asr by about an hour). At <strong>high latitudes</strong> (roughly above 55&#176; in summer, or the polar circles) where the windows cannot be resolved, the app shows no verdict rather than inventing one - follow local scholarly guidance.</p>
 
 <h2>Boundary behaviour</h2>
 <p>Within &#177;60 seconds of any boundary the app shows "starting now / ending now" instead of flickering between verdicts. The verdict itself changes exactly at the computed boundary.</p>
