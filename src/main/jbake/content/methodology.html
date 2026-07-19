@@ -9,6 +9,8 @@ status=published
 
 <p>Every ruling on this page is grounded in the Qurʾān and authentic Sunnah, with each source cited and linked below so you can verify it yourself. For any decision that matters to you, confirm it with a scholar you trust.</p>
 
+<p class="setting-note">New to the terms, or wondering where your prayer times come from? <a href="/methods.html">How prayer times are calculated</a> explains twilight angles, your local authority, and every country's method in plain language, with diagrams.</p>
+
 <h2>What this tool answers</h2>
 <p>Standard prayer apps answer <em>when to pray</em>. This tool answers the inverse: whether the current moment falls inside one of the classically defined <strong>prohibited or disliked times for prayer (awqāt al-nahy)</strong> - and it conditions the answer on <strong>what</strong> you want to pray, because the ruling genuinely differs by that.</p>
 
@@ -88,7 +90,7 @@ status=published
 <h2>Astronomy</h2>
 <ul>
 <li>Prayer times are computed client-side with <a href="https://github.com/batoulapps/adhan-js" rel="noopener">Adhan.js</a>, a high-precision, widely used astronomical library.</li>
-<li>Calculation methods offered: ACJU (Sri Lanka), Muslim World League, ISNA, Egyptian, Umm al-Qura, University of Karachi, Dubai, Kuwait, Qatar, Singapore, Moonsighting Committee, Turkey (Diyanet). The default is chosen by your country and can be changed in settings.</li>
+<li><strong>Your local authority is the default.</strong> Where we hold an authority's own extracted timetable (Sri Lanka's ACJU today), the app serves those exact published times; everywhere else it computes with the very method that authority uses. You can switch to any other method in settings and compare, then switch back. Methods offered: ACJU (Sri Lanka), Kemenag (Indonesia), Muslim World League, ISNA, Egyptian, Umm al-Qura, University of Karachi, Tehran, Dubai, Kuwait, Qatar, MUIS (Singapore), Diyanet (Turkey), UOIF (France), SAMR (Russia), Moonsighting Committee. Every country's authority and method is listed on <a href="/methods.html">How prayer times are calculated</a>.</li>
 <li><strong>Your madhhab is also defaulted by country</strong> (Shāfiʿī in Sri Lanka, the Maldives and South-East Asia; Ḥanafī in Turkey, South and Central Asia). It sets the Asr shadow factor as well as the rule matrix, so the default matters: choosing the wrong school moves Asr by about an hour. Your explicit choice always overrides the default.</li>
 <li><strong>Agreement with national authorities.</strong> The prohibited windows depend on sunrise, solar zenith and sunset - astronomical events that calculation conventions do not change. Measured against the All Ceylon Jamiyyathul Ulama's official Colombo timetable, our sunrise matches exactly, our zenith to within one minute, and our sunset to within two. Only Fajr and Isha are convention-dependent (twilight angles); for Sri Lanka we follow the ACJU convention (Fajr 20&deg;, Isha 18&deg;), which reproduces their published times to within one minute. We compute these times ourselves and are not endorsed by any authority; where your local authority publishes a timetable, it is the reference.</li>
 <li>Your madhhab sets the Asr shadow factor as well as the rule matrix: Ḥanafī uses the double-shadow convention, Shāfiʿī the single shadow. Asr <em>time</em> itself moves with this setting.</li>

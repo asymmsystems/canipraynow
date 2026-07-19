@@ -13,6 +13,7 @@
  */
 
 import { METHODS } from '../astronomy.js';
+import { authorityInfo, AUTHORITY_METHOD } from '../timetables.js';
 import { t } from '../strings.js';
 import { esc } from '../utils.js';
 import { loadCities, searchCities, detectByGps, detectByEdge, nearestCity } from '../location.js';
@@ -72,17 +73,47 @@ function toggle(drawer, btn, open) {
  */
 function methodOptions(settings, defaults) {
     const cc = settings.location && settings.location.cc;
+    const country = settings.location && settings.location.country;
+    const authority = authorityInfo(cc);
+    const opt = (key, label) => `<option value="${key}" ${key === settings.method ? 'selected' : ''}>${esc(label)}</option>`;
+
+    // Where we have the authority's OWN extracted timetable, that is the top
+    // choice and the default: "{ACJU} published timetable". Every computed
+    // method stays selectable below, and picking one recomputes - so the user
+    // (in Sri Lanka too) can switch to a method and see the times change.
+    const authorityGroup = authority
+        ? `<optgroup label="${esc(t('settings.METHOD_AUTHORITY_GROUP'))}">`
+            + opt(AUTHORITY_METHOD, t('settings.METHOD_AUTHORITY_OPTION', { authority: authority.name }))
+            + `</optgroup>`
+        : '';
+
     const recKey = (defaults && cc && defaults.byCountry[cc]) || (defaults && defaults.default);
     const rec = METHODS.find((m) => m.key === recKey);
-    const country = settings.location && settings.location.country;
-    const opt = (m) => `<option value="${m.key}" ${m.key === settings.method ? 'selected' : ''}>${esc(m.label)}</option>`;
-    if (!rec) return METHODS.map(opt).join('');
+    const methodOpt = (m) => opt(m.key, m.label);
+    if (!rec) return authorityGroup + METHODS.map(methodOpt).join('');
     const others = METHODS.filter((m) => m.key !== rec.key);
-    const recLabel = country
-        ? t('settings.METHOD_RECOMMENDED_FOR', { country })
-        : t('settings.METHOD_RECOMMENDED');
-    return `<optgroup label="${esc(recLabel)}">${opt(rec)}</optgroup>`
-        + `<optgroup label="${esc(t('settings.METHOD_OTHER'))}">${others.map(opt).join('')}</optgroup>`;
+    // With an authority timetable present, the computed list is framed as the
+    // "compute instead" alternative; without one, it is the recommendation.
+    const recLabel = authority
+        ? t('settings.METHOD_COMPUTE_INSTEAD')
+        : (country ? t('settings.METHOD_RECOMMENDED_FOR', { country }) : t('settings.METHOD_RECOMMENDED'));
+    return authorityGroup
+        + `<optgroup label="${esc(recLabel)}">${methodOpt(rec)}</optgroup>`
+        + `<optgroup label="${esc(t('settings.METHOD_OTHER'))}">${others.map(methodOpt).join('')}</optgroup>`;
+}
+
+/**
+ * The line under the method select. Only meaningful where the country has an
+ * authority timetable: it tells the user whether they are seeing the
+ * authority's own published times or a computed alternative, and how to switch.
+ */
+function methodNote(settings) {
+    const authority = authorityInfo(settings.location && settings.location.cc);
+    if (!authority) return '';
+    const key = settings.method === AUTHORITY_METHOD
+        ? 'settings.METHOD_NOTE_AUTHORITY'
+        : 'settings.METHOD_NOTE_COMPUTED';
+    return `<p class="setting-note">${esc(t(key, { authority: authority.name }))}</p>`;
 }
 
 function render(drawer, opts) {
@@ -118,9 +149,7 @@ function render(drawer, opts) {
         <section class="setting">
             <h3><label for="setting-method">${esc(t('settings.METHOD'))}</label></h3>
             <select id="setting-method">${methodOptions(settings, methodDefaults)}</select>
-            ${settings.timesSource
-                ? `<p class="setting-note">${esc(t('settings.METHOD_AUTHORITY_NOTE', { authority: settings.timesSource.source }))}</p>`
-                : ''}
+            ${methodNote(settings)}
         </section>
         <section class="setting">
             <h3>${esc(t('settings.BASIS'))}</h3>
