@@ -1332,6 +1332,42 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
     border-top: 1px solid var(--border-subtle);
 }
 
+/* Explanatory SVG diagrams (methods page). Self-contained, theme-aware via
+   currentColor / CSS variables - no external assets, instant, offline. */
+.diagram {
+    margin: var(--space-lg) 0;
+    padding: var(--space-md);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-raised);
+
+    svg {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-width: 32rem;
+        margin: 0 auto;
+        overflow: visible;
+    }
+
+    figcaption {
+        margin-top: var(--space-sm);
+        text-align: center;
+        font-size: var(--t-size-caption);
+        color: var(--text-prose);
+    }
+
+    .dg-sun { fill: var(--signal-caution); }
+    .dg-line { stroke: var(--text-primary); stroke-width: 1.5; }
+    .dg-angle { stroke: var(--signal-yes); stroke-width: 1.6; fill: none; }
+    .dg-ghost { stroke: var(--signal-muted); stroke-width: 1; stroke-dasharray: 3 3; fill: none; }
+    .dg-label { fill: var(--text-prose); font-size: 12px; font-family: inherit; }
+    .dg-key { fill: var(--signal-yes); font-size: 12px; font-weight: var(--t-weight-medium); }
+    .dg-fixed { stroke: var(--text-primary); stroke-width: 2; }
+    .dg-band { fill: var(--signal-yes); fill-opacity: 0.14; }
+    .dg-ground { fill: var(--text-primary); fill-opacity: 0.05; }
+}
+
 .nearby {
     list-style: none;
     margin: var(--space-sm) 0 0;

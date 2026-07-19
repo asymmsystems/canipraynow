@@ -11,13 +11,14 @@
 <body class="page state-neutral">
 <nav class="site-nav">
     <a class="brand" href="/index.html">Can I Pray Now?</a>
+    <a href="/methods.html">Prayer times</a>
     <a href="/methodology.html">Methodology</a>
 </nav>
 <article class="page-wrap">
 ${content.body}
 </article>
 <footer class="app-footer">
-    <span>&#169; 2026 Asymm Systems (Pvt) Ltd &#183; <a href="/privacy.html">Privacy</a> &#183; <a href="/methodology.html">Methodology</a> &#183; <a href="/cities.html">Cities</a> &#183; <a href="/q/index.html">Questions</a></span>
+    <span>&#169; 2026 Asymm Systems (Pvt) Ltd &#183; <a href="/privacy.html">Privacy</a> &#183; <a href="/methods.html">Prayer times</a> &#183; <a href="/methodology.html">Methodology</a> &#183; <a href="/cities.html">Cities</a> &#183; <a href="/q/index.html">Questions</a></span>
 </footer>
 </body>
 </html>

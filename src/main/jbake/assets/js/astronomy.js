@@ -25,7 +25,13 @@ const CUSTOM_METHODS = {
     // Isya 18 (same angles as the MUIS/Singapore preset); its published tables
     // additionally apply a small ihtiyat safety margin that Adhan.js does not,
     // so this matches the convention, not the printed minute exactly.
-    Kemenag: { fajrAngle: 20, ishaAngle: 18 }
+    Kemenag: { fajrAngle: 20, ishaAngle: 18 },
+    // France - Union des Organisations Islamiques de France (UOIF / Musulmans
+    // de France). Uses a notably shallow 12/12, so Fajr is much later and Isha
+    // much earlier than the 18/17 default. Its own convention, not a preset.
+    France: { fajrAngle: 12, ishaAngle: 12 },
+    // Russia - Spiritual Administration of Muslims of Russia (SAMR). 16/15.
+    Russia: { fajrAngle: 16, ishaAngle: 15 }
 };
 
 /**
@@ -47,6 +53,8 @@ export const METHODS = Object.freeze([
     { key: 'Qatar', label: 'Qatar (Calendar House)' },
     { key: 'Singapore', label: 'MUIS (Singapore)' },
     { key: 'Turkey', label: 'Diyanet (Turkey)' },
+    { key: 'France', label: 'UOIF (France)' },
+    { key: 'Russia', label: 'Spiritual Administration of Muslims (Russia)' },
     { key: 'MoonsightingCommittee', label: 'Moonsighting Committee Worldwide' }
 ]);
 

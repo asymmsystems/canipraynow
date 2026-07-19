@@ -21,7 +21,7 @@ import { renderPrayers } from './ui/prayers.js';
 import { renderSponsor } from './ui/sponsor.js';
 import { initSettings, syncSettings, initLocationSlot, autoLocate } from './ui/settings.js';
 import { isFridayIn, distanceKm } from './utils.js';
-import { hasAuthorityTimetable, authorityDayEvents } from './timetables.js';
+import { hasAuthorityTimetable, authorityDayEvents, AUTHORITY_METHOD } from './timetables.js';
 
 const state = {
     location: null,      // {name, lat, lng, tz, cc}
@@ -161,12 +161,23 @@ async function resolveDefaults() {
     }
     // Method = pure function of (explicit choice, country), recomputed EVERY
     // time. No stored state.method to go stale, so changing New York never
-    // keeps Karachi: with no explicit choice, the US default (ISNA) wins.
+    // keeps Karachi: with no explicit choice, the country default wins.
+    //
+    // The LOCAL AUTHORITY is the default everywhere: where we have baked its
+    // real timetable, the default is the AUTHORITY sentinel (serve those exact
+    // times); everywhere else the default is the authority's own calculation
+    // convention (byCountry). Either way the dropdown is live - an explicit
+    // choice always wins, so a Sri Lanka user can switch to a computed method
+    // and see it. `computeMethodFor` resolves AUTHORITY to a real method for
+    // computation and for any day the timetable does not cover.
     const cc = state.location && state.location.cc;
-    state.method = state.methodChoice
-        || (defs && cc && defs.byCountry[cc])
-        || (defs && defs.default)
-        || 'MuslimWorldLeague';
+    const countryMethod = (defs && cc && defs.byCountry[cc])
+        || (defs && defs.default) || 'MuslimWorldLeague';
+    let m = state.methodChoice;
+    if (m === AUTHORITY_METHOD && !hasAuthorityTimetable(cc)) m = null;   // stale after travel
+    if (!m) m = hasAuthorityTimetable(cc) ? AUTHORITY_METHOD : countryMethod;
+    state.method = m;
+    state.countryMethod = countryMethod;   // real computed fallback for AUTHORITY days/gaps
     // Ruleset: evidence-based for everyone by default; the user may override.
     // A stored value that names no shipped matrix would take the verdict down,
     // so it is always coerced back to a real one.
@@ -225,18 +236,23 @@ async function recompute() {
 }
 
 /**
- * One civil day's events, preferring the national authority's OWN published
- * times where we have them (Sri Lanka / ACJU today), falling back to Adhan.js
- * computation for every other place and for any day the table does not cover.
+ * One civil day's events. When the effective method is the AUTHORITY sentinel
+ * (the default wherever we have baked an authority's real table), serve those
+ * exact published times; on any day the table does not cover, fall back to the
+ * country's own computed convention. When the user has explicitly picked a
+ * calculation method, compute with it - even in a country that has a table, so
+ * the dropdown always changes the times the user sees.
  * @returns {Promise<{result: import('./astronomy.js').DayResult, source: Object|null}>}
  */
 async function dayEvents(date, coords) {
-    if (hasAuthorityTimetable(state.location.cc)) {
+    if (state.method === AUTHORITY_METHOD && hasAuthorityTimetable(state.location.cc)) {
         const auth = await authorityDayEvents(date, { ...coords, cc: state.location.cc });
         if (auth) {
             const result = assembleAuthorityEvents(auth.events, date, coords.lng);
             if (result.valid) return { result, source: auth };
         }
+        // A day the table does not cover: compute with the country's real method.
+        return { result: computeDayEvents(date, coords, state.countryMethod, state.madhhab), source: null };
     }
     return { result: computeDayEvents(date, coords, state.method, state.madhhab), source: null };
 }
