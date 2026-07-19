@@ -7,7 +7,7 @@ status=published
 <span class="kicker">Technical reference</span>
 <h1>Calculation methods in depth</h1>
 
-<p>This is the technical companion to <a href="/methods.html">how prayer times are calculated</a>. That page explains the ideas in plain language; this one gives the exact parameters behind every method and a side-by-side table of how they differ. All of it runs on your device through <a href="https://github.com/batoulapps/adhan-js" rel="noopener">Adhan.js</a>; no service is called.</p>
+<p>This is the technical companion to <a href="/methods.html">how prayer times are calculated</a>. That page explains the ideas in plain language; this one gives the exact parameters behind every method and a side-by-side table of how they differ. All of it runs on your device - a small astronomical engine compiled to <strong>WebAssembly</strong>, the same one that prepares the offline tables - and no service is ever called.</p>
 
 <h2>What a method actually specifies</h2>
 
@@ -23,7 +23,7 @@ status=published
 
 <h2>Fajr and Isha: the depression angle</h2>
 
-<p>Dawn and nightfall are twilight events, so they are defined by how far the sun sits below the horizon. A larger angle means a darker sky, so a larger Fajr angle makes Fajr <strong>earlier</strong>, and a larger Isha angle makes Isha <strong>later</strong>. The full spread across mainstream methods is roughly 12&deg; to 20&deg;. For a location and date, Adhan.js solves the time at which the sun's centre reaches that depression. This is the only parameter authorities genuinely disagree on.</p>
+<p>Dawn and nightfall are twilight events, so they are defined by how far the sun sits below the horizon. A larger angle means a darker sky, so a larger Fajr angle makes Fajr <strong>earlier</strong>, and a larger Isha angle makes Isha <strong>later</strong>. The full spread across mainstream methods is roughly 12&deg; to 20&deg;. For a location and date, the engine solves the time at which the sun's centre reaches that depression. This is the only parameter authorities genuinely disagree on.</p>
 
 <h2>The two special cases</h2>
 
