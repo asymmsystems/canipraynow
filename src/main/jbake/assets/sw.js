@@ -19,7 +19,7 @@
 
 // Bump on any release that must invalidate old caches. The activate handler
 // deletes every cache that is not this version.
-const VERSION = 'cipn-v10';
+const VERSION = 'cipn-v11';
 
 const SHELL = [
     '/',
