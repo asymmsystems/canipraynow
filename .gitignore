@@ -15,7 +15,7 @@ output/
 target/site/
 
 # SCSS compile output — source of truth is src/main/scss/style.scss
-src/main/jbake/assets/css/style.css
+**/src/main/jbake/assets/css/style.css
 
 # IDEs
 .idea/
@@ -32,8 +32,8 @@ Thumbs.db
 # City SEO pages — derived from assets/data/cities.json by
 # scripts/GenerateCityPages.java at build time (generate-sources).
 # Source of truth is the dataset; never hand-edit or commit these.
-src/main/jbake/content/*/
-!src/main/jbake/content/q/
+**/src/main/jbake/content/*/
+!**/src/main/jbake/content/q/
 
 # Dev-only tool deps (pdfjs for scripts/fetch-timetables.mjs) - never committed
 node_modules/
