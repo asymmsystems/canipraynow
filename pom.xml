@@ -23,7 +23,24 @@
     <description>Can I Pray Now - reactor (Asymm Systems)</description>
 
     <modules>
+        <!-- framework: utilities + contracts (the volatility firewall) -->
+        <module>framework/cipn-fw-common</module>
+        <module>framework/cipn-fw-contract</module>
+
+        <!-- service: engine (business logic), accessors (by location), managers (orchestration) -->
+        <module>service/cipn-svc-engine</module>
+        <module>service/cipn-svc-accessor-file</module>
+        <module>service/cipn-svc-manager</module>
+
+        <!-- application: the clients -->
         <module>application/cipn-app-site</module>
+        <module>application/cipn-app-server</module>
+        <module>application/cipn-app-batch</module>
+
+        <!-- wiring: composition, mirroring the services -->
+        <module>wiring/cipn-wiring-engine-default</module>
+        <module>wiring/cipn-wiring-accessor-file</module>
+        <module>wiring/cipn-wiring-manager-default</module>
     </modules>
 
     <properties>
