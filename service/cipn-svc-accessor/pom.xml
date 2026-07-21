@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  Wiring: composes cipn-svc-engine.
-  Volatility-based structure - see architecture/module-structure.md.
+  Accessors: HIGH volatility, split by LOCATION (deployment-time swap). No -core: implementations share nothing.
+  See architecture/module-structure.md.
 
   @author Fahim Farook
 -->
@@ -18,9 +18,13 @@
         <relativePath>../..</relativePath>
     </parent>
 
-    <artifactId>cipn-wiring-engine-default</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>cipn-svc-accessor</artifactId>
+    <packaging>pom</packaging>
 
-    <name>cipn-wiring-engine-default</name>
-    <description>Wiring: composes cipn-svc-engine.</description>
+    <name>cipn-svc-accessor</name>
+    <description>Accessors: HIGH volatility, split by LOCATION (deployment-time swap). No -core: implementations share nothing.</description>
+
+    <modules>
+        <module>cipn-svc-accessor-file</module>
+    </modules>
 </project>

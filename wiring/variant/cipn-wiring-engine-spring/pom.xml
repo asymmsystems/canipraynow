@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  Wiring: composes cipn-svc-manager-default.
-  Volatility-based structure - see architecture/module-structure.md.
+  Spring @Configuration wiring cipn-svc-engine. Keeps svc-engine framework-free (ADR-029).
+  See architecture/module-structure.md.
 
   @author Fahim Farook
 -->
@@ -13,14 +13,13 @@
 
     <parent>
         <groupId>systems.asymm.cipn</groupId>
-        <artifactId>canipraynow</artifactId>
+        <artifactId>cipn-wiring-variant</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../..</relativePath>
     </parent>
 
-    <artifactId>cipn-wiring-manager-default</artifactId>
+    <artifactId>cipn-wiring-engine-spring</artifactId>
     <packaging>jar</packaging>
 
-    <name>cipn-wiring-manager-default</name>
-    <description>Wiring: composes cipn-svc-manager-default.</description>
+    <name>cipn-wiring-engine-spring</name>
+    <description>Spring @Configuration wiring cipn-svc-engine. Keeps svc-engine framework-free (ADR-029).</description>
 </project>
