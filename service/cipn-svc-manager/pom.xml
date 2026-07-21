@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  Manager: use-case orchestration, zero business logic.
-  Volatility-based structure - see architecture/module-structure.md.
+  Manager: use-case orchestration, zero business logic. Single module - one orchestration mechanism, so no mechanism axis to split on.
+  See architecture/module-structure.md.
 
   @author Fahim Farook
 -->
@@ -19,13 +19,8 @@
     </parent>
 
     <artifactId>cipn-svc-manager</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <name>cipn-svc-manager</name>
-    <description>Manager: use-case orchestration, zero business logic.</description>
-
-    <modules>
-        <module>cipn-svc-manager-core</module>
-        <module>cipn-svc-manager-default</module>
-    </modules>
+    <description>Manager: use-case orchestration, zero business logic. Single module - one orchestration mechanism, so no mechanism axis to split on.</description>
 </project>

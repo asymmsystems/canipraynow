@@ -22,25 +22,27 @@
     <name>canipraynow</name>
     <description>Can I Pray Now - reactor (Asymm Systems)</description>
 
+    <!--
+      Layered build order (ADR-00007 / M360 root POM): wiring is Layer -1 and
+      must build first, then framework (0), service (1), application (2).
+    -->
     <modules>
-        <!-- framework: utilities + contracts (the volatility firewall) -->
+        <!-- Layer -1: Wiring (runtime DI configuration - builds first) -->
+        <module>wiring</module>
+
+        <!-- Layer 0: Framework (technical plumbing: utilities + contracts) -->
         <module>framework/cipn-fw-common</module>
         <module>framework/cipn-fw-contract</module>
 
-        <!-- service: engine (business logic), accessors (by location), managers (orchestration) -->
+        <!-- Layer 1: Service (core business) -->
         <module>service/cipn-svc-engine</module>
-        <module>service/cipn-svc-accessor-file</module>
+        <module>service/cipn-svc-accessor</module>
         <module>service/cipn-svc-manager</module>
 
-        <!-- application: the clients -->
+        <!-- Layer 2: Application (deployment units) -->
         <module>application/cipn-app-site</module>
         <module>application/cipn-app-server</module>
         <module>application/cipn-app-batch</module>
-
-        <!-- wiring: composition, mirroring the services -->
-        <module>wiring/cipn-wiring-engine-default</module>
-        <module>wiring/cipn-wiring-accessor-file</module>
-        <module>wiring/cipn-wiring-manager-default</module>
     </modules>
 
     <properties>

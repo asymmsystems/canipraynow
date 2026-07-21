@@ -29,5 +29,6 @@
         <module>cipn-fw-contract-access</module>
         <module>cipn-fw-contract-engine</module>
         <module>cipn-fw-contract-manager</module>
+        <module>cipn-fw-contract-app</module>
     </modules>
 </project>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  Shared use-case infrastructure (pipeline, result contracts).
-  Volatility-based structure - see architecture/module-structure.md.
+  Spring @Configuration wiring cipn-svc-manager.
+  See architecture/module-structure.md.
 
   @author Fahim Farook
 -->
@@ -13,14 +13,13 @@
 
     <parent>
         <groupId>systems.asymm.cipn</groupId>
-        <artifactId>cipn-svc-manager</artifactId>
+        <artifactId>cipn-wiring-variant</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-        <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>cipn-svc-manager-core</artifactId>
+    <artifactId>cipn-wiring-manager-spring</artifactId>
     <packaging>jar</packaging>
 
-    <name>cipn-svc-manager-core</name>
-    <description>Shared use-case infrastructure (pipeline, result contracts).</description>
+    <name>cipn-wiring-manager-spring</name>
+    <description>Spring @Configuration wiring cipn-svc-manager.</description>
 </project>
