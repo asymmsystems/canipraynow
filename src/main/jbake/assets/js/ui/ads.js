@@ -8,8 +8,8 @@
  * Unlike the Phase A sponsor card this DOES load a third-party script, so it is
  * deliberately fenced in: exactly one placement, never above the ruler, injected
  * only after the page is interactive and idle so it cannot compete with the
- * verdict for first paint, and into a slot whose height is reserved in CSS so a
- * late-arriving unit cannot shift layout (spec §6, CLS budget).
+ * verdict for first paint, and into a slot placed last in the sidebar so a
+ * late-arriving unit has nothing beneath it to shift (spec §6, CLS budget).
  *
  * @author Fahim Farook
  */
