@@ -163,8 +163,10 @@
     --layout-breakpoint-md: 768px;
 
     /* Ad slot: height reserved up-front so a late unit cannot shift layout
-       (spec §9: CLS < 0.02). Change here, not in the component. */
-    --ad-slot-height: 250px;
+       (spec §9: CLS < 0.02). Sized to the banner unit actually served, not to a
+       generic MPU - reserving 250px for a ~90px banner left a large empty box.
+       Change here, not in the component; raise it if a taller unit is ever served. */
+    --ad-slot-height: 100px;
     --ad-slot-height-mobile: 100px;
 
     --radius-sm: 0.4rem;
@@ -819,7 +821,7 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
     background: var(--surface-sunken);
     border: 1px solid var(--border-subtle);
     text-decoration: none;
-    min-height: 5rem;   /* reserved - zero CLS */
+    min-height: 4.5rem;   /* reserved - zero CLS */
     position: relative;
 
     img { border-radius: var(--radius-sm); }
@@ -839,7 +841,7 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
     display: flex;
     flex-direction: column;
     gap: var(--space-2xs);
-    font-size: var(--t-size-caption);
+    font-size: var(--t-size-kicker);
 
     span { opacity: 0.75; }
 }
@@ -850,7 +852,9 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
     display: grid;
     place-items: center;
     border-radius: var(--radius-lg);
-    border: 1px dashed var(--border-subtle);
+    /* Solid, matching the sponsor card: a dashed frame reads as an empty
+       placeholder now that the slot is actually filled. */
+    border: 1px solid var(--border-subtle);
     overflow: hidden;
 
     &[hidden] { display: none; }
