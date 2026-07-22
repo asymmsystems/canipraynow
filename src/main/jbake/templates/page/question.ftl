@@ -63,6 +63,5 @@ ${parts[0]}
 <h2>Sources</h2>${parts[1]}
 </section>
 </#if>
-<#include "/partial/ad-footer.ftl">
 </body>
 </html>
