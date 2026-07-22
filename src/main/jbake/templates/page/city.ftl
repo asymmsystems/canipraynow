@@ -126,5 +126,6 @@ madhhab and prayer type. See the
 <a href="/methodology.html">methodology</a>.</em></p>
 </article>
 <#include "/partial/app.ftl">
+<#include "/partial/ad-footer.ftl">
 </body>
 </html>
