@@ -1,0 +1,6 @@
+{
+  "enabled": true,
+  "provider": "HalalSpark",
+  "delayMs": 3000,
+  "src": "https://ads.halalspark.co.uk/get-ad-script-banner?placement_id=3c26e888-cba5-4cb4-90c5-d9785ec59d6d&domain=https://canipraynow.com&_v=3.0"
+}
