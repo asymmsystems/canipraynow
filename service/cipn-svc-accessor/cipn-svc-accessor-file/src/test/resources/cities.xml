@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cities>
+    <city name="Colombo" country="Sri Lanka" cc="LK" slug="colombo" country-slug="sri-lanka"
+          lat="6.9271" lng="79.8612" tz="Asia/Colombo" page="true"/>
+    <city name="Kuala Lumpur" country="Malaysia" cc="MY" slug="kuala-lumpur" country-slug="malaysia"
+          lat="3.139" lng="101.6869" tz="Asia/Kuala_Lumpur" page="true"/>
+    <city name="Hidden" country="Nowhere" cc="XX" slug="hidden" country-slug="nowhere"
+          lat="0" lng="0" tz="UTC" page="false"/>
+</cities>
