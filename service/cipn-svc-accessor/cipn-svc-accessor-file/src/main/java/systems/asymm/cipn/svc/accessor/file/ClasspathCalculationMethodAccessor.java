@@ -7,16 +7,16 @@ package systems.asymm.cipn.svc.accessor.file;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeSet;
 
-import systems.asymm.cipn.fw.common.util.PropertiesParser;
 import systems.asymm.cipn.fw.common.util.ResourceParseException;
 import systems.asymm.cipn.fw.common.util.ResourceParser;
+import systems.asymm.cipn.fw.common.util.StructuredXmlParser;
 import systems.asymm.cipn.fw.contract.access.CalculationMethodAccessor;
 import systems.asymm.cipn.fw.contract.data.CalculationParameters;
 import systems.asymm.cipn.fw.contract.data.EventOffsets;
@@ -28,82 +28,67 @@ import systems.asymm.cipn.fw.contract.data.Shafaq;
 /**
  * Classpath-backed {@link CalculationMethodAccessor}.
  *
- * <p>4-Concerns: Location = classpath (this class); Type/Schema = Properties (internal,
- * via {@link PropertiesParser}); Consumed Type = calculation-method parameters (the
- * contract). Reads {@code calculation-methods.properties} once at construction and
- * serves an immutable view; only non-default fields need to appear in the file.
+ * <p>4-Concerns: Location = classpath (this class); Type/Schema = XML (internal, via
+ * {@link StructuredXmlParser}); Consumed Type = calculation-method parameters (the
+ * contract). Reads {@code calculation-methods.xml} once at construction and serves an
+ * immutable view; only non-default fields need to appear in the file.
  *
- * <p>Keys follow the asymm convention (lower-case, dot-namespaced, kebab-case):
- * {@code calculation-method.<slug>.<field>}. A caller's CamelCase method id
- * (e.g. {@code MuslimWorldLeague}) is normalized to its slug ({@code muslim-world-league})
- * for lookup.
+ * <p>Keys in the file are lower-case kebab slugs; a caller's CamelCase method id
+ * (e.g. {@code MuslimWorldLeague}) normalizes to its slug ({@code muslim-world-league}).
  *
  * @see CalculationMethodAccessor
  */
 public class ClasspathCalculationMethodAccessor implements CalculationMethodAccessor {
 
-    private static final String DEFAULT_RESOURCE = "calculation-methods.properties";
-    private static final String NAMESPACE = "calculation-method.";
-    private static final String DEFAULT_KEY = NAMESPACE + "default";
+    private static final String DEFAULT_RESOURCE = "calculation-methods.xml";
 
-    private final Map<String, String> table;
+    private final Map<String, MethodEntry> bySlug;
     private final String defaultSlug;
-    private final Set<String> slugs;
 
-    /** Loads the registry from the bundled {@code calculation-methods.properties}. */
+    /** Loads the registry from the bundled {@code calculation-methods.xml}. */
     public ClasspathCalculationMethodAccessor() {
-        this(DEFAULT_RESOURCE, new PropertiesParser());
+        this(DEFAULT_RESOURCE, new StructuredXmlParser<>(CalculationMethods.class));
     }
 
     /**
      * Loads the registry from a classpath resource.
      *
-     * @param resourcePath classpath path to the properties table
-     * @param parser       the properties parser (Type/Schema concern)
+     * @param resourcePath classpath path to the XML table
+     * @param parser       the XML parser (Type/Schema concern)
      */
-    public ClasspathCalculationMethodAccessor(String resourcePath, ResourceParser<Map<String, String>> parser) {
-        this.table = load(resourcePath, parser);
-        this.defaultSlug = text(DEFAULT_KEY, "muslim-world-league");
-        this.slugs = extractSlugs(table);
+    public ClasspathCalculationMethodAccessor(String resourcePath, ResourceParser<CalculationMethods> parser) {
+        CalculationMethods doc = load(resourcePath, parser);
+        Map<String, MethodEntry> map = new LinkedHashMap<>();
+        for (MethodEntry entry : doc.method()) {
+            map.put(entry.key(), entry);
+        }
+        this.bySlug = Map.copyOf(map);
+        this.defaultSlug = doc.defaultMethod() == null ? "muslim-world-league" : doc.defaultMethod();
     }
 
     @Override
     public Optional<CalculationParameters> parameters(String methodKey, Madhab madhab) {
-        String slug = slug(methodKey);
-        return slugs.contains(slug) ? Optional.of(build(slug, madhab)) : Optional.empty();
+        MethodEntry entry = bySlug.get(slug(methodKey));
+        return entry == null ? Optional.empty() : Optional.of(toParameters(entry, madhab));
     }
 
     @Override
     public CalculationParameters parametersOrDefault(String methodKey, Madhab madhab) {
-        return parameters(methodKey, madhab).orElseGet(() -> build(defaultSlug, madhab));
+        return parameters(methodKey, madhab).orElseGet(() -> toParameters(bySlug.get(defaultSlug), madhab));
     }
 
     @Override
     public Set<String> methodKeys() {
-        return slugs;
+        return bySlug.keySet();
     }
 
-    private CalculationParameters build(String slug, Madhab madhab) {
-        String base = NAMESPACE + slug + ".";
-        Rounding rounding = Rounding.valueOf(text(base + "rounding", "nearest").toUpperCase(Locale.ROOT));
+    private static CalculationParameters toParameters(MethodEntry e, Madhab madhab) {
+        Rounding rounding = e.rounding() == null
+                ? Rounding.NEAREST : Rounding.valueOf(e.rounding().toUpperCase(Locale.ROOT));
         EventOffsets offsets = new EventOffsets(
-                intValue(base + "fajr-offset"),
-                intValue(base + "sunrise-offset"),
-                intValue(base + "dhuhr-offset"),
-                intValue(base + "asr-offset"),
-                intValue(base + "maghrib-offset"),
-                intValue(base + "isha-offset"));
-        return new CalculationParameters(
-                slug,
-                doubleValue(base + "fajr-angle"),
-                doubleValue(base + "isha-angle"),
-                doubleValue(base + "isha-interval"),
-                doubleValue(base + "maghrib-angle"),
-                madhab,
-                HighLatitudeRule.MIDDLE_OF_THE_NIGHT,
-                rounding,
-                Shafaq.GENERAL,
-                offsets);
+                e.fajrOffset(), e.sunriseOffset(), e.dhuhrOffset(), e.asrOffset(), e.maghribOffset(), e.ishaOffset());
+        return new CalculationParameters(e.key(), e.fajrAngle(), e.ishaAngle(), e.ishaInterval(), e.maghribAngle(),
+                madhab, HighLatitudeRule.MIDDLE_OF_THE_NIGHT, rounding, Shafaq.GENERAL, offsets);
     }
 
     /** CamelCase id -> lower-case kebab slug, e.g. {@code MuslimWorldLeague -> muslim-world-league}. */
@@ -114,37 +99,7 @@ public class ClasspathCalculationMethodAccessor implements CalculationMethodAcce
                 .toLowerCase(Locale.ROOT);
     }
 
-    private String text(String key, String fallback) {
-        String v = table.get(key);
-        return v == null ? fallback : v.trim();
-    }
-
-    private double doubleValue(String key) {
-        String v = table.get(key);
-        return v == null ? 0.0 : Double.parseDouble(v.trim());
-    }
-
-    private int intValue(String key) {
-        String v = table.get(key);
-        return v == null ? 0 : Integer.parseInt(v.trim());
-    }
-
-    private static Set<String> extractSlugs(Map<String, String> table) {
-        Set<String> keys = new TreeSet<>();
-        for (String key : table.keySet()) {
-            if (!key.startsWith(NAMESPACE) || key.equals(DEFAULT_KEY)) {
-                continue;
-            }
-            String rest = key.substring(NAMESPACE.length());
-            int dot = rest.indexOf('.');
-            if (dot > 0) {
-                keys.add(rest.substring(0, dot));
-            }
-        }
-        return Collections.unmodifiableSet(keys);
-    }
-
-    private static Map<String, String> load(String resourcePath, ResourceParser<Map<String, String>> parser) {
+    private static CalculationMethods load(String resourcePath, ResourceParser<CalculationMethods> parser) {
         ClassLoader loader = ClasspathCalculationMethodAccessor.class.getClassLoader();
         try (InputStream in = loader.getResourceAsStream(resourcePath)) {
             if (in == null) {
@@ -154,5 +109,25 @@ public class ClasspathCalculationMethodAccessor implements CalculationMethodAcce
         } catch (IOException e) {
             throw new ResourceParseException("Failed reading " + resourcePath, e);
         }
+    }
+
+    /** XML binding (Type/Schema detail): {@code <calculation-methods default-method="...">}. */
+    record CalculationMethods(String defaultMethod, List<MethodEntry> method) {
+    }
+
+    /** XML binding for one {@code <method .../>} element. Absent numeric attributes default to 0. */
+    record MethodEntry(
+            String key,
+            double fajrAngle,
+            double ishaAngle,
+            double ishaInterval,
+            double maghribAngle,
+            String rounding,
+            int fajrOffset,
+            int sunriseOffset,
+            int dhuhrOffset,
+            int asrOffset,
+            int maghribOffset,
+            int ishaOffset) {
     }
 }

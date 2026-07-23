@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<timetable authority="ACJU"
+           zone="01"
+           name="Colombo, Gampaha, Kalutara"
+           source="https://www.acju.lk/prayer-times/"
+           unit="minutes-from-midnight">
+    <!-- Declared out of calendar order on purpose; the accessor must sort. -->
+    <day month="1" day="2" fajr="300" sunrise="383" dhuhr="736" asr="937" maghrib="1088" isha="1162"/>
+    <day month="1" day="1" fajr="300" sunrise="382" dhuhr="735" asr="937" maghrib="1087" isha="1161"/>
+    <day month="12" day="31" fajr="299" sunrise="381" dhuhr="733" asr="936" maghrib="1085" isha="1160"/>
+</timetable>
