@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cities>
+    <city name="Colombo" country="Sri Lanka" cc="LK" slug="colombo" country-slug="sri-lanka"
+          lat="6.9271" lng="79.8612" tz="Asia/Colombo" page="true"/>
+    <city name="London" country="United Kingdom" cc="GB" slug="london" country-slug="united-kingdom"
+          lat="51.5074" lng="-0.1278" tz="Europe/London" page="true"/>
+</cities>

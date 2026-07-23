@@ -23,4 +23,58 @@
 
     <name>cipn-svc-manager</name>
     <description>Manager: use-case orchestration, zero business logic. Single module - one orchestration mechanism, so no mechanism axis to split on.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-manager</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-access</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Build-time templating; kept here (not fw-common/engine) so it stays off the WASM path. -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>${freemarker.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Integration test wires the real engine + file accessors (test scope only). -->
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-svc-engine</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-svc-accessor-file</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
