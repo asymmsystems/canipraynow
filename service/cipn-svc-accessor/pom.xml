@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Accessors: HIGH volatility, split by LOCATION (deployment-time swap). No -core: implementations share nothing.
+  See architecture/module-structure.md.
+
+  @author Fahim Farook
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>systems.asymm.cipn</groupId>
+        <artifactId>canipraynow</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
+    </parent>
+
+    <artifactId>cipn-svc-accessor</artifactId>
+    <packaging>pom</packaging>
+
+    <name>cipn-svc-accessor</name>
+    <description>Accessors: HIGH volatility, split by LOCATION (deployment-time swap). No -core: implementations share nothing.</description>
+
+    <modules>
+        <module>cipn-svc-accessor-file</module>
+    </modules>
+</project>

@@ -1,0 +1,199 @@
+{
+  "id": "hanafi",
+  "label": "Ḥanafī",
+  "version": "hanafi-0.1.0",
+  "verified_by": null,
+  "verified_at": null,
+  "params": {
+    "P_sunrise": {
+      "value": 20,
+      "unit": "minutes",
+      "range": [
+        12,
+        20
+      ],
+      "basis": "Conventional Ḥanafī ishrāq interval; scholar to set final value.",
+      "verified_by": null,
+      "verified_at": null
+    },
+    "P_zenith": {
+      "value": 10,
+      "unit": "minutes",
+      "range": [
+        5,
+        15
+      ],
+      "basis": "Istiwāʾ window before zawāl; scholar to set final value.",
+      "verified_by": null,
+      "verified_at": null
+    },
+    "P_isfirar": {
+      "value": 20,
+      "unit": "minutes",
+      "range": [
+        20,
+        40
+      ],
+      "basis": "Isfirār convention varies across Ḥanafī timetables (20-40 min); scholar to set final value.",
+      "verified_by": null,
+      "verified_at": null
+    },
+    "anchor_convention": {
+      "value": "prayer-time-entry",
+      "basis": "Ḥanafī is asymmetric: the after-Fajr (W1) restriction is time-based (from true dawn), while after-ʿAsr (W4) attaches to having performed ʿAsr. The app cannot know performance, so both anchor conservatively to prayer-time entry. Scholar to confirm.",
+      "verified_by": null,
+      "verified_at": null
+    }
+  },
+  "asrShadowFactor": 2,
+  "matrix": {
+    "AFTER_FAJR": {
+      "fardCurrent": {
+        "status": "PERMITTED",
+        "basis": "Current Fajr is prayed in its time; the W1 restriction concerns nafl only."
+      },
+      "qada": {
+        "status": "PERMITTED",
+        "basis": "Qaḍāʾ is valid after Fajr entry; restriction concerns nafl only."
+      },
+      "janazah": {
+        "status": "PERMITTED",
+        "basis": "Janāzah is permitted in the extended (nafl-restricted) windows."
+      },
+      "causalNafl": {
+        "status": "PROHIBITED",
+        "notes": [
+          "MAKRUH_TAHRIMI",
+          "SUNNAH_FAJR"
+        ],
+        "basis": "Nafl after Fajr entry is makrūh taḥrīmī; the two rakʿahs of the Fajr sunnah are excepted before Fajr is prayed."
+      },
+      "pureNafl": {
+        "status": "PROHIBITED",
+        "notes": [
+          "MAKRUH_TAHRIMI"
+        ],
+        "basis": "Nafl after Fajr entry is makrūh taḥrīmī until the sun has risen."
+      }
+    },
+    "SUNRISE": {
+      "fardCurrent": {
+        "status": "PROHIBITED",
+        "notes": [
+          "FAJR_EXPIRED"
+        ],
+        "basis": "Fajr's time ends at sunrise; it is made up as qaḍāʾ after the sun has fully risen. Never rendered as a bare NO (spec §3.6)."
+      },
+      "qada": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "basis": "Prayer in the three strict times is invalid (ḥadīth of ʿUqbah ibn ʿĀmir, Muslim 831)."
+      },
+      "janazah": {
+        "status": "DISLIKED",
+        "notes": [
+          "JANAZAH_STRICT"
+        ],
+        "basis": "Disliked if the funeral was ready beforehand; permitted if it became ready within the window."
+      },
+      "causalNafl": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "basis": "No nafl in the strict times, causal or otherwise."
+      },
+      "pureNafl": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "basis": "No nafl in the strict times."
+      }
+    },
+    "ZENITH": {
+      "fardCurrent": {
+        "status": "PERMITTED",
+        "unreachable": true,
+        "basis": "No obligatory prayer's window naturally falls at istiwāʾ; defined defensively as PERMITTED (spec §3.3 fn 7)."
+      },
+      "qada": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "basis": "Prayer in the three strict times is invalid (Muslim 831)."
+      },
+      "janazah": {
+        "status": "DISLIKED",
+        "notes": [
+          "JANAZAH_STRICT"
+        ],
+        "basis": "Disliked if the funeral was ready beforehand; permitted if it became ready within the window."
+      },
+      "causalNafl": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "basis": "No nafl in the strict times."
+      },
+      "pureNafl": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "basis": "No nafl in the strict times."
+      }
+    },
+    "AFTER_ASR": {
+      "fardCurrent": {
+        "status": "PERMITTED",
+        "basis": "Current Asr is prayed in its time; the W4 restriction concerns nafl only."
+      },
+      "qada": {
+        "status": "PERMITTED",
+        "basis": "Qaḍāʾ is valid after Asr entry; restriction concerns nafl only."
+      },
+      "janazah": {
+        "status": "PERMITTED",
+        "basis": "Janāzah is permitted in the extended (nafl-restricted) windows."
+      },
+      "causalNafl": {
+        "status": "PROHIBITED",
+        "notes": [
+          "MAKRUH_TAHRIMI"
+        ],
+        "basis": "Nafl after Asr entry is makrūh taḥrīmī until Maghrib."
+      },
+      "pureNafl": {
+        "status": "PROHIBITED",
+        "notes": [
+          "MAKRUH_TAHRIMI"
+        ],
+        "basis": "Nafl after Asr entry is makrūh taḥrīmī until Maghrib."
+      }
+    },
+    "SUNSET": {
+      "fardCurrent": {
+        "status": "PERMITTED_WITH_WARNING",
+        "notes": [
+          "TODAYS_ASR"
+        ],
+        "basis": "That day's unperformed Asr must still be prayed before Maghrib; valid, though the delay was sinful (spec §3.3 fn 8)."
+      },
+      "qada": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "basis": "Prayer in the three strict times is invalid (Muslim 831)."
+      },
+      "janazah": {
+        "status": "DISLIKED",
+        "notes": [
+          "JANAZAH_STRICT"
+        ],
+        "basis": "Disliked if the funeral was ready beforehand; permitted if it became ready within the window."
+      },
+      "causalNafl": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "basis": "No nafl in the strict times."
+      },
+      "pureNafl": {
+        "status": "PROHIBITED",
+        "invalid": true,
+        "basis": "No nafl in the strict times."
+      }
+    }
+  }
+}

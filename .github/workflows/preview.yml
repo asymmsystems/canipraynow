@@ -29,11 +29,11 @@ jobs:
           cache: maven
 
       - name: Build site
-        run: ./mvnw -Pproduction clean process-resources --batch-mode --no-transfer-progress
+        run: ./mvnw -Pproduction -pl application/cipn-app-site -am clean process-resources --batch-mode --no-transfer-progress
 
       - name: Deploy to Cloudflare Pages (preview)
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy target/site --project-name=can-i-pray-now-code-pfw --branch=develop
+          command: pages deploy application/cipn-app-site/target/site --project-name=can-i-pray-now-code-pfw --branch=develop

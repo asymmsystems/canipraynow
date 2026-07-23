@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+
+  canipraynow.com - build descriptor.
+  Same JBake/Maven pipeline as asymm-corporate-code-pfw:
+  SCSS -> CSS (Dart Sass), JBake bake, CSS minify, HTML compress,
+  production profile strips .html for Cloudflare Pages clean URLs.
+
+  @author Fahim Farook
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>systems.asymm.cipn</groupId>
+        <artifactId>canipraynow</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
+    </parent>
+
+    <artifactId>cipn-app-site</artifactId>
+    <packaging>pom</packaging>
+
+    <name>cipn-app-site</name>
+    <description>Can I Pray Now - JBake static site (SSG): public core + SEO pages</description>
+
+    <build>
+        <plugins>
+            <!-- City SEO pages (spec §8.1) are DERIVED from assets/data/cities.json,
+                 exactly as style.css is derived from style.scss: generated here in
+                 generate-sources (before JBake bakes in generate-resources) and
+                 git-ignored, never hand-edited. Single-file source launch - no
+                 compile step, no dependencies, no scripting runtime. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-city-pages</id>
+                        <phase>generate-sources</phase>
+                        <goals><goal>exec</goal></goals>
+                        <configuration>
+                            <executable>${java.home}/bin/java</executable>
+                            <arguments>
+                                <argument>${project.basedir}/scripts/GenerateCityPages.java</argument>
+                                <argument>${project.basedir}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- SCSS -> CSS compile (Dart Sass). Runs before JBake copies assets,
+                 so JBake sees the freshly-generated assets/css/style.css. -->
+            <plugin>
+                <groupId>io.github.cleydyr</groupId>
+                <artifactId>dart-sass-maven-plugin</artifactId>
+                <version>${sass.plugin.version}</version>
+                <configuration>
+                    <version>${dart.sass.version}</version>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>compile-scss</id>
+                        <phase>generate-resources</phase>
+                        <goals><goal>compile-sass</goal></goals>
+                        <configuration>
+                            <inputFolder>${project.basedir}/src/main/scss</inputFolder>
+                            <outputFolder>${project.basedir}/src/main/jbake/assets/css</outputFolder>
+                            <style>EXPANDED</style>
+                            <noSourceMap>true</noSourceMap>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jbake</groupId>
+                <artifactId>jbake-maven-plugin</artifactId>
+                <version>${jbake.plugin.version}</version>
+                <configuration>
+                    <inputDirectory>${project.basedir}/src/main/jbake</inputDirectory>
+                    <outputDirectory>${project.build.directory}/site</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-generate</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jbake</groupId>
+                        <artifactId>jbake-core</artifactId>
+                        <version>${jbake.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.freemarker</groupId>
+                        <artifactId>freemarker</artifactId>
+                        <version>${freemarker.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.vladsch.flexmark</groupId>
+                        <artifactId>flexmark-all</artifactId>
+                        <version>0.64.8</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <!-- CSS Minification -->
+            <plugin>
+                <groupId>com.7p-group</groupId>
+                <artifactId>minify-maven-plugin</artifactId>
+                <version>${minify.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>minify-css</id>
+                        <phase>process-resources</phase>
+                        <goals><goal>minify</goal></goals>
+                        <configuration>
+                            <webappSourceDir>${project.basedir}/src/main/jbake/assets</webappSourceDir>
+                            <webappTargetDir>${project.build.directory}/site</webappTargetDir>
+                            <cssSourceDir>css</cssSourceDir>
+                            <cssSourceFiles>
+                                <cssSourceFile>style.css</cssSourceFile>
+                            </cssSourceFiles>
+                            <cssFinalFile>style.css</cssFinalFile>
+                            <skipMerge>true</skipMerge>
+                            <nosuffix>true</nosuffix>
+                            <charset>UTF-8</charset>
+                            <skipMinify>${skip.optimize}</skipMinify>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- HTML Compression. JS/CSS untouched: CSS is minified above; JS
+                 stays readable ES modules (see task/asset-polish.md for a
+                 minify step; the YUI-based minifier cannot handle ESM). -->
+            <plugin>
+                <groupId>com.github.hazendaz.maven</groupId>
+                <artifactId>htmlcompressor-maven-plugin</artifactId>
+                <version>${htmlcompressor.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compress-html</id>
+                        <phase>process-resources</phase>
+                        <goals><goal>html</goal></goals>
+                        <configuration>
+                            <srcFolder>${project.build.directory}/site</srcFolder>
+                            <targetFolder>${project.build.directory}/site</targetFolder>
+                            <javascriptHtmlSprite>false</javascriptHtmlSprite>
+                            <removeComments>true</removeComments>
+                            <removeMultiSpaces>true</removeMultiSpaces>
+                            <removeIntertagSpaces>false</removeIntertagSpaces>
+                            <preserveLineBreaks>false</preserveLineBreaks>
+                            <compressJavaScript>false</compressJavaScript>
+                            <compressCss>false</compressCss>
+                            <encoding>UTF-8</encoding>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <profiles>
+        <!-- Production-only: strip .html from internal hrefs for Cloudflare Pages.
+             Default (no profile) builds keep .html so target/site/ is browsable
+             with a plain local file server. CI deploys activate this profile via
+             ./mvnw -Pproduction clean process-resources. -->
+        <profile>
+            <id>production</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>clean-urls</id>
+                                <phase>process-resources</phase>
+                                <goals><goal>exec</goal></goals>
+                                <configuration>
+                                    <executable>${project.basedir}/scripts/clean-urls.sh</executable>
+                                    <arguments>
+                                        <argument>${project.build.directory}/site</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
