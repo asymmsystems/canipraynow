@@ -24,6 +24,6 @@
     <description>Wiring assemblies: composed BOMs combining variants into deployment configurations.</description>
 
     <modules>
-        <module>cipn-wiring-assembly-spring-standard</module>
+        <module>cipn-wiring-assembly-standard</module>
     </modules>
 </project>

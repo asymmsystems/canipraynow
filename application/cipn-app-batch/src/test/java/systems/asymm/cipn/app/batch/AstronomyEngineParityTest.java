@@ -5,8 +5,6 @@
  */
 package systems.asymm.cipn.app.batch;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
@@ -15,6 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import systems.asymm.cipn.fw.common.util.StructuredXmlParser;
 import systems.asymm.cipn.fw.contract.access.CalculationMethodAccessor;
 import systems.asymm.cipn.fw.contract.data.CalculationParameters;
 import systems.asymm.cipn.fw.contract.data.Coordinates;
@@ -28,23 +27,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * Integration parity check for the astronomy pipeline: the calculation-method
- * accessor (E2) resolves each method's parameters, the engine (E3) computes the day,
- * and every one of the seven events must reproduce the vendored adhan.js reference to
- * the minute across all 2688 golden vectors. This is where accessor and engine are
- * wired together (as S2 will wire them), so the golden oracle lives here rather than in
- * either pure service module. Regenerate with {@code scripts/gen-golden-vectors.mjs}.
+ * Integration parity check for the astronomy pipeline: the calculation-method accessor (E2)
+ * resolves each method's parameters, the engine (E3) computes the day, and every one of the
+ * seven events must reproduce the vendored adhan.js reference to the minute across all 2688
+ * golden vectors. The oracle is the frozen {@code golden-vectors.xml} (captured once from
+ * adhan.js, the historical JS reference).
  */
 class AstronomyEngineParityTest {
 
-    private static final String[] EVENTS = {"fajr", "sunrise", "dhuhr", "asr", "sunset", "maghrib", "isha"};
-
     @Test
     void engineWithResolvedMethodReproducesAdhanToTheMinute() throws Exception {
-        JsonNode root;
-        try (InputStream in = getClass().getResourceAsStream("/golden-vectors.json")) {
-            assertNotNull(in, "golden-vectors.json missing from test resources");
-            root = new ObjectMapper().readTree(in);
+        GoldenVectors golden;
+        try (InputStream in = getClass().getResourceAsStream("/golden-vectors.xml")) {
+            assertNotNull(in, "golden-vectors.xml missing from test resources");
+            golden = new StructuredXmlParser<>(GoldenVectors.class).parse(in);
         }
 
         CalculationMethodAccessor methods = new ClasspathCalculationMethodAccessor();
@@ -54,36 +50,26 @@ class AstronomyEngineParityTest {
         long worstMs = 0;
         int checked = 0;
 
-        for (JsonNode v : root.get("vectors")) {
-            String method = v.get("method").asText();
-            String madhab = v.get("madhab").asText();
-            Coordinates coords = new Coordinates(v.get("lat").asDouble(), v.get("lng").asDouble());
-            LocalDate date = LocalDate.of(v.get("y").asInt(), v.get("mo").asInt() + 1, v.get("da").asInt());
-
+        for (Vector v : golden.vector()) {
+            Coordinates coords = new Coordinates(v.lat(), v.lng());
+            LocalDate date = LocalDate.of(v.y(), v.mo() + 1, v.da());
             CalculationParameters params = methods.parametersOrDefault(
-                    method, "hanafi".equals(madhab) ? Madhab.HANAFI : Madhab.SHAFI);
+                    v.method(), "hanafi".equals(v.madhab()) ? Madhab.HANAFI : Madhab.SHAFI);
             DayEvents e = engine.compute(coords, date, params);
 
+            long[] expected = {v.fajr(), v.sunrise(), v.dhuhr(), v.asr(), v.sunset(), v.maghrib(), v.isha()};
             Instant[] actual = {e.fajr(), e.sunrise(), e.dhuhr(), e.asr(), e.sunset(), e.maghrib(), e.isha()};
-            for (int i = 0; i < EVENTS.length; i++) {
-                JsonNode expNode = v.get(EVENTS[i]);
-                Long expected = expNode.isNull() ? null : expNode.asLong();
-                Long got = actual[i] == null ? null : actual[i].toEpochMilli();
+            String[] names = {"fajr", "sunrise", "dhuhr", "asr", "sunset", "maghrib", "isha"};
+            for (int i = 0; i < names.length; i++) {
                 checked++;
-                if (expected == null || got == null) {
-                    if (expected != got) {
-                        mismatches.add("%s/%s %s %s: null-mismatch exp=%s got=%s"
-                                .formatted(method, madhab, v.get("loc").asText(), EVENTS[i], expected, got));
-                    }
-                    continue;
-                }
-                long diff = Math.abs(expected - got);
+                long got = actual[i].toEpochMilli();
+                long diff = Math.abs(expected[i] - got);
                 if (diff != 0) {
                     worstMs = Math.max(worstMs, diff);
                     if (mismatches.size() < 40) {
                         mismatches.add("%s/%s %s %s %s: exp=%s got=%s (%+d s)".formatted(
-                                method, madhab, v.get("loc").asText(), date, EVENTS[i],
-                                Instant.ofEpochMilli(expected), Instant.ofEpochMilli(got), (got - expected) / 1000));
+                                v.method(), v.madhab(), v.loc(), date, names[i],
+                                Instant.ofEpochMilli(expected[i]), actual[i], (got - expected[i]) / 1000));
                     }
                 }
             }
@@ -93,5 +79,15 @@ class AstronomyEngineParityTest {
             fail("Parity failures: %d of %d checks off (worst %d s). Samples:%n%s".formatted(
                     mismatches.size(), checked, worstMs / 1000, String.join("\n", mismatches)));
         }
+    }
+
+    /** XML binding for {@code golden-vectors.xml}. */
+    record GoldenVectors(List<Vector> vector) {
+    }
+
+    /** XML binding for one {@code <vector .../>} (times are UTC epoch millis). */
+    record Vector(
+            String method, String madhab, String loc, double lat, double lng, int y, int mo, int da,
+            long fajr, long sunrise, long dhuhr, long asr, long sunset, long maghrib, long isha) {
     }
 }

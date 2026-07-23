@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  Spring @Configuration wiring cipn-svc-engine. Keeps svc-engine framework-free (ADR-029).
+  Plain-Java wiring for cipn-svc-manager. Keeps the manager impl framework-free.
   See architecture/module-structure.md.
 
   @author Fahim Farook
@@ -17,9 +17,17 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cipn-wiring-engine-spring</artifactId>
+    <artifactId>cipn-wiring-manager</artifactId>
     <packaging>jar</packaging>
 
-    <name>cipn-wiring-engine-spring</name>
-    <description>Spring @Configuration wiring cipn-svc-engine. Keeps svc-engine framework-free (ADR-029).</description>
+    <name>cipn-wiring-manager</name>
+    <description>Plain-Java wiring for cipn-svc-manager. Keeps the manager impl framework-free.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-svc-manager</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

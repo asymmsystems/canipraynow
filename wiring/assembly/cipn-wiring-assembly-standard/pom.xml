@@ -2,11 +2,9 @@
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
 
-  Assembly BOM: combines the wiring variants needed for the standard Spring
-  deployment, so an application depends on ONE artifact instead of every variant.
-  Packaging is pom - an assembly carries dependencies only, never sources.
-
-  Selected by the reactor via ${wiring.framework} / ${wiring.variant}.
+  Standard assembly: composes the engine + file-accessor + manager wiring variants into
+  the wired site-generation use case (SiteGenerationWiring). An application depends on this
+  ONE artifact - never on impl (svc-*) modules or the individual variants.
 
   @author Fahim Farook
 -->
@@ -21,26 +19,26 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cipn-wiring-assembly-spring-standard</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>cipn-wiring-assembly-standard</artifactId>
+    <packaging>jar</packaging>
 
-    <name>cipn-wiring-assembly-spring-standard</name>
-    <description>Standard Spring deployment: engine + file accessor + manager wiring.</description>
+    <name>cipn-wiring-assembly-standard</name>
+    <description>Standard deployment: composes engine + file accessor + manager wiring into the site-generation use case.</description>
 
     <dependencies>
         <dependency>
             <groupId>systems.asymm.cipn</groupId>
-            <artifactId>cipn-wiring-engine-spring</artifactId>
+            <artifactId>cipn-wiring-engine</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>systems.asymm.cipn</groupId>
-            <artifactId>cipn-wiring-accessor-file-spring</artifactId>
+            <artifactId>cipn-wiring-accessor-file</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>systems.asymm.cipn</groupId>
-            <artifactId>cipn-wiring-manager-spring</artifactId>
+            <artifactId>cipn-wiring-manager</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

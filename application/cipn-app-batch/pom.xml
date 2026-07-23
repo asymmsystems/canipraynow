@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  Application: build-time generator - yearly S1 extraction / S2 computation of the annual tables.
-  Wires the engine (E3) and the calculation-method accessor (E2); hosts their integration tests.
+  Application: build-time generator (S2). Thin entry point - depends only on the wiring
+  assembly and the contracts it references; no svc-* (impl) dependencies.
   Volatility-based structure - see architecture/module-structure.md.
 
   @author Fahim Farook
@@ -23,17 +23,19 @@
     <packaging>jar</packaging>
 
     <name>cipn-app-batch</name>
-    <description>Application: build-time generator - yearly S1 extraction / S2 computation of the annual tables.</description>
+    <description>Application: build-time generator (S2). Thin - depends only on the wiring assembly.</description>
 
     <dependencies>
+        <!-- The app depends on the wiring assembly, never on impl (svc-*) modules. -->
         <dependency>
             <groupId>systems.asymm.cipn</groupId>
-            <artifactId>cipn-svc-engine</artifactId>
+            <artifactId>cipn-wiring-assembly-standard</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- Contract types the entry point references (SiteGenerationManager/Result). -->
         <dependency>
             <groupId>systems.asymm.cipn</groupId>
-            <artifactId>cipn-svc-accessor-file</artifactId>
+            <artifactId>cipn-fw-contract-manager</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -43,10 +45,17 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- The astronomy-parity integration test drives the engine + method accessor impls directly. -->
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-svc-engine</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-svc-accessor-file</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

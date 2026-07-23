@@ -24,8 +24,8 @@
     <description>Wiring variants: atomic DI modules, one per service type + framework (ADR-027).</description>
 
     <modules>
-        <module>cipn-wiring-engine-spring</module>
-        <module>cipn-wiring-accessor-file-spring</module>
-        <module>cipn-wiring-manager-spring</module>
+        <module>cipn-wiring-engine</module>
+        <module>cipn-wiring-accessor-file</module>
+        <module>cipn-wiring-manager</module>
     </modules>
 </project>
