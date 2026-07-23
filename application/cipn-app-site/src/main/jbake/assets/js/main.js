@@ -19,6 +19,7 @@ import { renderChips } from './ui/chips.js';
 import { renderRuler, updateCursor, rulerSummary, rulerA11yList, bindRulerTooltip } from './ui/ruler.js';
 import { renderPrayers } from './ui/prayers.js';
 import { renderSponsor } from './ui/sponsor.js';
+import { renderAd } from './ui/ads.js';
 import { initSettings, syncSettings, initLocationSlot, autoLocate } from './ui/settings.js';
 import { isFridayIn, distanceKm } from './utils.js';
 import { hasAuthorityTimetable, authorityDayEvents, AUTHORITY_METHOD } from './timetables.js';
@@ -116,6 +117,7 @@ async function boot() {
     initLocationSlot(document.getElementById('location-slot-canvas'), pick);
     initLocationSlot(document.getElementById('location-slot-sidebar'), pick);
     renderSponsor(document.getElementById('sponsor'));
+    renderAd(document.getElementById('ad-slot-1'));
     registerSw();
 
     if (!state.location) {

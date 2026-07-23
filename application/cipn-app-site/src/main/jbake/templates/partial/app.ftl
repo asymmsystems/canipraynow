@@ -70,15 +70,20 @@
 
         <@locationSlot id="location-slot-sidebar" extra="location-slot-sidebar"/>
         <section id="prayers" aria-label="Today's prayers"></section>
-        <section id="sponsor" hidden aria-label="Sponsored"></section>
-        <#-- Ad slot (spec §9 Phase B): below the fold on mobile, below the
-             prayer list on desktop - never above or inside the Status Canvas.
-             Height reserved so a late-loading unit cannot shift layout. -->
-        <div class="ad-slot" id="ad-slot-1" data-ad-slot hidden aria-label="Advertisement"></div>
+        <#-- The ruling basis and site nav sit directly under the prayer list,
+             above the commercial slots: the provenance of the answer belongs
+             next to the answer, not below an ad. -->
         <footer class="app-footer">
             <span id="ruleset-version"></span>
             <br><a href="/methods.html">Prayer times</a> &#183; <a href="/methodology.html">Rulings &amp; evidence</a> &#183; <a href="/cities.html">Cities</a> &#183; <a href="/q/index.html">Questions</a> &#183; <a href="/privacy.html">Privacy</a>
         </footer>
+        <section id="sponsor" hidden aria-label="Sponsored"></section>
+        <#-- Ad slot (spec §9 Phase B): below the fold on mobile, below the
+             prayer list on desktop - never above or inside the Status Canvas.
+             Deliberately the LAST element in the sidebar: with nothing beneath
+             it, a late-loading unit shifts no layout and needs no reserved
+             height. Keep it last if the sidebar is ever reordered. -->
+        <div class="ad-slot" id="ad-slot-1" data-ad-slot hidden aria-label="Advertisement"></div>
     </aside>
 </div>
 

@@ -1,5 +1,5 @@
 title=Privacy
-description=Can I Pray Now stores your settings on your device only. No accounts, no cookies, no trackers, no IP storage.
+description=Can I Pray Now stores your settings on your device only. No accounts, no analytics, no fingerprinting, no IP storage, and exactly what the advertising does.
 type=page
 status=published
 ~~~~~~
@@ -10,8 +10,11 @@ status=published
 <p>Your location, calculation method, madhhab, and display preferences are stored in your browser's local storage under <code>cipn.*</code> keys. They never leave your device. Clearing your browser data removes them.</p>
 <h2>Location</h2>
 <p>If you use "Use my location", the coordinates are read by your browser and used locally to compute prayer windows - they are not sent to us. The fallback <code>/api/geo</code> endpoint returns the approximate city Cloudflare already derives from the connection; we do not store your IP address or any identifier.</p>
-<h2>No trackers</h2>
-<p>There are no analytics cookies, no fingerprinting, no third-party scripts, and no advertising trackers. If a sponsor card is shown it is a static, clearly labelled card served from this site; clicking it passes through a counter that records only that a click happened - no cookies, no user IDs.</p>
+<h2>We do not track you</h2>
+<p>We run no analytics of any kind: no analytics cookies, no fingerprinting, and no profile of you across sites or visits. We do not know who you are. If a sponsor card is shown it is a static, clearly labelled card served from this site; clicking it passes through a counter that records only that a click happened - no cookies, no user IDs.</p>
+<h2>Advertising</h2>
+<p>The advertising on this site is served by <strong>HalalSpark</strong>. Showing an ad means loading a script from their servers, and that script is the one third-party code on this site. We checked what it does before enabling it: it does <strong>not</strong> fingerprint you, and it does <strong>not</strong> read or write cookies from the page. It does use session storage and an intersection observer to tell whether the ad was actually seen, it makes requests to fetch the ad, and the server it loads from sets its own bot-protection cookie (<code>__cf_bm</code>) on its own domain.</p>
+<p>Your location, your madhhab, and your settings are never sent to it. Ads never block the page and never load before your answer, and they sit below the content so they can never cover the verdict. If you would rather it were not there at all, we understand; it is what keeps the tool free.</p>
 <h2>Affiliate links</h2>
 <p>Some sponsor cards are affiliate links. As an Amazon Associate we earn from qualifying purchases: if you buy through one, we may receive a small commission at no extra cost to you. This changes nothing about what the site stores about you, which is still nothing.</p>
 <h2>Offline</h2>

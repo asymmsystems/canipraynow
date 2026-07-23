@@ -162,11 +162,6 @@
     --layout-drawer-width: min(24rem, 100vw);
     --layout-breakpoint-md: 768px;
 
-    /* Ad slot: height reserved up-front so a late unit cannot shift layout
-       (spec §9: CLS < 0.02). Change here, not in the component. */
-    --ad-slot-height: 250px;
-    --ad-slot-height-mobile: 100px;
-
     --radius-sm: 0.4rem;
     --radius-md: 0.6rem;
     --radius-lg: 0.9rem;
@@ -819,7 +814,7 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
     background: var(--surface-sunken);
     border: 1px solid var(--border-subtle);
     text-decoration: none;
-    min-height: 5rem;   /* reserved - zero CLS */
+    min-height: 4.5rem;   /* reserved - zero CLS */
     position: relative;
 
     img { border-radius: var(--radius-sm); }
@@ -839,25 +834,32 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
     display: flex;
     flex-direction: column;
     gap: var(--space-2xs);
-    font-size: var(--t-size-caption);
+    font-size: var(--t-size-kicker);
 
     span { opacity: 0.75; }
 }
 
-/* Height is reserved even while empty, so filling it later shifts nothing. */
+/* No reserved height: this slot is the LAST element in the sidebar, so a
+   late-loading unit pushes nothing and cannot shift layout (spec §9 CLS budget
+   is satisfied by position, not by reservation). Reserving a height here only
+   produced an empty box on the days the unit was shorter than the reserve.
+   If the slot is ever moved above other content, reserve a height again. */
 .ad-slot {
-    min-height: var(--ad-slot-height-mobile);
     display: grid;
     place-items: center;
     border-radius: var(--radius-lg);
-    border: 1px dashed var(--border-subtle);
+    /* Solid, matching the sponsor card: a dashed frame reads as an empty
+       placeholder now that the slot is actually filled. */
+    border: 1px solid var(--border-subtle);
     overflow: hidden;
 
-    &[hidden] { display: none; }
-}
+    /* The ad tag hardcodes `margin: 10px auto` inline on its own container.
+       The slot already positions the unit (grid centring replaces the auto
+       margins), so drop it; beating an inline style needs !important. Direct
+       children only, so the tag's internal spacing is left alone. */
+    > * { margin: 0 !important; }
 
-@media (min-width: 769px) {
-    .ad-slot { min-height: var(--ad-slot-height); }
+    &[hidden] { display: none; }
 }
 
 /* ---------------------------------------------------------------- settings */
