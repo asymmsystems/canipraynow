@@ -23,4 +23,12 @@
 
     <name>cipn-fw-contract-engine</name>
     <description>Engine ports: AstronomyEngine, WindowEngine, VerdictEngine, AuthorityParseEngine.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

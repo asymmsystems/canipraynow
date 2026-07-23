@@ -47,6 +47,11 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>25</maven.compiler.release>
+        <!-- Shared test-library versions for the Java modules. -->
+        <junit.version>5.11.3</junit.version>
+        <jackson.version>2.18.2</jackson.version>
+        <surefire.version>3.5.2</surefire.version>
         <jbake.version>2.7.0-rc.7</jbake.version>
         <jbake.plugin.version>2.7.0-rc.7</jbake.plugin.version>
         <freemarker.version>2.3.33</freemarker.version>
