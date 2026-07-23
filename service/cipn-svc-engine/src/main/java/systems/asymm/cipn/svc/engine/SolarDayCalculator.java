@@ -31,7 +31,7 @@ import static systems.asymm.cipn.svc.engine.Astronomical.seasonAdjustedMorningTw
  */
 final class SolarDayCalculator {
 
-    private static final String MOONSIGHTING = "MoonsightingCommittee";
+    private static final String MOONSIGHTING = "moonsighting-committee";
 
     private SolarDayCalculator() {
     }

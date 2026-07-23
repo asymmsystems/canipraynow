@@ -23,4 +23,12 @@
 
     <name>cipn-fw-contract-access</name>
     <description>Accessor ports, named by consumed type: TimetableAccessor, RulesetAccessor.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const ADHAN = path.resolve(HERE, '../../../application/cipn-app-site/src/main/jbake/assets/js/vendor/adhan.js');
+const ADHAN = path.resolve(HERE, '../../cipn-app-site/src/main/jbake/assets/js/vendor/adhan.js');
 const OUT = path.resolve(HERE, '../src/test/resources/golden-vectors.json');
 
 const Adhan = await import(ADHAN);

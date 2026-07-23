@@ -3,7 +3,7 @@
  *
  * @author Fahim Farook
  */
-package systems.asymm.cipn.svc.engine;
+package systems.asymm.cipn.app.batch;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,35 +15,41 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import systems.asymm.cipn.fw.contract.access.CalculationMethodAccessor;
 import systems.asymm.cipn.fw.contract.data.CalculationParameters;
 import systems.asymm.cipn.fw.contract.data.Coordinates;
 import systems.asymm.cipn.fw.contract.data.DayEvents;
 import systems.asymm.cipn.fw.contract.data.Madhab;
 import systems.asymm.cipn.fw.contract.engine.AstronomyEngine;
+import systems.asymm.cipn.svc.accessor.file.ClasspathCalculationMethodAccessor;
+import systems.asymm.cipn.svc.engine.DefaultAstronomyEngine;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * Validates {@link DefaultAstronomyEngine} (E3) against golden vectors captured from
- * the vendored adhan.js - the reference the browser has always used. Every
- * (method x madhab x location x date) row must reproduce all seven event times
- * exactly to the minute. Regenerate the oracle with
- * {@code scripts/gen-golden-vectors.mjs} when the registry or adhan.js changes.
+ * Integration parity check for the astronomy pipeline: the calculation-method
+ * accessor (E2) resolves each method's parameters, the engine (E3) computes the day,
+ * and every one of the seven events must reproduce the vendored adhan.js reference to
+ * the minute across all 2688 golden vectors. This is where accessor and engine are
+ * wired together (as S2 will wire them), so the golden oracle lives here rather than in
+ * either pure service module. Regenerate with {@code scripts/gen-golden-vectors.mjs}.
  */
-class DefaultAstronomyEngineParityTest {
+class AstronomyEngineParityTest {
 
     private static final String[] EVENTS = {"fajr", "sunrise", "dhuhr", "asr", "sunset", "maghrib", "isha"};
 
     @Test
-    void reproducesAdhanToTheMinute() throws Exception {
+    void engineWithResolvedMethodReproducesAdhanToTheMinute() throws Exception {
         JsonNode root;
         try (InputStream in = getClass().getResourceAsStream("/golden-vectors.json")) {
             assertNotNull(in, "golden-vectors.json missing from test resources");
             root = new ObjectMapper().readTree(in);
         }
 
+        CalculationMethodAccessor methods = new ClasspathCalculationMethodAccessor();
         AstronomyEngine engine = new DefaultAstronomyEngine();
+
         List<String> mismatches = new ArrayList<>();
         long worstMs = 0;
         int checked = 0;
@@ -54,7 +60,7 @@ class DefaultAstronomyEngineParityTest {
             Coordinates coords = new Coordinates(v.get("lat").asDouble(), v.get("lng").asDouble());
             LocalDate date = LocalDate.of(v.get("y").asInt(), v.get("mo").asInt() + 1, v.get("da").asInt());
 
-            CalculationParameters params = engine.resolveMethod(
+            CalculationParameters params = methods.parametersOrDefault(
                     method, "hanafi".equals(madhab) ? Madhab.HANAFI : Madhab.SHAFI);
             DayEvents e = engine.compute(coords, date, params);
 
