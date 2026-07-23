@@ -44,7 +44,7 @@ export const METHODS = Object.freeze([
     { key: 'Kemenag', label: 'Kemenag (Indonesia)' },
     { key: 'MuslimWorldLeague', label: 'Muslim World League' },
     { key: 'NorthAmerica', label: 'ISNA (North America)' },
-    { key: 'Egyptian', label: 'Egyptian General Authority of Survey' },
+    { key: 'Egyptian', label: 'Egyptian Survey Authority' },
     { key: 'UmmAlQura', label: 'Umm al-Qura (Saudi Arabia)' },
     { key: 'Karachi', label: 'University of Islamic Sciences, Karachi' },
     { key: 'Tehran', label: 'Institute of Geophysics, Tehran (Iran)' },

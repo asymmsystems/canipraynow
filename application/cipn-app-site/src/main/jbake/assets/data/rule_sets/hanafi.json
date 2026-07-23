@@ -40,7 +40,7 @@
     },
     "anchor_convention": {
       "value": "prayer-time-entry",
-      "basis": "Scholarly basis is after performing Fajr/Asr; app cannot know performance, so anchors conservatively to prayer-time entry. Scholar to confirm.",
+      "basis": "Ḥanafī is asymmetric: the after-Fajr (W1) restriction is time-based (from true dawn), while after-ʿAsr (W4) attaches to having performed ʿAsr. The app cannot know performance, so both anchor conservatively to prayer-time entry. Scholar to confirm.",
       "verified_by": null,
       "verified_at": null
     }

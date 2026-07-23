@@ -65,7 +65,7 @@ public final class GenerateCityPages {
     private static final Map<String, String> METHOD_LABEL = Map.ofEntries(
             Map.entry("MuslimWorldLeague", "the Muslim World League convention"),
             Map.entry("NorthAmerica", "the ISNA (North America) convention"),
-            Map.entry("Egyptian", "the Egyptian General Authority of Survey convention"),
+            Map.entry("Egyptian", "the Egyptian Survey Authority convention"),
             Map.entry("UmmAlQura", "the Umm al-Qura convention"),
             Map.entry("Karachi", "the University of Islamic Sciences, Karachi convention"),
             Map.entry("Tehran", "the Institute of Geophysics, Tehran convention"),
