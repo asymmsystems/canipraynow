@@ -42,10 +42,12 @@ runs:
           --pattern "SHA256SUMS.txt" \
           --pattern "SHA256SUMS.txt.asc" \
           --clobber
-        curl -fsSL --retry 5 --retry-all-errors -o eliya-key.asc "https://key.asymm.systems/eliya-signing-key.asc"
 
         echo "Verifying the checksum file's GPG signature ..."
-        gpg --quiet --import eliya-key.asc
+        # The Eliya signing public key is pinned in this action (eliya-signing-key.asc),
+        # not fetched at build time: deterministic, and a stronger trust root than
+        # re-downloading it (key.asymm.systems is behind Cloudflare and 403s runner IPs).
+        gpg --quiet --import "${GITHUB_ACTION_PATH}/eliya-signing-key.asc"
         gpg --quiet --verify SHA256SUMS.txt.asc SHA256SUMS.txt
 
         echo "Verifying the tarball SHA-256 ..."
