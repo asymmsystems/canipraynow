@@ -34,6 +34,7 @@ final class TimetableViewModel {
         model.put("authorityCode", table.authority());
         model.put("url", table.authorityUrl());
         model.put("zone", table.zoneName());
+        model.put("year", table.year());
 
         List<Map<String, Object>> months = new ArrayList<>();
         for (int month = 1; month <= 12; month++) {

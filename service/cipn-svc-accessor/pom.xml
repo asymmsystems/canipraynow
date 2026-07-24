@@ -25,6 +25,7 @@
     <description>Accessors: HIGH volatility, split by LOCATION (deployment-time swap). No -core: implementations share nothing.</description>
 
     <modules>
+        <module>cipn-svc-accessor-classpath</module>
         <module>cipn-svc-accessor-file</module>
     </modules>
 </project>

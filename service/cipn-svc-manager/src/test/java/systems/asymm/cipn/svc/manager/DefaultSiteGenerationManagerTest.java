@@ -43,8 +43,8 @@ class DefaultSiteGenerationManagerTest {
 
     private static final AuthorityTimetable ACJU = new AuthorityTimetable(
             "ACJU", "All Ceylon Jamiyyathul Ulama", "https://www.acju.lk/prayer-times/",
-            "01", "Colombo, Gampaha, Kalutara", "https://www.acju.lk/prayer-times/",
-            List.of(new TimetableRow(1, 1, 300, 382, 735, 937, 1087, 1161)));
+            "01", "Colombo, Gampaha, Kalutara", "https://www.acju.lk/prayer-times/", 2026,
+            List.of(new TimetableRow(1, 1, 300, 382, 735, 937, 1087, 1161, 734)));
 
     /** Timetable accessor double: LK has a table (zone 01 -> ACJU), everything else has none. */
     private static final TimetableAccessor TIMETABLES = new TimetableAccessor() {

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  ACJU zone index for Sri Lanka, 2026. Validates against schema/zone.xsd. @author Fahim Farook
+-->
+<zones authority="ACJU"
+       authority-name="All Ceylon Jamiyyathul Ulama"
+       authority-url="https://www.acju.lk/prayer-times/"
+       country="Sri Lanka">
+    <zone id="01" name="Colombo, Gampaha, Kalutara" lat="6.9271" lng="79.8612"/>
+    <zone id="07" name="Kandy, Matale, Nuwara Eliya" lat="7.2906" lng="80.6337"/>
+</zones>

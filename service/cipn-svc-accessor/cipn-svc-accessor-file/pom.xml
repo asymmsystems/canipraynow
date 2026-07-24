@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems. All rights reserved.
-  Accessor (Location = file/classpath): reads and writes the baked timetable and rule-set JSON. Resource I/O only.
-  See architecture/module-structure.md.
+  Accessor (Location = filesystem): writes generated content under the output root and sweeps
+  prior runs (FileContentAccessor). Write-side I/O only; the read-side accessors are classpath
+  (cipn-svc-accessor-classpath). See architecture/module-structure.md and ADR-0012.
 
   @author Fahim Farook
 -->
@@ -21,7 +22,7 @@
     <packaging>jar</packaging>
 
     <name>cipn-svc-accessor-file</name>
-    <description>Accessor (Location = file/classpath): reads and writes the baked timetable and rule-set JSON. Resource I/O only.</description>
+    <description>Accessor (Location = filesystem): writes generated content and sweeps prior runs. Write-side I/O only.</description>
 
     <dependencies>
         <dependency>
@@ -33,11 +34,6 @@
             <groupId>systems.asymm.cipn</groupId>
             <artifactId>cipn-fw-common</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>

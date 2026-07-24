@@ -4,7 +4,7 @@
   month-sectioned HTML fragment. Driven by TimetableViewModel. @author Fahim Farook
 -->
 <section class="authority-timetable">
-<h2>${authority} annual timetable - ${zone}</h2>
+<h2>${authority} annual timetable ${year?c} - ${zone}</h2>
 <p class="timetable-note">Published times from ${authority}, served exactly (not computed). Source: <a href="${url}" rel="nofollow">${authorityCode}</a>.</p>
 <#list months as month>
 <details class="timetable-month">

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Coverage manifest for 2026: the countries with an extracted authority table this year.
+  Written by S1; read by the accessor to enumerate coverage (jar-safe, no directory listing).
+  Validates against schema/index.xsd. @author Fahim Farook
+-->
+<timetable-index year="2026">
+    <country cc="LK"/>
+</timetable-index>

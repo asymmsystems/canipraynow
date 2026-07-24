@@ -20,7 +20,7 @@ import systems.asymm.cipn.fw.contract.data.TimetableZone;
  * <p>Named by CONSUMED TYPE (authority timetables). Reads only, zero business logic:
  * it returns the zones and each zone's annual rows; picking the zone for a location
  * (snap-to-nearest-centroid) is the caller's concern. The location and format are
- * implementation details ({@code ClasspathTimetableAccessor} reads bundled JSON today).
+ * implementation details ({@code ClasspathTimetableAccessor} reads bundled per-year XML).
  *
  * @see Accessor
  */

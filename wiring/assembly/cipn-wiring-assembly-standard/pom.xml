@@ -33,6 +33,11 @@
         </dependency>
         <dependency>
             <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-wiring-accessor-classpath</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
             <artifactId>cipn-wiring-accessor-file</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -26,11 +26,10 @@
     <description>Application: build-time generator (S2). Thin - depends only on the wiring assembly.</description>
 
     <properties>
-        <!-- Defaults for the S2 generate target, so it runs with no arguments.
-             Both stay inside the codebase: input is the checked-in data/ directory at the
-             reactor root; output goes under this module's target/ (never committed). Override
-             either on the command line, e.g. -Dcipn.data.dir=/path -Dcipn.output.dir=/path. -->
-        <cipn.data.dir>${maven.multiModuleProjectDirectory}/data</cipn.data.dir>
+        <!-- Default output root for the S2 generate target, so it runs with no arguments.
+             Input data is bundled on the classpath (ADR-0012); only the output root is passed,
+             and it stays inside the codebase under target/ (never committed). Override with
+             -Dcipn.output.dir=/path. The years default to current + next inside the app. -->
         <cipn.output.dir>${project.build.directory}/site</cipn.output.dir>
     </properties>
 
@@ -95,7 +94,6 @@
                         <configuration>
                             <mainClass>systems.asymm.cipn.app.batch.SiteGeneratorApp</mainClass>
                             <arguments>
-                                <argument>${cipn.data.dir}</argument>
                                 <argument>${cipn.output.dir}</argument>
                             </arguments>
                         </configuration>

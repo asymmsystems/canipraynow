@@ -6,8 +6,9 @@
 
 # can-i-pray-now: Developer and Usage Guide
 
-This guide takes you from a fresh clone to generated pages, and explains the whole
-data lifecycle in between. It is meant to be read top to bottom the first time.
+This guide takes you from a fresh clone to generated pages, and explains the whole data
+lifecycle in between. It is meant to be read top to bottom the first time. The data model and
+placement decisions here are recorded in ADR-0012 (and ADR-0009, ADR-0011).
 
 Throughout, `$REPO` means the reactor root:
 
@@ -21,245 +22,220 @@ Run every command from `$REPO` with `JAVA_HOME=/opt/eliya` set (section 2 explai
 
 ## 1. Glossary (read this first)
 
-The rest of the guide uses these terms precisely; none of them are left implicit.
-
 | Term | Meaning |
 | --- | --- |
-| **Authority** | The body that publishes official prayer times for a country or region, e.g. ACJU (Sri Lanka), JAKIM (Malaysia). We reproduce their tables rather than invent times. |
-| **cc** | An **ISO 3166-1 alpha-2 country code** - two letters, e.g. `LK` (Sri Lanka), `GB` (United Kingdom), `MY` (Malaysia). Upper-case in data; the on-disk timetable folder uses the lower-case form (`timetables/lk/`). |
-| **Zone** | A region an authority publishes one shared timetable for. An authority divides its country into zones (ACJU has districts grouped into numbered zones). |
-| **Zone id** | The authority's own identifier for a zone, taken verbatim, e.g. ACJU zone `01` = "Colombo, Gampaha, Kalutara". It is not invented by us; it comes from the authority and is used to name the file `zone-01.xml`. |
+| **Authority** | The body that publishes official prayer times for a country/region, e.g. ACJU (Sri Lanka), JAKIM (Malaysia). We reproduce their tables rather than invent times. |
+| **cc** | An **ISO 3166-1 alpha-2 country code** - two letters, e.g. `LK`, `GB`, `MY`. Upper-case in data; the on-disk timetable folder uses the lower-case form (`.../lk/`). |
+| **Zone** | A region an authority publishes one shared timetable for (e.g. ACJU groups districts into numbered zones). |
+| **Zone id** | The authority's own identifier for a zone, taken verbatim, e.g. ACJU zone `01`. It names the file `zone-01.xml`. |
 | **Slug** | A URL-safe lower-case name, e.g. `colombo`, `sri-lanka`. A city's page URL is `<country-slug>/<slug>.html`. |
-| **Adhan** | A single prayer time (Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha). |
-| **Madhab** | The juristic school that sets the Asr shadow factor; supplied per calculation, not stored in data. |
-| **S1** | **Scrape** stage: read an authority's published source and emit standard XML data. |
-| **S2** | **Generate** stage: read that XML data and produce the per-city static HTML pages. This is the stage you can run today. |
-| **E1 / E2 / E3** | Calculation engines: E1 reads a baked table, E3 is the general astronomy engine, E2 = E3 plus an authority's published angles/offsets. |
-| **C1 / C2** | Client side: C1 reads a baked table in the browser, C2 is the astronomy engine compiled to WASM. |
-| **DATA_DIR** | Input directory for S2. Holds `cities.xml` and `timetables/<cc>/...`. It is **checked into the repo**; the default is `$REPO/data` (section 8). |
-| **OUTPUT_DIR** | Output directory for S2. Where generated HTML is written. It lives under **`target/`** and is never committed; the default is `application/cipn-app-batch/target/site`. |
+| **S1** | **Scrape** stage: read an authority's published source and emit standard XML timetables. Native Java (JAKIM first). Not yet built - see section 10. |
+| **S2** | **Generate** stage: read the bundled XML and produce the per-city static HTML. This is what you run today (`SiteGeneratorApp`). |
+| **Output root** | Where S2 writes HTML. Under **`target/`**, never committed. Default `application/cipn-app-batch/target/site`. This is the only path you pass S2. |
+
+> **There is no `DATA_DIR`.** Input data is **bundled on the classpath** inside the accessor
+> module (ADR-0012), so the generator needs no data path - only an output root. Singular names
+> throughout: `city.xml`, `zone.xml`, `zone-<id>.xml`, `calculation-method.xml`.
 
 ---
 
-## 2. Prerequisite: the Eliya JDK (mandatory, enforced by the build)
+## 2. Prerequisite: the Eliya JDK (mandatory, enforced)
 
-The build requires the **Eliya JDK** (Asymm Systems' OpenJDK), installed at `/opt/eliya`.
-This is enforced: the reactor root POM runs a Maven Enforcer rule (`RequireJavaVendor`) in the
-`validate` phase that checks `java.vendor == "Asymm Systems"`. Any other JDK (Temurin, Zulu,
-Oracle) fails the build before compilation with:
-
-```
-Build requires the Eliya JDK (java.vendor = "Asymm Systems").
-Install it at /opt/eliya and set JAVA_HOME=/opt/eliya.
-```
-
-Set it for every command below, and verify:
+The build requires the **Eliya JDK** (Asymm Systems' OpenJDK) at `/opt/eliya`. Enforced: the
+reactor root POM runs `maven-enforcer` `RequireJavaVendor` in `validate`, failing any JDK whose
+`java.vendor` is not `"Asymm Systems"`.
 
 ```sh
 export JAVA_HOME=/opt/eliya
 /opt/eliya/bin/java -version      # -> Eliya-25.0.3+24, vendor "Asymm Systems"
 ```
 
-Do **not** use `~/.sdkman/candidates/java/current` - that is Temurin, and the build rejects it.
+Do **not** use `~/.sdkman/candidates/java/current` (Temurin) - the build rejects it.
 
 ---
 
-## 3. The end-to-end lifecycle (the big picture)
+## 3. The end-to-end lifecycle
 
-canipraynow turns an authority's published prayer times into a static website. Data flows
-through four stages. XML is read once, at the front (S1's output); after that everything is
-Java objects until HTML comes out.
+An authority's published times become a static site through four stages. XML is read once, at
+the front; after that everything is Java objects until HTML comes out.
 
 ```
-  Authority sources                data/  (standard XML,          target/site/  (HTML)
-  (websites, PDFs)                  checked in)
-        │                              │                              │
-        ▼            S1               ▼            S2                 ▼        JBake        Deploy
-  ┌───────────┐   scrape &     ┌────────────┐   generate      ┌────────────┐  bake   ┌──────────┐
-  │  ACJU,    │──normalise ───▶│ cities.xml │──per-city ─────▶│ per-city   │────────▶│  static  │
-  │  JAKIM... │  to standard   │ timetables/│   pages          │ .html      │         │  site    │
-  └───────────┘   schema       └────────────┘                 └────────────┘         └──────────┘
+  Authority sources         accessor classpath data       target/site/  (HTML)
+  (websites, PDFs)          (committed XML resources)
+        │                         │                             │
+        ▼          S1            ▼          S2                  ▼      JBake       Deploy
+  ┌───────────┐  scrape &  ┌────────────┐  generate     ┌────────────┐ bake  ┌──────────┐
+  │ ACJU,     │─normalise ▶│ city.xml   │─per-city,─────▶│ per-city   │──────▶│  static  │
+  │ JAKIM ... │ to schema  │ timetable/ │  per-year       │ .html      │       │  site    │
+  └───────────┘            └────────────┘                └────────────┘       └──────────┘
 ```
 
-| Stage | Reads | Writes | Where the output lives | Status |
+| Stage | Reads | Writes | Where | Status |
 | --- | --- | --- | --- | --- |
-| **S1 scrape** | authority websites / PDFs | `cities.xml` + `timetables/<cc>/*.xml` (standard schema, section 7) | `$REPO/data` (checked in) | **Not yet in Java (T-26).** Legacy node scrapers still exist but are being removed. See section 10. |
-| **S2 generate** | `$REPO/data` | per-city `<country-slug>/<slug>.html` | `application/cipn-app-batch/target/site` | **Done** - `SiteGeneratorApp`. Run it with the Maven target in section 9. |
-| **Site bake** | generated HTML + templates | full static site | JBake output | Current site still bakes stubs via `GenerateCityPages.java`; wiring S2's output into JBake is part of the cutover (section 10). |
+| **S1 scrape** | authority sites/PDFs | `timetable/<year>/<cc>/*.xml` + `index.xml` | accessor classpath resources | **Not yet in Java (T-26/F2).** JAKIM first. Legacy node scrapers being removed. |
+| **S2 generate** | bundled classpath data | `<year>/<country-slug>/<slug>.html` (+ canonical current year at root) | `.../cipn-app-batch/target/site` | **Done** - `SiteGeneratorApp`. Section 9. |
+| **Site bake** | generated HTML + templates | full static site | JBake output | cutover pending (retire `GenerateCityPages.java`). |
 | **Deploy** | baked site | hosted site | hosting | out of scope here |
 
-The important invariant: **whatever authority S1 scrapes, and whatever format the authority
-publishes in, S1 normalises it into one standard XML schema** (section 7). Every country's data
-therefore looks identical to S2 - S2 has no per-authority code.
+Whatever authority S1 scrapes, and whatever format it publishes, S1 **normalises it into one
+standard schema** (section 7) - so every country looks identical to S2, which has no
+per-authority code.
+
+**Annual rollover (no cron):** an authority table is one year. S2 is year-parameterized and
+bakes the **current + next** year; the next year's pages exist before Dec 31, so Jan 1 rolls
+over with no build. The T-05 runbook makes "next-year data present" a release check - S2 prints
+a WARNING for any baked year with no tables.
 
 ---
 
 ## 4. Module map
 
-The reactor is decomposed by **volatility** (IDesign / Löwy), built top-down:
-`wiring → framework → service → application`.
+Decomposed by **volatility** (ADR-0011), built top-down: `wiring → framework → service → application`.
 
 ```
 $REPO
-├── pom.xml                          reactor root (Eliya enforcer lives here)
-├── data/                            checked-in standard XML data = the default DATA_DIR
-├── schema/                          the standard XSDs S1 output / S2 input must satisfy
+├── pom.xml                          reactor root (Eliya enforcer)
 ├── framework/
-│   ├── cipn-fw-common               pure utilities: XML parser, geometry, formatters (WASM-safe)
+│   ├── cipn-fw-common               pure utilities: XML parser, geometry (WASM-safe)
 │   └── cipn-fw-contract/
-│       ├── cipn-fw-contract-data    pure records/enums (City, TimetableRow, ...). No behaviour.
+│       ├── cipn-fw-contract-data    records/enums + resources/schema/*.xsd (the data contract)
 │       ├── cipn-fw-contract-access  Accessor marker + accessor interfaces
 │       ├── cipn-fw-contract-engine  Engine marker + engine interfaces
 │       └── cipn-fw-contract-manager Manager marker + manager interfaces
 ├── service/
-│   ├── cipn-svc-engine              engine impls (Default*): pure logic, zero I/O, WASM-bound
+│   ├── cipn-svc-engine              engine impls (Default*): pure logic, WASM-bound
 │   ├── cipn-svc-accessor/
-│   │   └── cipn-svc-accessor-file   file/classpath accessors: I/O only
+│   │   ├── cipn-svc-accessor-classpath  READ accessors + the bundled data (city, timetable, methods)
+│   │   └── cipn-svc-accessor-file        the content WRITER only (FileContentAccessor)
 │   └── cipn-svc-manager             manager impls: orchestration + build-time templating
 ├── wiring/
-│   ├── variant/                     per-service-type wiring (composes the Default* impls)
+│   ├── variant/{engine, accessor-classpath, accessor-file, manager}
 │   └── assembly/cipn-wiring-assembly-standard   the single assembly the app depends on
 └── application/
-    ├── cipn-app-site                the JBake static site (still holds the live JSON data)
+    ├── cipn-app-site                the JBake static site (legacy live JSON data)
     ├── cipn-app-server/*            runtime server variants
     └── cipn-app-batch               the S2 generator entry point (SiteGeneratorApp)
 ```
+
+Accessors are split by **location** (ADR-032): the classpath module holds the read-side
+(bundled data), the file module holds the write-side (output). Each accessor is named by its
+**consumed type** (City / Timetable / CalculationMethod), one per resource.
 
 ---
 
 ## 5. The data and config files (inventory)
 
-Every input the code reads is XML (project rule: XML for all config/data/oracles - no JSON,
-YAML, properties, or node). Here is every such file, where it lives, and who touches it.
+Every input is XML (project rule: XML for all config/data/oracles - no JSON/YAML/node). All of
+it is committed inside the accessor module (data) or the contract-data module (schema).
 
 | File | Location | What it is | Produced by | Consumed by | Schema |
 | --- | --- | --- | --- | --- | --- |
-| `cities.xml` | `$REPO/data/cities.xml` | Master list of cities to generate | S1 (today: seeded by hand) | S2 city accessor | `schema/cities.xsd` |
-| `zones.xml` | `$REPO/data/timetables/<cc>/zones.xml` | One country's authority + its zone index | S1 | S2 timetable accessor | `schema/zones.xsd` |
-| `zone-<id>.xml` | `$REPO/data/timetables/<cc>/zone-<id>.xml` | One zone's published timetable | S1 | S2 timetable accessor | `schema/timetable.xsd` |
-| `calculation-methods.xml` | `service/cipn-svc-accessor/cipn-svc-accessor-file/src/main/resources/calculation-methods.xml` | E2 registry: each authority's Fajr/Isha angles + offsets | maintained by hand | calculation-method accessor | (internal) |
-| `golden-vectors.xml` | `service/cipn-svc-engine/src/test/resources/golden-vectors.xml` | 2688 astronomy test oracles for E3 parity | one-off | engine parity test | (internal) |
-| `cities.json`, `timetables/**` | `application/cipn-app-site/src/main/jbake/assets/data/` | **Legacy** live data, still JSON | old node scrapers | old `GenerateCityPages.java` | none (to be retired) |
+| `city.xml` | `cipn-svc-accessor-classpath/src/main/resources/city.xml` | Curated city list (near-static) | maintained by hand | `ClasspathCityAccessor` | `schema/city.xsd` |
+| `index.xml` | `.../resources/timetable/<year>/index.xml` | Coverage manifest: which countries have a table that year | S1 | `ClasspathTimetableAccessor` | `schema/index.xsd` |
+| `zone.xml` | `.../resources/timetable/<year>/<cc>/zone.xml` | One country's authority + zone index | S1 | `ClasspathTimetableAccessor` | `schema/zone.xsd` |
+| `zone-<id>.xml` | `.../resources/timetable/<year>/<cc>/zone-<id>.xml` | One zone's annual table | S1 | `ClasspathTimetableAccessor` | `schema/timetable.xsd` |
+| `calculation-method.xml` | `.../resources/calculation-method.xml` | E2 registry: authority Fajr/Isha angles + offsets | maintained by hand | `ClasspathCalculationMethodAccessor` | (internal) |
+| `golden-vectors.xml` | `cipn-svc-engine/src/test/resources/golden-vectors.xml` | 2688 astronomy oracles for E3 parity | one-off | engine parity test | (internal) |
+| `cities.json`, `timetables/**` | `cipn-app-site/src/main/jbake/assets/data/` | **Legacy** live data, still JSON | old node scrapers | old `GenerateCityPages.java` | none (to be retired) |
 
-The three files in `$REPO/data/**` are the standard S1-output / S2-input contract; they are
-detailed next.
+The schema files live in `framework/cipn-fw-contract/cipn-fw-contract-data/src/main/resources/schema/`
+because `timetable`/`zone` are the cross-module S1-produces / S2-consumes contract (section 7).
 
-### 5.1 `cities.xml`
+### 5.1 `city.xml`
 
-**Location:** `$REPO/data/cities.xml`. **Schema:** `schema/cities.xsd`.
-
-The master list. One `<city>` per city; `page="true"` means "generate a page for it".
+**Location:** `service/cipn-svc-accessor/cipn-svc-accessor-classpath/src/main/resources/city.xml`.
+Curated list; `page="true"` means "generate a page". One `<city>` per city.
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<cities>
-    <city name="Colombo" country="Sri Lanka" cc="LK" slug="colombo" country-slug="sri-lanka"
-          lat="6.9271" lng="79.8612" tz="Asia/Colombo" page="true"/>
-    <city name="London" country="United Kingdom" cc="GB" slug="london" country-slug="united-kingdom"
-          lat="51.5074" lng="-0.1278" tz="Europe/London" page="true"/>
-</cities>
+<city name="Colombo" country="Sri Lanka" cc="LK" slug="colombo" country-slug="sri-lanka"
+      lat="6.9271" lng="79.8612" tz="Asia/Colombo" page="true"/>
 ```
 
-| Attribute | Meaning |
-| --- | --- |
-| `name`, `country` | display names |
-| `cc` | ISO 3166-1 alpha-2 country code (glossary). Links the city to `timetables/<lower-cc>/`. |
-| `slug`, `country-slug` | URL segments; page path is `<country-slug>/<slug>.html` |
-| `lat`, `lng` | coordinates (used to snap the city to a zone and to find nearby cities) |
-| `tz` | IANA timezone id |
-| `page` | `true` to generate a page, `false` to list without one |
+| Attr | Meaning | | Attr | Meaning |
+| --- | --- | --- | --- | --- |
+| `name`/`country` | display names | | `lat`/`lng` | coordinates (zone snap + neighbours) |
+| `cc` | ISO alpha-2 country code | | `tz` | IANA timezone |
+| `slug`/`country-slug` | URL segments | | `page` | `true` to generate a page |
 
-### 5.2 `zones.xml` (one country's zone index)
+### 5.2 `timetable/<year>/index.xml`
 
-**Location:** `$REPO/data/timetables/<cc>/zones.xml` - one per country, e.g.
-`data/timetables/lk/zones.xml`. **Schema:** `schema/zones.xsd`.
-
-Names the authority and lists its zones with a representative point each. The **zone id** is
-the authority's own identifier (glossary) and must match a `zone-<id>.xml` file in the same
-folder.
+**Location:** `.../resources/timetable/<year>/index.xml`. Lists the countries that have a table
+for that year, so the accessor enumerates coverage without listing a directory (jar-safe).
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<zones authority="ACJU"
-       authority-name="All Ceylon Jamiyyathul Ulama"
-       authority-url="https://www.acju.lk/prayer-times/"
-       country="Sri Lanka">
+<timetable-index year="2026">
+    <country cc="LK"/>
+</timetable-index>
+```
+
+### 5.3 `timetable/<year>/<cc>/zone.xml`
+
+**Location:** `.../resources/timetable/<year>/<cc>/zone.xml` (e.g. `timetable/2026/lk/zone.xml`).
+Names the authority and lists its zones; the **zone id** must match a `zone-<id>.xml`.
+
+```xml
+<zones authority="ACJU" authority-name="All Ceylon Jamiyyathul Ulama"
+       authority-url="https://www.acju.lk/prayer-times/" country="Sri Lanka">
     <zone id="01" name="Colombo, Gampaha, Kalutara" lat="6.9271" lng="79.8612"/>
-    <zone id="07" name="Kandy, Matale, Nuwara Eliya" lat="7.2906" lng="80.6337"/>
 </zones>
 ```
 
-### 5.3 `zone-<id>.xml` (one zone's timetable)
+### 5.4 `timetable/<year>/<cc>/zone-<id>.xml`
 
-**Location:** `$REPO/data/timetables/<cc>/zone-<id>.xml`, where `<id>` is the **zone id** from
-`zones.xml`, e.g. `data/timetables/lk/zone-01.xml`. **Schema:** `schema/timetable.xsd`.
-
-The authority's published table for that zone. `unit="minutes-from-midnight"`, so `fajr="300"`
-means 05:00. One `<day>` per calendar date; rows are sorted by month/day on read.
+**Location:** `.../resources/timetable/<year>/<cc>/zone-<id>.xml`. The authority's published
+table; `unit="minutes-from-midnight"`, one `<day>` per date, including `solar-noon`.
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
 <timetable authority="ACJU" zone="01" name="Colombo, Gampaha, Kalutara"
            source="https://www.acju.lk/prayer-times/" unit="minutes-from-midnight">
-    <day month="1" day="1" fajr="300" sunrise="382" dhuhr="735" asr="937" maghrib="1087" isha="1161"/>
-    <day month="1" day="2" fajr="300" sunrise="383" dhuhr="736" asr="937" maghrib="1088" isha="1162"/>
+    <day month="1" day="1" fajr="300" sunrise="382" dhuhr="735" asr="937"
+         maghrib="1087" isha="1161" solar-noon="734"/>
 </timetable>
 ```
 
-A country with a `timetables/<cc>/` folder gets an authority table baked into its pages; a
-country without one (e.g. `GB` above) gets a page with no baked table.
+### 5.5 `calculation-method.xml`
 
-### 5.4 `calculation-methods.xml` (E2 registry)
-
-**Location:** `service/cipn-svc-accessor/cipn-svc-accessor-file/src/main/resources/calculation-methods.xml`.
-This is a **classpath resource** inside the accessor module, **not** part of `DATA_DIR`. It
-holds each authority's Fajr/Isha angles and offsets (only non-default fields written).
-
-```xml
-<calculation-methods default-method="muslim-world-league">
-    <method key="acju" fajr-angle="20" isha-angle="18"/>
-    <method key="france" fajr-angle="12" isha-angle="12"/>
-    <!-- ... -->
-</calculation-methods>
-```
+**Location:** `.../resources/calculation-method.xml`. The E2 registry (Fajr/Isha angles +
+offsets per authority); only non-default fields are written.
 
 ---
 
 ## 6. Where XML is parsed (and where it is not)
 
-There is exactly one XML parser: `StructuredXmlParser` in `cipn-fw-common` (a thin wrapper over
-Jackson's `XmlMapper`). Only the **accessors** call it, and only to **read**. There is no
-Java to XML serialisation anywhere. After the accessor, data is plain Java records; the manager
-transforms them (pure Java) and FreeMarker renders HTML. The `cipn-svc-engine` never touches the
-parser (WASM hygiene), and ArchUnit fails the build if it ever does.
+One parser: `StructuredXmlParser` in `cipn-fw-common` (a thin wrapper over Jackson `XmlMapper`).
+Only the **accessors** call it, and only to **read** - there is no Java-to-XML anywhere. After
+the accessor it is plain Java records; the manager transforms them and FreeMarker renders HTML.
+The `cipn-svc-engine` never touches the parser (WASM hygiene); ArchUnit fails the build if it does.
 
 ---
 
 ## 7. The standard schema (`schema/*.xsd`)
 
-**Location:** `$REPO/schema/`. These XSDs are the country-independent contract that all scraped
-data must satisfy - the shape S1 must emit and S2 relies on.
+**Location:** `framework/cipn-fw-contract/cipn-fw-contract-data/src/main/resources/schema/`.
+These XSDs are the country-independent contract all scraped data must satisfy - the S1-output /
+S2-input boundary. They live in the framework because `timetable`/`zone` are shared across S1
+(producer) and S2 (consumer), so they belong with the record contract, not inside one impl.
 
 | Schema | Validates |
 | --- | --- |
-| `schema/cities.xsd` | `data/cities.xml` |
-| `schema/zones.xsd` | every `data/timetables/<cc>/zones.xml` |
-| `schema/timetable.xsd` | every `data/timetables/<cc>/zone-<id>.xml` |
+| `city.xsd` | `city.xml` |
+| `index.xsd` | every `timetable/<year>/index.xml` |
+| `zone.xsd` | every `timetable/<year>/<cc>/zone.xml` |
+| `timetable.xsd` | every `timetable/<year>/<cc>/zone-<id>.xml` |
 
-Validate a data file against its schema at any time:
+Validate any data file:
 
 ```sh
-xmllint --noout --schema "$REPO/schema/timetable.xsd" "$REPO/data/timetables/lk/zone-01.xml"
+SC=framework/cipn-fw-contract/cipn-fw-contract-data/src/main/resources/schema
+D=service/cipn-svc-accessor/cipn-svc-accessor-classpath/src/main/resources
+xmllint --noout --schema $SC/timetable.xsd $D/timetable/2026/lk/zone-01.xml
 ```
 
-When S1 is built, validating its output against these XSDs is the acceptance test for every new
-country: if it validates, S2 can consume it unchanged.
+When S1 is built, validating its output against these XSDs is the acceptance test per new country.
 
 ---
 
 ## 8. Building
-
-Full reactor build (compile + test + package), skipping PMD (its remote ruleset 401s):
 
 ```sh
 export JAVA_HOME=/opt/eliya
@@ -269,11 +245,11 @@ cd /home/fahimfarookme/Documents/projects/canipraynow/repository/code/can-i-pray
 
 | Goal | Command (from `$REPO`, `JAVA_HOME=/opt/eliya`) |
 | --- | --- |
-| Compile + test + package everything | `./mvnw verify -Dpmd.skip=true` |
-| Compile + install to local `~/.m2` | `./mvnw install -Dpmd.skip=true` |
-| Fast build, skip tests | `./mvnw verify -Dpmd.skip=true -Dmaven.test.skip=true` |
-| Just check the Eliya gate passes | `./mvnw validate` |
-| One module + its deps | `./mvnw verify -Dpmd.skip=true -pl application/cipn-app-batch -am` |
+| Compile + test + package | `./mvnw verify -Dpmd.skip=true` |
+| Install to local `~/.m2` | `./mvnw install -Dpmd.skip=true` |
+| Fast, skip tests | `./mvnw verify -Dpmd.skip=true -Dmaven.test.skip=true` |
+| Check the Eliya gate | `./mvnw validate` |
+| One module + deps | `./mvnw verify -Dpmd.skip=true -pl application/cipn-app-batch -am` |
 
 ---
 
@@ -281,13 +257,11 @@ cd /home/fahimfarookme/Documents/projects/canipraynow/repository/code/can-i-pray
 
 ### 9.1 S2 - generate the per-city pages (works today)
 
-`SiteGeneratorApp` reads `DATA_DIR`, writes pages to `OUTPUT_DIR`. Both default to locations
-**inside the codebase**, so you pass nothing:
+`SiteGeneratorApp` reads the **bundled classpath data** and writes HTML to the output root. The
+output root defaults inside the codebase, so you pass nothing:
 
-- `DATA_DIR` default: `$REPO/data` (checked in).
-- `OUTPUT_DIR` default: `application/cipn-app-batch/target/site` (under `target/`, not committed).
-
-Run the target (requires `install` first so the reactor classpath is resolvable):
+- Output root default: `application/cipn-app-batch/target/site` (under `target/`, not committed).
+- Years default to **current + next**; override with trailing year arguments.
 
 ```sh
 export JAVA_HOME=/opt/eliya
@@ -296,54 +270,47 @@ cd /home/fahimfarookme/Documents/projects/canipraynow/repository/code/can-i-pray
 ./mvnw install -Dpmd.skip=true -Dmaven.test.skip=true          # once, to populate ~/.m2
 ./mvnw -pl application/cipn-app-batch exec:java@generate-site   # generate
 
-# inspect
-find application/cipn-app-batch/target/site -type f
+find application/cipn-app-batch/target/site -name '*.html'
 ```
 
-Expected: `Generated 2 city pages (1 with a baked authority timetable); swept 0 stale.`, and
-`sri-lanka/colombo.html` (with the ACJU table + neighbour links) plus `united-kingdom/london.html`
-(no baked table) under `target/site`.
+Output layout:
 
-Override the defaults only if you want to (e.g. point at a scratch export):
+```
+target/site/sri-lanka/colombo.html            <- canonical (current year), clean URL
+target/site/2026/sri-lanka/colombo.html       <- per-year archive
+target/site/2027/sri-lanka/colombo.html       <- next year (WARNING if its data is absent)
+```
+
+Override output root or years:
 
 ```sh
-./mvnw -pl application/cipn-app-batch exec:java@generate-site \
-  -Dcipn.data.dir="$REPO/data" -Dcipn.output.dir="$REPO/application/cipn-app-batch/target/export"
+./mvnw -pl application/cipn-app-batch exec:java@generate-site -Dcipn.output.dir=/some/dir
+# specific years (positional, after the output root - here via exec.args):
+./mvnw -pl application/cipn-app-batch exec:java \
+  -Dexec.mainClass=systems.asymm.cipn.app.batch.SiteGeneratorApp \
+  -Dexec.args="application/cipn-app-batch/target/site 2026"
 ```
 
 ### 9.2 S1 - scrape into the standard XML (not yet available)
 
-**S1 is not implemented in Java yet (task T-26).** Only S2 has an entry point today. The legacy
-scrapers are node scripts (`application/cipn-app-site/scripts/fetch-*.mjs`), which the project is
-removing (no node allowed). So there is no runnable S1 Maven target yet.
-
-The intended shape, once T-26 lands, is a batch app that writes into the same checked-in `data/`
-directory S2 reads, validated against `schema/*.xsd`:
-
-```sh
-# intended (pending T-26) - writes $REPO/data/**, then validate:
-./mvnw -pl application/cipn-app-batch exec:java@scrape -Dcipn.authority=acju
-xmllint --noout --schema schema/timetable.xsd data/timetables/lk/zone-*.xml
-```
-
-Until then, `data/**` is maintained by hand (currently a small sample), and the cutover from the
-legacy JSON is what will populate it in full. See section 10.
+**S1 is not implemented in Java yet (T-26/F2).** The legacy scrapers are node scripts being
+removed. When built, S1 writes into the same accessor classpath resources S2 reads
+(`timetable/<year>/<cc>/*.xml` + `index.xml`), validated against `schema/*.xsd`. **JAKIM /
+Malaysia** is the first target (JSON over HTTP), then ACJU (PDF). See section 10.
 
 ---
 
 ## 10. Current state and known gaps
 
-Honest status, so nothing here reads as finished when it is not:
-
-- **S1 (Java scraper) does not exist** - only the deprecated node `.mjs` scripts. Building the
-  Java S1 is **T-26**; per the Asymm process it needs a short spec/ADR before implementation.
-- **`data/` holds a small sample** (Colombo, London, ACJU zone 01), enough to run and test S2.
-  The full production data still lives as **JSON** in
-  `application/cipn-app-site/src/main/jbake/assets/data/`. Converting it to the XML in `data/`
-  is the **cutover**.
-- **`GenerateCityPages.java`** (in `application/cipn-app-site/scripts/`) still generates page
-  stubs during the site build; retiring it and feeding S2's `target/site` output into JBake is
-  the rest of the cutover.
+- **S1 (Java scraper) does not exist yet** - only deprecated node scripts. Building it is
+  **T-26/F2**; JAKIM first. It gets its own service-type engine (`SourceExtractor`) per authority.
+- **The bundled data is a small sample** (Colombo, London; ACJU 2026 zone 01), enough to run and
+  test S2. The full world data still lives as **JSON** in `cipn-app-site/.../data/` - converting
+  it into the classpath resources here is the **cutover**.
+- **`GenerateCityPages.java`** still generates page stubs during the site build; retiring it and
+  feeding S2's output into JBake is the rest of the cutover.
+- **Next-year data** is typically absent until the annual refresh; S2 prints a WARNING for any
+  baked year with no tables (the T-05 check).
 
 ---
 
@@ -351,48 +318,36 @@ Honest status, so nothing here reads as finished when it is not:
 
 ```sh
 export JAVA_HOME=/opt/eliya
-cd /home/fahimfarookme/Documents/projects/canipraynow/repository/code/can-i-pray-now-code-pfw
 ./mvnw test -Dpmd.skip=true
 ```
 
-Key suites:
+- **`ArchitectureTest`** (`cipn-app-batch`, ArchUnit) - enforces the layering (app→wiring only,
+  engines framework/parser-free, contracts don't depend on impls, no cycles). Needs ArchUnit
+  1.4.1+ and Surefire `useManifestOnlyJar=false` (configured).
+- **`SiteGenerationIntegrationTest`** (`cipn-app-batch`) - the S2 test: wires the whole stack and
+  generates a year's pages from the bundled classpath data.
+- **`Classpath*AccessorTest`** (`cipn-svc-accessor-classpath`) - the read accessors over the
+  bundled resources.
+- **Astronomy parity** (`cipn-svc-engine`) - E3 against the 2688 `golden-vectors.xml` oracles.
 
-- **`ArchitectureTest`** (`application/cipn-app-batch`, ArchUnit) - enforces the layering: app
-  depends only on wiring/contracts, engines are framework/parser-free (WASM), contracts do not
-  depend on impls, no package cycles. Needs ArchUnit 1.4.1+ (Java 25 bytecode) and Surefire's
-  `useManifestOnlyJar=false` (already configured).
-- **`SiteGenerationIntegrationTest`** (`application/cipn-app-batch`) - **the S2 test**: wires the
-  whole stack (assembly -> variants -> impls -> FreeMarker) and generates pages from XML fixtures
-  in `src/test/resources/gen` (the same shape as `data/`).
-- **Astronomy parity** (`cipn-svc-engine`) - checks E3 against the 2688 `golden-vectors.xml`
-  oracles for exact adhan agreement.
-
-Run one suite:
-
-```sh
-./mvnw test -Dpmd.skip=true -pl application/cipn-app-batch -Dtest=SiteGenerationIntegrationTest
-```
-
-**S1 has no test yet** because S1 does not exist yet (section 10); its acceptance test will be
-XSD-validation of its output plus a fixture-based scrape test (offline HTML, no live network).
+S1 has no test yet (it does not exist); its acceptance test will be XSD-validation of its output
+plus a fixture-based scrape test (offline HTML/JSON, no live network in CI).
 
 ---
 
 ## 12. Conventions (so a build passes review)
 
-- **Eliya only.** `JAVA_HOME=/opt/eliya`; the reactor rejects any other JDK (section 2).
+- **Eliya only.** `JAVA_HOME=/opt/eliya`; the reactor rejects any other JDK.
 - **XML for all config/data/oracles.** No JSON, YAML, properties. No node/npm/`.mjs`.
-- **Service-type pattern.** A service = a marker interface (`Engine`/`Manager`/`Accessor`) + a
-  specific contract interface in `cipn-fw-contract-*`, with a `Default*` impl in `cipn-svc-*`,
-  wired externally. No frameworkless concrete class dumped in a service module.
-- **Wiring only in the app.** `application/*` depends solely on `cipn-wiring-assembly-standard`;
-  it never depends on `svc-*` or `new`s an impl.
-- **WASM hygiene.** Keep FreeMarker/Jackson/Spring off `cipn-svc-engine` and off
-  `cipn-fw-common`'s engine-reachable path. Templating lives in `cipn-svc-manager` (build-time).
-- **Headers.** Every source file starts with
-  `Copyright (c) 2026 Asymm Systems. All rights reserved.` + `@author Fahim Farook`. User-facing
-  and legal text (site footer, README) uses the full legal entity `Asymm Systems (Pvt) Ltd`.
+- **Singular names.** `city.xml`, `zone.xml`, `calculation-method.xml`, `timetable/`.
+- **Service-type pattern.** Marker (`Engine`/`Manager`/`Accessor`) + specific contract in
+  `cipn-fw-contract-*`, `Default*`/location-prefixed impl in `cipn-svc-*`, wired externally.
+  Accessors are named by consumed type, one per resource; split into modules by location.
+- **Wiring only in the app.** `application/*` depends solely on `cipn-wiring-assembly-standard`.
+- **WASM hygiene.** Keep FreeMarker/Jackson/Spring off `cipn-svc-engine` and off `cipn-fw-common`'s
+  engine-reachable path. Templating lives in `cipn-svc-manager` (build-time).
+- **Headers.** Every source file: `Copyright (c) 2026 Asymm Systems. All rights reserved.` +
+  `@author Fahim Farook`. Legal/user-facing text uses `Asymm Systems (Pvt) Ltd`.
 - **Every enum constant and record component is documented.**
 
-`ArchitectureTest` mechanically enforces the layering, so a violation fails `verify` rather than
-waiting for review.
+`ArchitectureTest` mechanically enforces the layering, so a violation fails `verify`.

@@ -20,7 +20,7 @@ import systems.asymm.cipn.fw.contract.data.Coordinates;
 import systems.asymm.cipn.fw.contract.data.DayEvents;
 import systems.asymm.cipn.fw.contract.data.Madhab;
 import systems.asymm.cipn.fw.contract.engine.AstronomyEngine;
-import systems.asymm.cipn.wiring.accessor.file.FileAccessorWiring;
+import systems.asymm.cipn.wiring.accessor.classpath.ClasspathAccessorWiring;
 import systems.asymm.cipn.wiring.engine.EngineWiring;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -43,7 +43,7 @@ class AstronomyEngineParityTest {
             golden = new StructuredXmlParser<>(GoldenVectors.class).parse(in);
         }
 
-        CalculationMethodAccessor methods = FileAccessorWiring.calculationMethodAccessor();
+        CalculationMethodAccessor methods = ClasspathAccessorWiring.calculationMethodAccessor();
         AstronomyEngine engine = EngineWiring.astronomyEngine();
 
         List<String> mismatches = new ArrayList<>();

@@ -18,6 +18,7 @@ import java.util.List;
  * @param zoneId        the zone this table is for
  * @param zoneName      the districts the zone covers
  * @param source        the specific source the rows were scraped from
+ * @param year          the Gregorian year this annual table is for
  * @param rows          the annual rows, one per day, in calendar order
  */
 public record AuthorityTimetable(
@@ -27,5 +28,6 @@ public record AuthorityTimetable(
         String zoneId,
         String zoneName,
         String source,
+        int year,
         List<TimetableRow> rows) {
 }
