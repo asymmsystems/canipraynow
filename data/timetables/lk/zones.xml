@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zones authority="ACJU"
+       authority-name="All Ceylon Jamiyyathul Ulama"
+       authority-url="https://www.acju.lk/prayer-times/"
+       country="Sri Lanka">
+    <zone id="01" name="Colombo, Gampaha, Kalutara" lat="6.9271" lng="79.8612"/>
+    <zone id="07" name="Kandy, Matale, Nuwara Eliya" lat="7.2906" lng="80.6337"/>
+</zones>

@@ -25,6 +25,15 @@
     <name>cipn-app-batch</name>
     <description>Application: build-time generator (S2). Thin - depends only on the wiring assembly.</description>
 
+    <properties>
+        <!-- Defaults for the S2 generate target, so it runs with no arguments.
+             Both stay inside the codebase: input is the checked-in data/ directory at the
+             reactor root; output goes under this module's target/ (never committed). Override
+             either on the command line, e.g. -Dcipn.data.dir=/path -Dcipn.output.dir=/path. -->
+        <cipn.data.dir>${maven.multiModuleProjectDirectory}/data</cipn.data.dir>
+        <cipn.output.dir>${project.build.directory}/site</cipn.output.dir>
+    </properties>
+
     <dependencies>
         <!-- The app depends on the wiring assembly, never on impl (svc-*) modules. -->
         <dependency>
@@ -66,6 +75,32 @@
                          dependency modules (otherwise surefire's manifest-only jar hides them). -->
                     <useManifestOnlyJar>false</useManifestOnlyJar>
                 </configuration>
+            </plugin>
+            <!--
+              S2 generate target. Run from the reactor root with:
+                ./mvnw -pl application/cipn-app-batch exec:java@generate-site
+              It reads the checked-in data/ directory and writes pages under target/site,
+              so no arguments are needed. Override with -Dcipn.data.dir / -Dcipn.output.dir.
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-site</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>systems.asymm.cipn.app.batch.SiteGeneratorApp</mainClass>
+                            <arguments>
+                                <argument>${cipn.data.dir}</argument>
+                                <argument>${cipn.output.dir}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
