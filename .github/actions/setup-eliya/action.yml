@@ -21,21 +21,28 @@ runs:
   steps:
     - name: Install Eliya JDK ${{ inputs.version }}
       shell: bash
+      env:
+        # Authenticated release download: anonymous downloads from GitHub-hosted runner
+        # IPs are rate-limited (HTTP 403); the runner token lifts that. eliya-jdk is public,
+        # so this repo-scoped token can read it.
+        GH_TOKEN: ${{ github.token }}
       run: |
         set -euo pipefail
         version="${{ inputs.version }}"
-        base="https://github.com/asymmsystems/eliya-jdk/releases/download/eliya-jdk-${version}"
         tarball="eliya-jdk-${version}-linux-x64.tar.gz"
         work="${RUNNER_TEMP}/eliya"
         install_dir="${work}/jdk"
         mkdir -p "${work}" "${install_dir}"
         cd "${work}"
 
-        echo "Downloading Eliya ${version} ..."
-        curl -fsSL --retry 5 --retry-all-errors -o "${tarball}"       "${base}/${tarball}"
-        curl -fsSL --retry 5 --retry-all-errors -o SHA256SUMS.txt     "${base}/SHA256SUMS.txt"
-        curl -fsSL --retry 5 --retry-all-errors -o SHA256SUMS.txt.asc "${base}/SHA256SUMS.txt.asc"
-        curl -fsSL --retry 5 --retry-all-errors -o eliya-key.asc      "https://key.asymm.systems/eliya-signing-key.asc"
+        echo "Downloading Eliya ${version} from the release (authenticated) ..."
+        gh release download "eliya-jdk-${version}" \
+          --repo asymmsystems/eliya-jdk \
+          --pattern "${tarball}" \
+          --pattern "SHA256SUMS.txt" \
+          --pattern "SHA256SUMS.txt.asc" \
+          --clobber
+        curl -fsSL --retry 5 --retry-all-errors -o eliya-key.asc "https://key.asymm.systems/eliya-signing-key.asc"
 
         echo "Verifying the checksum file's GPG signature ..."
         gpg --quiet --import eliya-key.asc
