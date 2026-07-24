@@ -61,6 +61,47 @@
         <minify.plugin.version>1.7.11</minify.plugin.version>
         <htmlcompressor.plugin.version>2.1.1</htmlcompressor.plugin.version>
         <exec.plugin.version>3.1.0</exec.plugin.version>
+        <enforcer.plugin.version>3.5.0</enforcer.plugin.version>
+        <!-- The mandated JDK: Eliya (Asymm Systems' OpenJDK). See ADR-00037 in asymm-engineering. -->
+        <java.vendor.required>Asymm Systems</java.vendor.required>
         <skip.optimize>false</skip.optimize>
     </properties>
+
+    <build>
+        <plugins>
+            <!--
+              Enforce the Eliya JDK on every module (inherited by all children), mirroring
+              asymm-build-parent's RequireJavaVendor gate: java.vendor must be "Asymm Systems"
+              (Eliya). This fails the build on Temurin/Zulu/etc. Until canipraynow adopts
+              asymm-build-parent (T-06), this gate carries the mandate here.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${enforcer.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-eliya-jdk</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[${maven.compiler.release},)</version>
+                                </requireJavaVersion>
+                                <requireJavaVendor>
+                                    <includes>
+                                        <include>${java.vendor.required}</include>
+                                    </includes>
+                                    <message>Build requires the Eliya JDK (java.vendor = "Asymm Systems"). Install it at /opt/eliya and set JAVA_HOME=/opt/eliya. See docs/developer-guide.md and ADR-00037.</message>
+                                </requireJavaVendor>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
