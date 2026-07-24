@@ -7,7 +7,7 @@ package systems.asymm.cipn.wiring.engine;
 
 import systems.asymm.cipn.fw.contract.access.TimetableAccessor;
 import systems.asymm.cipn.fw.contract.engine.AstronomyEngine;
-import systems.asymm.cipn.fw.contract.engine.ZoneResolverProvider;
+import systems.asymm.cipn.fw.contract.manager.ZoneResolverProvider;
 import systems.asymm.cipn.svc.engine.DefaultAstronomyEngine;
 
 /**

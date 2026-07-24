@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import systems.asymm.cipn.fw.contract.access.CityAccessor;
 import systems.asymm.cipn.fw.contract.access.ContentAccessor;
 import systems.asymm.cipn.fw.contract.access.TimetableAccessor;
-import systems.asymm.cipn.fw.contract.engine.ZoneResolverProvider;
+import systems.asymm.cipn.fw.contract.manager.ZoneResolverProvider;
 import systems.asymm.cipn.fw.contract.manager.SiteGenerationManager;
 import systems.asymm.cipn.fw.contract.manager.SiteGenerationResult;
 import systems.asymm.cipn.svc.accessor.file.FileCityAccessor;

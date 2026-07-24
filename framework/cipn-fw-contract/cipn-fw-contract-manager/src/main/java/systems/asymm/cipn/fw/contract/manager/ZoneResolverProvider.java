@@ -3,7 +3,9 @@
  *
  * @author Fahim Farook
  */
-package systems.asymm.cipn.fw.contract.engine;
+package systems.asymm.cipn.fw.contract.manager;
+
+import systems.asymm.cipn.fw.contract.engine.ZoneResolver;
 
 /**
  * Supplies the {@link ZoneResolver} to use for a given country - the seam where the

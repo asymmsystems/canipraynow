@@ -23,4 +23,13 @@
 
     <name>cipn-fw-contract-manager</name>
     <description>Manager ports and ManagerResult types.</description>
+
+    <dependencies>
+        <!-- Manager ports may reference the engine contracts they orchestrate (e.g. ZoneResolver). -->
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

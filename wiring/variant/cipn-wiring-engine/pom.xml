@@ -34,5 +34,11 @@
             <artifactId>cipn-fw-contract-access</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- The centroid provider implements the manager's ZoneResolverProvider port. -->
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-manager</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

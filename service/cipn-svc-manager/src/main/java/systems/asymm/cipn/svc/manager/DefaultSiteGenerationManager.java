@@ -14,7 +14,7 @@ import systems.asymm.cipn.fw.contract.access.TimetableAccessor;
 import systems.asymm.cipn.fw.contract.data.AuthorityTimetable;
 import systems.asymm.cipn.fw.contract.data.City;
 import systems.asymm.cipn.fw.contract.engine.ZoneResolver;
-import systems.asymm.cipn.fw.contract.engine.ZoneResolverProvider;
+import systems.asymm.cipn.fw.contract.manager.ZoneResolverProvider;
 import systems.asymm.cipn.fw.contract.manager.SiteGenerationManager;
 import systems.asymm.cipn.fw.contract.manager.SiteGenerationResult;
 
