@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+ * Copyright (c) 2026 Asymm Systems. All rights reserved.
  *
  * @author Fahim Farook
  */
@@ -20,8 +20,8 @@ import systems.asymm.cipn.fw.contract.data.Coordinates;
 import systems.asymm.cipn.fw.contract.data.DayEvents;
 import systems.asymm.cipn.fw.contract.data.Madhab;
 import systems.asymm.cipn.fw.contract.engine.AstronomyEngine;
-import systems.asymm.cipn.svc.accessor.file.ClasspathCalculationMethodAccessor;
-import systems.asymm.cipn.svc.engine.DefaultAstronomyEngine;
+import systems.asymm.cipn.wiring.accessor.file.FileAccessorWiring;
+import systems.asymm.cipn.wiring.engine.EngineWiring;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -43,8 +43,8 @@ class AstronomyEngineParityTest {
             golden = new StructuredXmlParser<>(GoldenVectors.class).parse(in);
         }
 
-        CalculationMethodAccessor methods = new ClasspathCalculationMethodAccessor();
-        AstronomyEngine engine = new DefaultAstronomyEngine();
+        CalculationMethodAccessor methods = FileAccessorWiring.calculationMethodAccessor();
+        AstronomyEngine engine = EngineWiring.astronomyEngine();
 
         List<String> mismatches = new ArrayList<>();
         long worstMs = 0;

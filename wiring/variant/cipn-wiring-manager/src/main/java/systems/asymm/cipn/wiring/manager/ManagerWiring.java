@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+ * Copyright (c) 2026 Asymm Systems. All rights reserved.
  *
  * @author Fahim Farook
  */
@@ -8,8 +8,9 @@ package systems.asymm.cipn.wiring.manager;
 import systems.asymm.cipn.fw.contract.access.CityAccessor;
 import systems.asymm.cipn.fw.contract.access.ContentAccessor;
 import systems.asymm.cipn.fw.contract.access.TimetableAccessor;
-import systems.asymm.cipn.fw.contract.engine.ZoneResolverProvider;
+import systems.asymm.cipn.fw.contract.engine.NeighbourEngine;
 import systems.asymm.cipn.fw.contract.manager.SiteGenerationManager;
+import systems.asymm.cipn.fw.contract.manager.ZoneResolverProvider;
 import systems.asymm.cipn.svc.manager.DefaultSiteGenerationManager;
 
 /**
@@ -24,7 +25,9 @@ public final class ManagerWiring {
 
     public static SiteGenerationManager siteGenerationManager(
             CityAccessor cityAccessor, TimetableAccessor timetableAccessor,
-            ContentAccessor contentAccessor, ZoneResolverProvider resolverProvider) {
-        return new DefaultSiteGenerationManager(cityAccessor, timetableAccessor, contentAccessor, resolverProvider);
+            ContentAccessor contentAccessor, ZoneResolverProvider resolverProvider,
+            NeighbourEngine neighbourEngine) {
+        return new DefaultSiteGenerationManager(
+                cityAccessor, timetableAccessor, contentAccessor, resolverProvider, neighbourEngine);
     }
 }

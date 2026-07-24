@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
 
   canipraynow.com - reactor (Maven multi-module root).
   Layered, volatility-based structure mirroring m360-code-system:
@@ -52,6 +52,7 @@
         <junit.version>5.11.3</junit.version>
         <jackson.version>2.18.2</jackson.version>
         <surefire.version>3.5.2</surefire.version>
+        <archunit.version>1.4.1</archunit.version>
         <jbake.version>2.7.0-rc.7</jbake.version>
         <jbake.plugin.version>2.7.0-rc.7</jbake.plugin.version>
         <freemarker.version>2.3.33</freemarker.version>

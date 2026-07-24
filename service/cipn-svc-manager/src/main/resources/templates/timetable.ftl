@@ -1,5 +1,5 @@
 <#--
-  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
   Standalone (non-JBake) template: renders a baked authority timetable into a
   month-sectioned HTML fragment. Driven by TimetableViewModel. @author Fahim Farook
 -->

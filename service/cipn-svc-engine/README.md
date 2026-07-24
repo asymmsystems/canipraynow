@@ -1,5 +1,5 @@
 <!--
-  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
   @author Fahim Farook
 -->
 # cipn-svc-engine

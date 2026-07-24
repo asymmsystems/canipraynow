@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
   Manager: use-case orchestration, zero business logic. Single module - one orchestration mechanism, so no mechanism axis to split on.
   See architecture/module-structure.md.
 
@@ -51,19 +51,6 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- Integration test wires the real engine + file accessors (test scope only). -->
-        <dependency>
-            <groupId>systems.asymm.cipn</groupId>
-            <artifactId>cipn-svc-engine</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>systems.asymm.cipn</groupId>
-            <artifactId>cipn-svc-accessor-file</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
   Engine: ALL business logic - astronomy, restricted windows, verdict, authority document parsing. Pure, no I/O, no accessor calls.
   Volatility-based structure - see architecture/module-structure.md.
 

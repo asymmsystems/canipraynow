@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+ * Copyright (c) 2026 Asymm Systems. All rights reserved.
  *
  * @author Fahim Farook
  */
@@ -10,8 +10,9 @@ import java.nio.file.Path;
 import systems.asymm.cipn.fw.contract.access.CityAccessor;
 import systems.asymm.cipn.fw.contract.access.ContentAccessor;
 import systems.asymm.cipn.fw.contract.access.TimetableAccessor;
-import systems.asymm.cipn.fw.contract.manager.ZoneResolverProvider;
+import systems.asymm.cipn.fw.contract.engine.NeighbourEngine;
 import systems.asymm.cipn.fw.contract.manager.SiteGenerationManager;
+import systems.asymm.cipn.fw.contract.manager.ZoneResolverProvider;
 import systems.asymm.cipn.wiring.accessor.file.FileAccessorWiring;
 import systems.asymm.cipn.wiring.engine.EngineWiring;
 import systems.asymm.cipn.wiring.manager.ManagerWiring;
@@ -38,6 +39,8 @@ public final class SiteGenerationWiring {
         CityAccessor cityAccessor = FileAccessorWiring.cityAccessor(dataDir.resolve("cities.xml"));
         ContentAccessor contentAccessor = FileAccessorWiring.contentAccessor(outputDir);
         ZoneResolverProvider resolverProvider = EngineWiring.centroidZoneResolverProvider(timetableAccessor);
-        return ManagerWiring.siteGenerationManager(cityAccessor, timetableAccessor, contentAccessor, resolverProvider);
+        NeighbourEngine neighbourEngine = EngineWiring.neighbourEngine();
+        return ManagerWiring.siteGenerationManager(
+                cityAccessor, timetableAccessor, contentAccessor, resolverProvider, neighbourEngine);
     }
 }

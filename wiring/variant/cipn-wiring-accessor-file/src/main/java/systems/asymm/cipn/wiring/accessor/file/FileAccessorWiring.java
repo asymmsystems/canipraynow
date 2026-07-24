@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+ * Copyright (c) 2026 Asymm Systems. All rights reserved.
  *
  * @author Fahim Farook
  */
@@ -7,9 +7,11 @@ package systems.asymm.cipn.wiring.accessor.file;
 
 import java.nio.file.Path;
 
+import systems.asymm.cipn.fw.contract.access.CalculationMethodAccessor;
 import systems.asymm.cipn.fw.contract.access.CityAccessor;
 import systems.asymm.cipn.fw.contract.access.ContentAccessor;
 import systems.asymm.cipn.fw.contract.access.TimetableAccessor;
+import systems.asymm.cipn.svc.accessor.file.ClasspathCalculationMethodAccessor;
 import systems.asymm.cipn.svc.accessor.file.FileCityAccessor;
 import systems.asymm.cipn.svc.accessor.file.FileContentAccessor;
 import systems.asymm.cipn.svc.accessor.file.FileTimetableAccessor;
@@ -36,5 +38,10 @@ public final class FileAccessorWiring {
     /** Content accessor writing under the given content root. */
     public static ContentAccessor contentAccessor(Path contentRoot) {
         return new FileContentAccessor(contentRoot);
+    }
+
+    /** Calculation-method accessor (E2 config) from the bundled classpath table. */
+    public static CalculationMethodAccessor calculationMethodAccessor() {
+        return new ClasspathCalculationMethodAccessor();
     }
 }

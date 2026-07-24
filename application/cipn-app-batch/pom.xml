@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
   Application: build-time generator (S2). Thin entry point - depends only on the wiring
   assembly and the contracts it references; no svc-* (impl) dependencies.
   Volatility-based structure - see architecture/module-structure.md.
@@ -45,17 +45,12 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- The astronomy-parity integration test drives the engine + method accessor impls directly. -->
+        <!-- ArchUnit enforces the volatility-based layering. app-batch sees the whole graph
+             (assembly -> variants -> impls -> contracts), so the rules live here. -->
         <dependency>
-            <groupId>systems.asymm.cipn</groupId>
-            <artifactId>cipn-svc-engine</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>systems.asymm.cipn</groupId>
-            <artifactId>cipn-svc-accessor-file</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5</artifactId>
+            <version>${archunit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -66,6 +61,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
+                <configuration>
+                    <!-- Put the full classpath on java.class.path so ArchUnit can scan the
+                         dependency modules (otherwise surefire's manifest-only jar hides them). -->
+                    <useManifestOnlyJar>false</useManifestOnlyJar>
+                </configuration>
             </plugin>
         </plugins>
     </build>
