@@ -251,6 +251,28 @@ cd /home/fahimfarookme/Documents/projects/canipraynow/repository/code/can-i-pray
 | Check the Eliya gate | `./mvnw validate` |
 | One module + deps | `./mvnw verify -Dpmd.skip=true -pl application/cipn-app-batch -am` |
 
+### 8.1 By lifecycle stage (Makefile)
+
+The `Makefile` wraps these per **stage** (section 3), so you build exactly the stage you mean.
+Run `make help` for the list. It defaults `JAVA_HOME=/opt/eliya`.
+
+| Stage | Make target | What it does |
+| --- | --- | --- |
+| whole reactor | `make build` | compile + test + package everything |
+| whole reactor | `make test` | run every test suite |
+| JDK check | `make doctor` | print the active JDK (must be Eliya) |
+| **S1 scrape** | `make scrape` | scrape authority tables -> XML. **Not built yet (T-26)** - prints a notice |
+| **S2 generate** | `make generate` | install, then generate per-city pages into `OUTPUT_DIR` |
+| **site bake** | `make site` | production JBake build (clean URLs) |
+| site (dev) | `make dev` | live-reload JBake server on `:8020` |
+
+### 8.2 CI
+
+Three GitHub workflows build the site: `validate` (PRs), `preview` (push to develop),
+`production` (tags on main). Each provisions the **Eliya JDK** via the composite action
+`.github/actions/setup-eliya` (download + GPG-signature + SHA-256 verification, then exports
+`JAVA_HOME`), so CI satisfies the same `RequireJavaVendor` gate as local builds.
+
 ---
 
 ## 9. Running the stages

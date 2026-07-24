@@ -1,0 +1,62 @@
+# Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+#
+# Composite action: provision the Eliya JDK (the mandated build JDK, ADR-0037) on a
+# GitHub-hosted runner. Downloads the published release, verifies the checksum file's
+# GPG signature against the Eliya signing key, verifies the tarball's SHA-256, installs
+# it, and exports JAVA_HOME + PATH so subsequent Maven steps satisfy RequireJavaVendor.
+#
+# @author Fahim Farook
+
+name: Set up Eliya JDK
+description: Download, verify (GPG + SHA-256) and install the Eliya JDK; export JAVA_HOME.
+
+inputs:
+  version:
+    description: Eliya JDK version to install (e.g. 25.0.3)
+    required: false
+    default: "25.0.3"
+
+runs:
+  using: composite
+  steps:
+    - name: Install Eliya JDK ${{ inputs.version }}
+      shell: bash
+      run: |
+        set -euo pipefail
+        version="${{ inputs.version }}"
+        base="https://github.com/asymmsystems/eliya-jdk/releases/download/eliya-jdk-${version}"
+        tarball="eliya-jdk-${version}-linux-x64.tar.gz"
+        work="${RUNNER_TEMP}/eliya"
+        install_dir="${work}/jdk"
+        mkdir -p "${work}" "${install_dir}"
+        cd "${work}"
+
+        echo "Downloading Eliya ${version} ..."
+        curl -fsSL --retry 5 --retry-all-errors -o "${tarball}"       "${base}/${tarball}"
+        curl -fsSL --retry 5 --retry-all-errors -o SHA256SUMS.txt     "${base}/SHA256SUMS.txt"
+        curl -fsSL --retry 5 --retry-all-errors -o SHA256SUMS.txt.asc "${base}/SHA256SUMS.txt.asc"
+        curl -fsSL --retry 5 --retry-all-errors -o eliya-key.asc      "https://key.asymm.systems/eliya-signing-key.asc"
+
+        echo "Verifying the checksum file's GPG signature ..."
+        gpg --quiet --import eliya-key.asc
+        gpg --quiet --verify SHA256SUMS.txt.asc SHA256SUMS.txt
+
+        echo "Verifying the tarball SHA-256 ..."
+        expected="$(grep "${tarball}" SHA256SUMS.txt | awk '{print $1}')"
+        actual="$(sha256sum "${tarball}" | awk '{print $1}')"
+        if [ -z "${expected}" ] || [ "${expected}" != "${actual}" ]; then
+          echo "::error::Eliya tarball checksum mismatch (expected '${expected}', got '${actual}')"
+          exit 1
+        fi
+
+        echo "Installing to ${install_dir} ..."
+        tar -xzf "${tarball}" -C "${install_dir}" --strip-components=1
+
+        echo "JAVA_HOME=${install_dir}" >> "${GITHUB_ENV}"
+        echo "${install_dir}/bin" >> "${GITHUB_PATH}"
+
+    - name: Confirm Eliya is active
+      shell: bash
+      run: |
+        java -version
+        java -XshowSettings:properties -version 2>&1 | grep -i 'java.vendor =' || true

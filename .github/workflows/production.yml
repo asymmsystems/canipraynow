@@ -38,13 +38,17 @@ jobs:
             echo "::warning::Tag $GITHUB_REF_NAME is not on main — skipping production deploy."
           fi
 
-      - name: Set up Java 25
+      - name: Set up Eliya JDK
         if: steps.guard.outputs.on_main == 'true'
-        uses: actions/setup-java@v4
+        uses: ./.github/actions/setup-eliya
+
+      - name: Cache Maven
+        if: steps.guard.outputs.on_main == 'true'
+        uses: actions/cache@v4
         with:
-          distribution: zulu
-          java-version: 25
-          cache: maven
+          path: ~/.m2/repository
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: maven-${{ runner.os }}-
 
       - name: Build site
         if: steps.guard.outputs.on_main == 'true'

@@ -16,12 +16,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Java 25
-        uses: actions/setup-java@v4
+      - name: Set up Eliya JDK
+        uses: ./.github/actions/setup-eliya
+
+      - name: Cache Maven
+        uses: actions/cache@v4
         with:
-          distribution: zulu
-          java-version: 25
-          cache: maven
+          path: ~/.m2/repository
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: maven-${{ runner.os }}-
 
       - name: Build site
         run: ./mvnw -Pproduction -pl application/cipn-app-site -am clean process-resources --batch-mode --no-transfer-progress
