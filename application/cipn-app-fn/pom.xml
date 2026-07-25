@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
+  Edge Worker (Cloudflare) for canipraynow.com: the /go sponsor redirect and /api geo.
+  A reactor member for versioning and structure; the artefact is JavaScript, so the actual
+  build and deploy are wrangler (see wrangler.toml + the production workflow), not Maven.
+  See architecture/decision/adr-0013.
+
+  @author Fahim Farook
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>systems.asymm.cipn</groupId>
+        <artifactId>canipraynow</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
+    </parent>
+
+    <artifactId>cipn-app-fn</artifactId>
+    <packaging>pom</packaging>
+
+    <name>cipn-app-fn</name>
+    <description>Cloudflare edge Worker: /go sponsor redirect + /api geo. Built and deployed by wrangler, not Maven.</description>
+</project>

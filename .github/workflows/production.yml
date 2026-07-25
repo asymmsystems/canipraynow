@@ -54,6 +54,18 @@ jobs:
         if: steps.guard.outputs.on_main == 'true'
         run: ./mvnw -Pproduction -pl application/cipn-app-site -am clean process-resources --batch-mode --no-transfer-progress
 
+      # Deploy the edge Worker (/go, /api) before Pages. Its routes take precedence over
+      # the Pages project for those paths; if this step fails the job stops and Pages is
+      # not redeployed, so production is never left in a half-updated state.
+      - name: Deploy edge Worker (production)
+        if: steps.guard.outputs.on_main == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: application/cipn-app-fn
+          command: deploy
+
       - name: Deploy to Cloudflare Pages (production)
         if: steps.guard.outputs.on_main == 'true'
         uses: cloudflare/wrangler-action@v3

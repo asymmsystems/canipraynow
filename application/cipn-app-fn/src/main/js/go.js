@@ -1,26 +1,29 @@
 /*
  * Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
  *
- * /go/{id} (spec §9): sponsor click-through. Increments a Cloudflare KV
- * counter (binding: SPONSOR_CLICKS) and 302-redirects to the sponsor URL
- * from data/sponsors.json. Privacy-preserving: no cookies, no user IDs,
- * only an aggregate count.
+ * /go/{id} (spec §9): sponsor click-through. Resolves the target from the same
+ * /data/sponsors.json the client renders (single source of truth), optionally bumps an
+ * aggregate Cloudflare KV counter (binding SPONSOR_CLICKS, best-effort), and 302-redirects.
+ * Privacy-preserving: no cookies, no user IDs, only an aggregate count.
  *
  * @author Fahim Farook
  */
 
-export async function onRequestGet({ params, env, request }) {
-    const id = params.id;
+/**
+ * @param {Request} request
+ * @param {{ SPONSOR_CLICKS?: KVNamespace }} env
+ * @param {URL} url
+ */
+export async function handleGo(request, env, url) {
+    const id = url.pathname.slice('/go/'.length);
     if (!/^[a-z0-9-]{1,64}$/.test(id)) {
         return new Response('Not found', { status: 404 });
     }
 
-    // Resolve the target from the same sponsors.json the client renders,
-    // so there is a single source of truth for sponsor inventory.
-    const origin = new URL(request.url).origin;
+    // Resolve the target from the site's sponsors.json (served by Pages, not this Worker).
     let target = null;
     try {
-        const res = await fetch(`${origin}/data/sponsors.json`);
+        const res = await fetch(`${url.origin}/data/sponsors.json`);
         if (res.ok) {
             const data = await res.json();
             const slot = (data.slots || []).find((s) => s.id === id);

@@ -1,14 +1,16 @@
 /*
  * Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
  *
- * /api/geo (spec §7): privacy-preserving location fallback. Returns only what
- * Cloudflare already derives from the connection (request.cf). No IP is
- * stored, no third-party geo API is called, nothing is logged.
+ * /api/geo (spec §7): privacy-preserving location fallback. Returns only what Cloudflare
+ * already derives from the connection (request.cf) - no IP is stored, no third-party geo
+ * API is called, nothing is logged. request.cf is undefined off the edge (e.g. local dev),
+ * in which case this reports "unavailable".
  *
  * @author Fahim Farook
  */
 
-export async function onRequestGet({ request }) {
+/** @param {Request} request */
+export function handleGeo(request) {
     const cf = request.cf || {};
     const lat = parseFloat(cf.latitude);
     const lng = parseFloat(cf.longitude);

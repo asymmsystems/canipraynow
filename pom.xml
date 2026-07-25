@@ -43,6 +43,7 @@
         <module>application/cipn-app-site</module>
         <module>application/cipn-app-server</module>
         <module>application/cipn-app-batch</module>
+        <module>application/cipn-app-fn</module>
     </modules>
 
     <properties>
