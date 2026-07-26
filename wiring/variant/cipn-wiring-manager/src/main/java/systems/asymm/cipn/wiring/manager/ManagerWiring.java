@@ -7,6 +7,7 @@ package systems.asymm.cipn.wiring.manager;
 
 import systems.asymm.cipn.fw.contract.access.CityAccessor;
 import systems.asymm.cipn.fw.contract.access.ContentAccessor;
+import systems.asymm.cipn.fw.contract.access.CountryAccessor;
 import systems.asymm.cipn.fw.contract.access.TimetableAccessor;
 import systems.asymm.cipn.fw.contract.engine.NeighbourEngine;
 import systems.asymm.cipn.fw.contract.manager.SiteGenerationManager;
@@ -24,10 +25,11 @@ public final class ManagerWiring {
     }
 
     public static SiteGenerationManager siteGenerationManager(
-            CityAccessor cityAccessor, TimetableAccessor timetableAccessor,
-            ContentAccessor contentAccessor, ZoneResolverProvider resolverProvider,
-            NeighbourEngine neighbourEngine) {
+            CityAccessor cityAccessor, CountryAccessor countryAccessor,
+            TimetableAccessor timetableAccessor, ContentAccessor contentAccessor,
+            ZoneResolverProvider resolverProvider, NeighbourEngine neighbourEngine) {
         return new DefaultSiteGenerationManager(
-                cityAccessor, timetableAccessor, contentAccessor, resolverProvider, neighbourEngine);
+                cityAccessor, countryAccessor, timetableAccessor, contentAccessor,
+                resolverProvider, neighbourEngine);
     }
 }

@@ -10,9 +10,11 @@ import java.util.Set;
 
 import systems.asymm.cipn.fw.contract.access.CityAccessor;
 import systems.asymm.cipn.fw.contract.access.ContentAccessor;
+import systems.asymm.cipn.fw.contract.access.CountryAccessor;
 import systems.asymm.cipn.fw.contract.access.TimetableAccessor;
 import systems.asymm.cipn.fw.contract.data.AuthorityTimetable;
 import systems.asymm.cipn.fw.contract.data.City;
+import systems.asymm.cipn.fw.contract.data.CountryDefaults;
 import systems.asymm.cipn.fw.contract.data.Neighbour;
 import systems.asymm.cipn.fw.contract.engine.NeighbourEngine;
 import systems.asymm.cipn.fw.contract.engine.ZoneResolver;
@@ -37,16 +39,18 @@ public class DefaultSiteGenerationManager implements SiteGenerationManager {
     private static final int NEARBY_COUNT = 5;
 
     private final CityAccessor cityAccessor;
+    private final CountryAccessor countryAccessor;
     private final TimetableAccessor timetableAccessor;
     private final ContentAccessor contentAccessor;
     private final ZoneResolverProvider resolverProvider;
     private final NeighbourEngine neighbourEngine;
     private final CityPageRenderer renderer = new CityPageRenderer();
 
-    public DefaultSiteGenerationManager(CityAccessor cityAccessor, TimetableAccessor timetableAccessor,
-                                        ContentAccessor contentAccessor, ZoneResolverProvider resolverProvider,
-                                        NeighbourEngine neighbourEngine) {
+    public DefaultSiteGenerationManager(CityAccessor cityAccessor, CountryAccessor countryAccessor,
+                                        TimetableAccessor timetableAccessor, ContentAccessor contentAccessor,
+                                        ZoneResolverProvider resolverProvider, NeighbourEngine neighbourEngine) {
         this.cityAccessor = cityAccessor;
+        this.countryAccessor = countryAccessor;
         this.timetableAccessor = timetableAccessor;
         this.contentAccessor = contentAccessor;
         this.resolverProvider = resolverProvider;
@@ -70,9 +74,10 @@ public class DefaultSiteGenerationManager implements SiteGenerationManager {
                 withTimetable++;
             }
             List<Neighbour> nearby = neighbourEngine.nearest(city, allCities, NEARBY_COUNT);
+            CountryDefaults country = countryAccessor.defaults(city.cc());
             contentAccessor.write(
                     city.countrySlug() + "/" + city.slug() + ".html",
-                    renderer.render(MARKER, city, nearby, timetable));
+                    renderer.render(MARKER, city, country, nearby, timetable));
             written++;
         }
         return new SiteGenerationResult(written, swept, withTimetable);

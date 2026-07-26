@@ -15,9 +15,11 @@ import java.util.Set;
 
 import systems.asymm.cipn.fw.contract.access.CityAccessor;
 import systems.asymm.cipn.fw.contract.access.ContentAccessor;
+import systems.asymm.cipn.fw.contract.access.CountryAccessor;
 import systems.asymm.cipn.fw.contract.access.TimetableAccessor;
 import systems.asymm.cipn.fw.contract.data.AuthorityTimetable;
 import systems.asymm.cipn.fw.contract.data.City;
+import systems.asymm.cipn.fw.contract.data.CountryDefaults;
 import systems.asymm.cipn.fw.contract.data.TimetableRow;
 import systems.asymm.cipn.fw.contract.data.TimetableZone;
 import systems.asymm.cipn.fw.contract.engine.NeighbourEngine;
@@ -79,11 +81,16 @@ class DefaultSiteGenerationManagerTest {
         }
     };
 
+    /** Country-defaults double: a method phrase for every country, an authority for LK. */
+    private static final CountryAccessor COUNTRIES = cc -> new CountryDefaults(
+            cc, "LK".equals(cc) ? "All Ceylon Jamiyyathul Ulama" : "",
+            "the Muslim World League convention", "Shāfiʿī");
+
     private SiteGenerationManager manager() {
         CityAccessor cities = () -> List.of(COLOMBO, LONDON);
         ZoneResolverProvider resolvers = cc -> (lat, lng) -> "LK".equals(cc) ? Optional.of("01") : Optional.empty();
         NeighbourEngine neighbours = (origin, candidates, count) -> List.of();
-        return new DefaultSiteGenerationManager(cities, TIMETABLES, content, resolvers, neighbours);
+        return new DefaultSiteGenerationManager(cities, COUNTRIES, TIMETABLES, content, resolvers, neighbours);
     }
 
     @Test
@@ -95,6 +102,9 @@ class DefaultSiteGenerationManagerTest {
 
         String colombo = written.get("sri-lanka/colombo.html");
         assertTrue(colombo.contains("generated_by=SiteGenerator"));
+        assertTrue(colombo.contains("city_method=the Muslim World League convention"),
+                "country method phrase should be in the front-matter");
+        assertTrue(colombo.contains("city_madhhab=Shāfiʿī"));
         assertTrue(colombo.contains("All Ceylon Jamiyyathul Ulama annual timetable"));
         assertTrue(colombo.contains("05:00"), "Fajr 300 min should render as 05:00");
 

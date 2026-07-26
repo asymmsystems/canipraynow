@@ -9,6 +9,7 @@ import java.nio.file.Path;
 
 import systems.asymm.cipn.fw.contract.access.CityAccessor;
 import systems.asymm.cipn.fw.contract.access.ContentAccessor;
+import systems.asymm.cipn.fw.contract.access.CountryAccessor;
 import systems.asymm.cipn.fw.contract.access.TimetableAccessor;
 import systems.asymm.cipn.fw.contract.engine.NeighbourEngine;
 import systems.asymm.cipn.fw.contract.manager.SiteGenerationManager;
@@ -39,10 +40,11 @@ public final class SiteGenerationWiring {
     public static SiteGenerationManager siteGenerationManager(Path outputRoot, int year) {
         TimetableAccessor timetableAccessor = ClasspathAccessorWiring.timetableAccessor(year);
         CityAccessor cityAccessor = ClasspathAccessorWiring.cityAccessor();
+        CountryAccessor countryAccessor = ClasspathAccessorWiring.countryAccessor();
         ContentAccessor contentAccessor = FileAccessorWiring.contentAccessor(outputRoot);
         ZoneResolverProvider resolverProvider = EngineWiring.centroidZoneResolverProvider(timetableAccessor);
         NeighbourEngine neighbourEngine = EngineWiring.neighbourEngine();
         return ManagerWiring.siteGenerationManager(
-                cityAccessor, timetableAccessor, contentAccessor, resolverProvider, neighbourEngine);
+                cityAccessor, countryAccessor, timetableAccessor, contentAccessor, resolverProvider, neighbourEngine);
     }
 }

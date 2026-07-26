@@ -37,6 +37,7 @@ class SiteGenerationIntegrationTest {
         String kl = Files.readString(out.resolve("malaysia/kuala-lumpur.html"));
         assertTrue(kl.contains("authority-timetable"), "MY city should carry a baked table");
         assertTrue(kl.contains("annual timetable 2026"), "the baked year should be labelled");
+        assertTrue(kl.contains("city_authority=JAKIM (e-Solat)"), "per-country front-matter is emitted");
 
         // Jakarta (ID) has no extracted authority table -> no baked table section.
         String jakarta = Files.readString(out.resolve("indonesia/jakarta.html"));

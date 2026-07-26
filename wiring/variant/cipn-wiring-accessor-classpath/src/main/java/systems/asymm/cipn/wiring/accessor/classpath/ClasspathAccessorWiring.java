@@ -7,9 +7,11 @@ package systems.asymm.cipn.wiring.accessor.classpath;
 
 import systems.asymm.cipn.fw.contract.access.CalculationMethodAccessor;
 import systems.asymm.cipn.fw.contract.access.CityAccessor;
+import systems.asymm.cipn.fw.contract.access.CountryAccessor;
 import systems.asymm.cipn.fw.contract.access.TimetableAccessor;
 import systems.asymm.cipn.svc.accessor.classpath.ClasspathCalculationMethodAccessor;
 import systems.asymm.cipn.svc.accessor.classpath.ClasspathCityAccessor;
+import systems.asymm.cipn.svc.accessor.classpath.ClasspathCountryAccessor;
 import systems.asymm.cipn.svc.accessor.classpath.ClasspathTimetableAccessor;
 
 /**
@@ -25,6 +27,11 @@ public final class ClasspathAccessorWiring {
     /** City accessor over the bundled {@code city.xml}. */
     public static CityAccessor cityAccessor() {
         return new ClasspathCityAccessor();
+    }
+
+    /** Country-defaults accessor over the bundled {@code country.xml}. */
+    public static CountryAccessor countryAccessor() {
+        return new ClasspathCountryAccessor();
     }
 
     /** Timetable accessor over the bundled {@code timetable/<year>/...} tree. */

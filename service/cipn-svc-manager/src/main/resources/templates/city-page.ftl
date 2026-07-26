@@ -14,6 +14,9 @@ city_lng=${city.lng}
 city_tz=${city.tz}
 city_cc=${city.cc}
 nearby=<#list nearby as n>${n.name}|${n.country}|${n.href}|${n.km}<#if n?has_next>;</#if></#list>
+city_authority=${countryAuthority}
+city_method=${countryMethod}
+city_madhhab=${countryMadhhab}
 ~~~~~~
 <#if months??>
 <#include "timetable.ftl">
