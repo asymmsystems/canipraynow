@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Jabatan Kemajuan Islam Malaysia zone index for Malaysia, 2026.
+  @author Fahim Farook
+-->
+<zones authority="JAKIM" authority-name="Jabatan Kemajuan Islam Malaysia" authority-url="https://www.e-solat.gov.my/" country="Malaysia">
+    <zone id="JHR01" name="Pulau Aur, Pulau Pemanggil" lat="2.4428" lng="104.5217"/>
+    <zone id="JHR02" name="Johor Bahru, Kota Tinggi, Mersing, Kulai" lat="1.4927" lng="103.7414"/>
+    <zone id="JHR03" name="Kluang, Pontian" lat="2.0257" lng="103.3183"/>
+    <zone id="JHR04" name="Batu Pahat, Muar, Segamat, Tangkak" lat="1.8548" lng="102.9325"/>
+    <zone id="KDH01" name="Kota Setar, Kubang Pasu, Pokok Sena" lat="6.1248" lng="100.3678"/>
+    <zone id="KDH02" name="Kuala Muda, Yan, Pendang" lat="5.647" lng="100.487"/>
+    <zone id="KDH03" name="Padang Terap, Sik" lat="6.253" lng="100.609"/>
+    <zone id="KDH04" name="Baling" lat="5.6758" lng="100.9186"/>
+    <zone id="KDH05" name="Bandar Baharu, Kulim" lat="5.365" lng="100.561"/>
+    <zone id="KDH06" name="Langkawi" lat="6.35" lng="99.8"/>
+    <zone id="KDH07" name="Puncak Gunung Jerai" lat="5.7889" lng="100.4331"/>
+    <zone id="KTN01" name="Kota Bharu, Bachok, Machang, Pasir Mas, Tumpat, Kuala Krai" lat="6.1254" lng="102.2381"/>
+    <zone id="KTN02" name="Gua Musang, Jeli, Lojing" lat="4.884" lng="101.968"/>
+    <zone id="MLK01" name="Melaka" lat="2.1896" lng="102.2501"/>
+    <zone id="NGS01" name="Tampin, Jempol" lat="2.47" lng="102.23"/>
+    <zone id="NGS02" name="Jelebu, Kuala Pilah, Rembau" lat="2.737" lng="102.251"/>
+    <zone id="NGS03" name="Port Dickson, Seremban" lat="2.7297" lng="101.9381"/>
+    <zone id="PHG01" name="Pulau Tioman" lat="2.8167" lng="104.16"/>
+    <zone id="PHG02" name="Kuantan, Pekan, Muadzam Shah" lat="3.8077" lng="103.326"/>
+    <zone id="PHG03" name="Jerantut, Temerloh, Maran, Bera" lat="3.45" lng="102.42"/>
+    <zone id="PHG04" name="Bentong, Lipis, Raub" lat="3.792" lng="101.857"/>
+    <zone id="PHG05" name="Genting Sempah, Janda Baik, Bukit Tinggi" lat="3.3167" lng="101.85"/>
+    <zone id="PHG06" name="Cameron Highlands, Genting Highlands, Bukit Fraser" lat="4.471" lng="101.377"/>
+    <zone id="PHG07" name="Rompin" lat="2.8" lng="103.49"/>
+    <zone id="PRK01" name="Tapah, Slim River, Tanjung Malim" lat="4.197" lng="101.26"/>
+    <zone id="PRK02" name="Ipoh, Kuala Kangsar, Batu Gajah, Kampar" lat="4.5975" lng="101.0901"/>
+    <zone id="PRK03" name="Lenggong, Pengkalan Hulu, Grik" lat="5.427" lng="101.127"/>
+    <zone id="PRK04" name="Temengor, Belum" lat="5.55" lng="101.4"/>
+    <zone id="PRK05" name="Teluk Intan, Bagan Datuk, Lumut, Sitiawan, Pangkor" lat="4.023" lng="101.021"/>
+    <zone id="PRK06" name="Selama, Taiping, Bagan Serai, Parit Buntar" lat="4.85" lng="100.74"/>
+    <zone id="PRK07" name="Bukit Larut" lat="4.86" lng="100.795"/>
+    <zone id="PLS01" name="Perlis" lat="6.4414" lng="100.1986"/>
+    <zone id="PNG01" name="Pulau Pinang" lat="5.4141" lng="100.3288"/>
+    <zone id="SBH01" name="Sandakan, Bukit Garam, Sukau" lat="5.8402" lng="118.1179"/>
+    <zone id="SBH02" name="Beluran, Telupid, Kuamut" lat="5.95" lng="117.58"/>
+    <zone id="SBH03" name="Lahad Datu, Kunak, Semporna" lat="5.027" lng="118.327"/>
+    <zone id="SBH04" name="Tawau, Balong, Kalabakan" lat="4.244" lng="117.891"/>
+    <zone id="SBH05" name="Kudat, Kota Marudu, Pitas" lat="6.883" lng="116.848"/>
+    <zone id="SBH06" name="Gunung Kinabalu" lat="6.075" lng="116.5583"/>
+    <zone id="SBH07" name="Kota Kinabalu, Ranau, Kota Belud, Tuaran, Papar" lat="5.9804" lng="116.0735"/>
+    <zone id="SBH08" name="Keningau, Tambunan, Nabawan, Pensiangan" lat="5.339" lng="116.16"/>
+    <zone id="SBH09" name="Beaufort, Sipitang, Tenom, Kuala Penyu" lat="5.347" lng="115.745"/>
+    <zone id="SWK01" name="Limbang, Lawas, Sundar, Trusan" lat="4.755" lng="115.008"/>
+    <zone id="SWK02" name="Miri, Niah, Marudi" lat="4.399" lng="113.991"/>
+    <zone id="SWK03" name="Bintulu, Belaga, Tatau" lat="3.171" lng="113.042"/>
+    <zone id="SWK04" name="Sibu, Mukah, Kapit, Kanowit" lat="2.287" lng="111.831"/>
+    <zone id="SWK05" name="Sarikei, Matu, Julau, Bintangor" lat="2.128" lng="111.519"/>
+    <zone id="SWK06" name="Sri Aman, Betong, Saratok, Lubok Antu" lat="1.237" lng="111.462"/>
+    <zone id="SWK07" name="Serian, Samarahan, Simunjan" lat="1.167" lng="110.567"/>
+    <zone id="SWK08" name="Kuching, Bau, Lundu, Sematan" lat="1.5533" lng="110.3592"/>
+    <zone id="SWK09" name="Zon Khas (Kampung Patarikan)" lat="4.93" lng="115.44"/>
+    <zone id="SGR01" name="Gombak, Petaling, Sepang, Hulu Langat, Hulu Selangor, Shah Alam" lat="3.073" lng="101.518"/>
+    <zone id="SGR02" name="Kuala Selangor, Sabak Bernam" lat="3.34" lng="101.25"/>
+    <zone id="SGR03" name="Klang, Kuala Langat" lat="3.044" lng="101.445"/>
+    <zone id="TRG01" name="Kuala Terengganu, Marang, Kuala Nerus" lat="5.3302" lng="103.1408"/>
+    <zone id="TRG02" name="Besut, Setiu" lat="5.746" lng="102.504"/>
+    <zone id="TRG03" name="Hulu Terengganu" lat="5.064" lng="102.95"/>
+    <zone id="TRG04" name="Dungun, Kemaman" lat="4.757" lng="103.42"/>
+    <zone id="WLY01" name="Kuala Lumpur, Putrajaya" lat="3.139" lng="101.6869"/>
+    <zone id="WLY02" name="Labuan" lat="5.2831" lng="115.2308"/>
+</zones>

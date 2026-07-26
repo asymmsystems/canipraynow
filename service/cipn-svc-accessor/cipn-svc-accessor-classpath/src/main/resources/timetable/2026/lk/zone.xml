@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  ACJU zone index for Sri Lanka, 2026. Validates against schema/zone.xsd. @author Fahim Farook
+  All Ceylon Jamiyyathul Ulama zone index for Sri Lanka, 2026.
+  @author Fahim Farook
 -->
-<zones authority="ACJU"
-       authority-name="All Ceylon Jamiyyathul Ulama"
-       authority-url="https://www.acju.lk/prayer-times/"
-       country="Sri Lanka">
+<zones authority="ACJU" authority-name="All Ceylon Jamiyyathul Ulama" authority-url="https://www.acju.lk/prayer-times/" country="Sri Lanka">
     <zone id="01" name="Colombo, Gampaha, Kalutara" lat="6.9271" lng="79.8612"/>
+    <zone id="02" name="Jaffna (Nallur)" lat="9.6615" lng="80.0255"/>
+    <zone id="03" name="Mullaitivu, Kilinochchi, Vavuniya" lat="8.7514" lng="80.4971"/>
+    <zone id="04" name="Mannar, Puttalam" lat="8.0362" lng="79.8283"/>
+    <zone id="05" name="Anuradhapura, Polonnaruwa" lat="8.3114" lng="80.4037"/>
+    <zone id="06" name="Kurunegala" lat="7.4863" lng="80.3623"/>
     <zone id="07" name="Kandy, Matale, Nuwara Eliya" lat="7.2906" lng="80.6337"/>
+    <zone id="08" name="Batticaloa, Ampara" lat="7.717" lng="81.7"/>
+    <zone id="09" name="Trincomalee" lat="8.5874" lng="81.2152"/>
+    <zone id="10" name="Badulla, Monaragala" lat="6.9934" lng="81.055"/>
+    <zone id="11" name="Ratnapura, Kegalle" lat="6.6828" lng="80.3992"/>
+    <zone id="12" name="Galle, Matara" lat="6.0535" lng="80.221"/>
+    <zone id="13" name="Hambantota" lat="6.1241" lng="81.1185"/>
 </zones>

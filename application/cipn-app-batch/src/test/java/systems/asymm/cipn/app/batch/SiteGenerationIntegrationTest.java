@@ -20,27 +20,26 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Wiring-level integration: the fully-composed pipeline (assembly -> variants -> classpath
- * accessors -> FreeMarker) generates real pages for one year from the bundled classpath data.
- * This is where the whole stack is wired together, so the integration test lives here rather
- * than in any single service module.
+ * accessors -> FreeMarker) generates a year's pages from the bundled classpath data (the real
+ * 301-city dataset with LK/MY authority tables). This is where the whole stack is wired
+ * together, so the integration test lives here rather than in any single service module.
  */
 class SiteGenerationIntegrationTest {
 
     @Test
-    void wiredPipelineBakesTheYearsTableAndLinksNeighbours(@TempDir Path out) throws Exception {
+    void wiredPipelineGeneratesEveryCityAndBakesAuthorityTables(@TempDir Path out) throws Exception {
         SiteGenerationResult result = SiteGenerationWiring.siteGenerationManager(out, 2026).generate();
 
-        assertEquals(2, result.pagesWritten());
-        assertEquals(1, result.pagesWithTimetable());
+        assertEquals(301, result.pagesWritten(), "one page per bundled city");
+        assertTrue(result.pagesWithTimetable() > 0, "LK/MY cities get a baked authority table");
 
-        String colombo = Files.readString(out.resolve("sri-lanka/colombo.html"));
-        assertTrue(colombo.contains("All Ceylon Jamiyyathul Ulama annual timetable"));
-        assertTrue(colombo.contains("annual timetable 2026"), "the baked year should be labelled");
-        assertTrue(colombo.contains("05:00"), "Fajr day 1 (300 min) should render as 05:00");
-        assertTrue(colombo.contains("nearby=London|United Kingdom|/united-kingdom/london.html|"),
-                "NeighbourEngine should link the nearest page-city");
+        // Kuala Lumpur (MY) snaps to a JAKIM zone -> its table is baked into the page.
+        String kl = Files.readString(out.resolve("malaysia/kuala-lumpur.html"));
+        assertTrue(kl.contains("authority-timetable"), "MY city should carry a baked table");
+        assertTrue(kl.contains("annual timetable 2026"), "the baked year should be labelled");
 
-        String london = Files.readString(out.resolve("united-kingdom/london.html"));
-        assertFalse(london.contains("authority-timetable"), "GB has no baked table");
+        // Jakarta (ID) has no extracted authority table -> no baked table section.
+        String jakarta = Files.readString(out.resolve("indonesia/jakarta.html"));
+        assertFalse(jakarta.contains("authority-timetable"), "ID has no extracted table");
     }
 }

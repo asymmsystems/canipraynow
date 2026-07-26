@@ -49,8 +49,10 @@
         <xs:attribute name="maghrib" type="minuteOfDay" use="required"/>
         <!-- Isha, minutes from midnight. -->
         <xs:attribute name="isha" type="minuteOfDay" use="required"/>
-        <!-- Solar noon (zenith), minutes from midnight. Baked so the client skips zenith math. -->
-        <xs:attribute name="solar-noon" type="minuteOfDay" use="required"/>
+        <!-- Solar noon (zenith), minutes from midnight. A COMPUTED enrichment (E3), not
+             authority-published, so it is optional: source tables may omit it, and the
+             baked-rendering step adds it. Absent binds to 0. -->
+        <xs:attribute name="solar-noon" type="minuteOfDay"/>
     </xs:complexType>
 
     <xs:simpleType name="timeUnit">

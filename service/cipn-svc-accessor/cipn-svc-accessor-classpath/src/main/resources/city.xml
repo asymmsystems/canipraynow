@@ -2,11 +2,308 @@
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
   Curated city dataset (NOT S1 output). Validates against schema/city.xsd.
-  Sample seed; the world city list lands via the cutover. @author Fahim Farook
+  @author Fahim Farook
 -->
 <cities>
-    <city name="Colombo" country="Sri Lanka" cc="LK" slug="colombo" country-slug="sri-lanka"
-          lat="6.9271" lng="79.8612" tz="Asia/Colombo" page="true"/>
-    <city name="London" country="United Kingdom" cc="GB" slug="london" country-slug="united-kingdom"
-          lat="51.5074" lng="-0.1278" tz="Europe/London" page="true"/>
+    <city name="Jakarta" country="Indonesia" cc="ID" slug="jakarta" country-slug="indonesia" lat="-6.2088" lng="106.8456" tz="Asia/Jakarta" page="true"/>
+    <city name="Karachi" country="Pakistan" cc="PK" slug="karachi" country-slug="pakistan" lat="24.8607" lng="67.0011" tz="Asia/Karachi" page="true"/>
+    <city name="Dhaka" country="Bangladesh" cc="BD" slug="dhaka" country-slug="bangladesh" lat="23.8103" lng="90.4125" tz="Asia/Dhaka" page="true"/>
+    <city name="Cairo" country="Egypt" cc="EG" slug="cairo" country-slug="egypt" lat="30.0444" lng="31.2357" tz="Africa/Cairo" page="true"/>
+    <city name="Lahore" country="Pakistan" cc="PK" slug="lahore" country-slug="pakistan" lat="31.5204" lng="74.3587" tz="Asia/Karachi" page="true"/>
+    <city name="Istanbul" country="Turkey" cc="TR" slug="istanbul" country-slug="turkey" lat="41.0082" lng="28.9784" tz="Europe/Istanbul" page="true"/>
+    <city name="Tehran" country="Iran" cc="IR" slug="tehran" country-slug="iran" lat="35.6892" lng="51.389" tz="Asia/Tehran" page="true"/>
+    <city name="Baghdad" country="Iraq" cc="IQ" slug="baghdad" country-slug="iraq" lat="33.3152" lng="44.3661" tz="Asia/Baghdad" page="true"/>
+    <city name="Mumbai" country="India" cc="IN" slug="mumbai" country-slug="india" lat="19.076" lng="72.8777" tz="Asia/Kolkata" page="true"/>
+    <city name="Delhi" country="India" cc="IN" slug="delhi" country-slug="india" lat="28.6139" lng="77.209" tz="Asia/Kolkata" page="true"/>
+    <city name="Kano" country="Nigeria" cc="NG" slug="kano" country-slug="nigeria" lat="12.0" lng="8.5167" tz="Africa/Lagos" page="true"/>
+    <city name="Lagos" country="Nigeria" cc="NG" slug="lagos" country-slug="nigeria" lat="6.5244" lng="3.3792" tz="Africa/Lagos" page="true"/>
+    <city name="Khartoum" country="Sudan" cc="SD" slug="khartoum" country-slug="sudan" lat="15.5007" lng="32.5599" tz="Africa/Khartoum" page="true"/>
+    <city name="Riyadh" country="Saudi Arabia" cc="SA" slug="riyadh" country-slug="saudi-arabia" lat="24.7136" lng="46.6753" tz="Asia/Riyadh" page="true"/>
+    <city name="Alexandria" country="Egypt" cc="EG" slug="alexandria" country-slug="egypt" lat="31.2001" lng="29.9187" tz="Africa/Cairo" page="true"/>
+    <city name="Casablanca" country="Morocco" cc="MA" slug="casablanca" country-slug="morocco" lat="33.5731" lng="-7.5898" tz="Africa/Casablanca" page="true"/>
+    <city name="Surabaya" country="Indonesia" cc="ID" slug="surabaya" country-slug="indonesia" lat="-7.2575" lng="112.7521" tz="Asia/Jakarta" page="true"/>
+    <city name="Jeddah" country="Saudi Arabia" cc="SA" slug="jeddah" country-slug="saudi-arabia" lat="21.4858" lng="39.1925" tz="Asia/Riyadh" page="true"/>
+    <city name="Ankara" country="Turkey" cc="TR" slug="ankara" country-slug="turkey" lat="39.9334" lng="32.8597" tz="Europe/Istanbul" page="true"/>
+    <city name="Bandung" country="Indonesia" cc="ID" slug="bandung" country-slug="indonesia" lat="-6.9175" lng="107.6191" tz="Asia/Jakarta" page="true"/>
+    <city name="Algiers" country="Algeria" cc="DZ" slug="algiers" country-slug="algeria" lat="36.7538" lng="3.0588" tz="Africa/Algiers" page="true"/>
+    <city name="Faisalabad" country="Pakistan" cc="PK" slug="faisalabad" country-slug="pakistan" lat="31.4504" lng="73.135" tz="Asia/Karachi" page="true"/>
+    <city name="Kabul" country="Afghanistan" cc="AF" slug="kabul" country-slug="afghanistan" lat="34.5553" lng="69.2075" tz="Asia/Kabul" page="true"/>
+    <city name="Kuala Lumpur" country="Malaysia" cc="MY" slug="kuala-lumpur" country-slug="malaysia" lat="3.139" lng="101.6869" tz="Asia/Kuala_Lumpur" page="true"/>
+    <city name="Tashkent" country="Uzbekistan" cc="UZ" slug="tashkent" country-slug="uzbekistan" lat="41.2995" lng="69.2401" tz="Asia/Tashkent" page="true"/>
+    <city name="Sanaa" country="Yemen" cc="YE" slug="sanaa" country-slug="yemen" lat="15.3694" lng="44.191" tz="Asia/Aden" page="true"/>
+    <city name="Medan" country="Indonesia" cc="ID" slug="medan" country-slug="indonesia" lat="3.5952" lng="98.6722" tz="Asia/Jakarta" page="true"/>
+    <city name="Mashhad" country="Iran" cc="IR" slug="mashhad" country-slug="iran" lat="36.2605" lng="59.6168" tz="Asia/Tehran" page="true"/>
+    <city name="Rawalpindi" country="Pakistan" cc="PK" slug="rawalpindi" country-slug="pakistan" lat="33.5651" lng="73.0169" tz="Asia/Karachi" page="true"/>
+    <city name="Aleppo" country="Syria" cc="SY" slug="aleppo" country-slug="syria" lat="36.2021" lng="37.1343" tz="Asia/Damascus" page="true"/>
+    <city name="Damascus" country="Syria" cc="SY" slug="damascus" country-slug="syria" lat="33.5138" lng="36.2765" tz="Asia/Damascus" page="true"/>
+    <city name="Amman" country="Jordan" cc="JO" slug="amman" country-slug="jordan" lat="31.9454" lng="35.9284" tz="Asia/Amman" page="true"/>
+    <city name="Chittagong" country="Bangladesh" cc="BD" slug="chittagong" country-slug="bangladesh" lat="22.3569" lng="91.7832" tz="Asia/Dhaka" page="true"/>
+    <city name="Hyderabad" country="India" cc="IN" slug="hyderabad" country-slug="india" lat="17.385" lng="78.4867" tz="Asia/Kolkata" page="true"/>
+    <city name="Makkah" country="Saudi Arabia" cc="SA" slug="makkah" country-slug="saudi-arabia" lat="21.4225" lng="39.8262" tz="Asia/Riyadh" page="true"/>
+    <city name="Izmir" country="Turkey" cc="TR" slug="izmir" country-slug="turkey" lat="38.4237" lng="27.1428" tz="Europe/Istanbul" page="true"/>
+    <city name="Dubai" country="United Arab Emirates" cc="AE" slug="dubai" country-slug="united-arab-emirates" lat="25.2048" lng="55.2708" tz="Asia/Dubai" page="true"/>
+    <city name="Dakar" country="Senegal" cc="SN" slug="dakar" country-slug="senegal" lat="14.7167" lng="-17.4677" tz="Africa/Dakar" page="true"/>
+    <city name="Mogadishu" country="Somalia" cc="SO" slug="mogadishu" country-slug="somalia" lat="2.0469" lng="45.3182" tz="Africa/Mogadishu" page="true"/>
+    <city name="Multan" country="Pakistan" cc="PK" slug="multan" country-slug="pakistan" lat="30.1978" lng="71.4697" tz="Asia/Karachi" page="true"/>
+    <city name="Peshawar" country="Pakistan" cc="PK" slug="peshawar" country-slug="pakistan" lat="34.0151" lng="71.5805" tz="Asia/Karachi" page="true"/>
+    <city name="Bamako" country="Mali" cc="ML" slug="bamako" country-slug="mali" lat="12.6392" lng="-8.0029" tz="Africa/Bamako" page="true"/>
+    <city name="Abidjan" country="Cote d'Ivoire" cc="CI" slug="abidjan" country-slug="cote-divoire" lat="5.36" lng="-4.0083" tz="Africa/Abidjan" page="true"/>
+    <city name="Kolkata" country="India" cc="IN" slug="kolkata" country-slug="india" lat="22.5726" lng="88.3639" tz="Asia/Kolkata" page="true"/>
+    <city name="Madinah" country="Saudi Arabia" cc="SA" slug="madinah" country-slug="saudi-arabia" lat="24.4686" lng="39.6142" tz="Asia/Riyadh" page="true"/>
+    <city name="Basra" country="Iraq" cc="IQ" slug="basra" country-slug="iraq" lat="30.5085" lng="47.7804" tz="Asia/Baghdad" page="true"/>
+    <city name="Ouagadougou" country="Burkina Faso" cc="BF" slug="ouagadougou" country-slug="burkina-faso" lat="12.3714" lng="-1.5197" tz="Africa/Ouagadougou" page="true"/>
+    <city name="Conakry" country="Guinea" cc="GN" slug="conakry" country-slug="guinea" lat="9.6412" lng="-13.5784" tz="Africa/Conakry" page="true"/>
+    <city name="Isfahan" country="Iran" cc="IR" slug="isfahan" country-slug="iran" lat="32.6546" lng="51.668" tz="Asia/Tehran" page="true"/>
+    <city name="Sharjah" country="United Arab Emirates" cc="AE" slug="sharjah" country-slug="united-arab-emirates" lat="25.3463" lng="55.4209" tz="Asia/Dubai" page="true"/>
+    <city name="Mosul" country="Iraq" cc="IQ" slug="mosul" country-slug="iraq" lat="36.34" lng="43.13" tz="Asia/Baghdad" page="true"/>
+    <city name="Tunis" country="Tunisia" cc="TN" slug="tunis" country-slug="tunisia" lat="36.8065" lng="10.1815" tz="Africa/Tunis" page="true"/>
+    <city name="Tripoli" country="Libya" cc="LY" slug="tripoli" country-slug="libya" lat="32.8872" lng="13.1913" tz="Africa/Tripoli" page="true"/>
+    <city name="Kuwait City" country="Kuwait" cc="KW" slug="kuwait-city" country-slug="kuwait" lat="29.3759" lng="47.9774" tz="Asia/Kuwait" page="true"/>
+    <city name="Doha" country="Qatar" cc="QA" slug="doha" country-slug="qatar" lat="25.2854" lng="51.531" tz="Asia/Qatar" page="true"/>
+    <city name="Islamabad" country="Pakistan" cc="PK" slug="islamabad" country-slug="pakistan" lat="33.6844" lng="73.0479" tz="Asia/Karachi" page="true"/>
+    <city name="Rabat" country="Morocco" cc="MA" slug="rabat" country-slug="morocco" lat="34.0209" lng="-6.8416" tz="Africa/Casablanca" page="true"/>
+    <city name="Baku" country="Azerbaijan" cc="AZ" slug="baku" country-slug="azerbaijan" lat="40.4093" lng="49.8671" tz="Asia/Baku" page="true"/>
+    <city name="Niamey" country="Niger" cc="NE" slug="niamey" country-slug="niger" lat="13.5137" lng="2.1098" tz="Africa/Niamey" page="true"/>
+    <city name="N'Djamena" country="Chad" cc="TD" slug="ndjamena" country-slug="chad" lat="12.1348" lng="15.0557" tz="Africa/Ndjamena" page="true"/>
+    <city name="Nouakchott" country="Mauritania" cc="MR" slug="nouakchott" country-slug="mauritania" lat="18.0735" lng="-15.9582" tz="Africa/Nouakchott" page="true"/>
+    <city name="Tabriz" country="Iran" cc="IR" slug="tabriz" country-slug="iran" lat="38.08" lng="46.2919" tz="Asia/Tehran" page="true"/>
+    <city name="Shiraz" country="Iran" cc="IR" slug="shiraz" country-slug="iran" lat="29.5918" lng="52.5837" tz="Asia/Tehran" page="true"/>
+    <city name="Lucknow" country="India" cc="IN" slug="lucknow" country-slug="india" lat="26.8467" lng="80.9462" tz="Asia/Kolkata" page="true"/>
+    <city name="Fez" country="Morocco" cc="MA" slug="fez" country-slug="morocco" lat="34.0181" lng="-5.0078" tz="Africa/Casablanca" page="true"/>
+    <city name="Marrakesh" country="Morocco" cc="MA" slug="marrakesh" country-slug="morocco" lat="31.6295" lng="-7.9811" tz="Africa/Casablanca" page="true"/>
+    <city name="Bursa" country="Turkey" cc="TR" slug="bursa" country-slug="turkey" lat="40.1826" lng="29.0665" tz="Europe/Istanbul" page="true"/>
+    <city name="Omdurman" country="Sudan" cc="SD" slug="omdurman" country-slug="sudan" lat="15.6445" lng="32.4777" tz="Africa/Khartoum" page="true"/>
+    <city name="Palembang" country="Indonesia" cc="ID" slug="palembang" country-slug="indonesia" lat="-2.9761" lng="104.7754" tz="Asia/Jakarta" page="true"/>
+    <city name="Makassar" country="Indonesia" cc="ID" slug="makassar" country-slug="indonesia" lat="-5.1477" lng="119.4327" tz="Asia/Makassar" page="true"/>
+    <city name="Hyderabad" country="Pakistan" cc="PK" slug="hyderabad" country-slug="pakistan" lat="25.396" lng="68.3578" tz="Asia/Karachi" page="true"/>
+    <city name="Quetta" country="Pakistan" cc="PK" slug="quetta" country-slug="pakistan" lat="30.1798" lng="66.975" tz="Asia/Karachi" page="true"/>
+    <city name="Sylhet" country="Bangladesh" cc="BD" slug="sylhet" country-slug="bangladesh" lat="24.8949" lng="91.8687" tz="Asia/Dhaka" page="true"/>
+    <city name="Dar es Salaam" country="Tanzania" cc="TZ" slug="dar-es-salaam" country-slug="tanzania" lat="-6.7924" lng="39.2083" tz="Africa/Dar_es_Salaam" page="true"/>
+    <city name="Abuja" country="Nigeria" cc="NG" slug="abuja" country-slug="nigeria" lat="9.0765" lng="7.3986" tz="Africa/Lagos" page="true"/>
+    <city name="Ibadan" country="Nigeria" cc="NG" slug="ibadan" country-slug="nigeria" lat="7.3775" lng="3.947" tz="Africa/Lagos" page="true"/>
+    <city name="Erbil" country="Iraq" cc="IQ" slug="erbil" country-slug="iraq" lat="36.1911" lng="44.0092" tz="Asia/Baghdad" page="true"/>
+    <city name="Najaf" country="Iraq" cc="IQ" slug="najaf" country-slug="iraq" lat="31.9961" lng="44.3142" tz="Asia/Baghdad" page="true"/>
+    <city name="Karbala" country="Iraq" cc="IQ" slug="karbala" country-slug="iraq" lat="32.6167" lng="44.0333" tz="Asia/Baghdad" page="true"/>
+    <city name="Qom" country="Iran" cc="IR" slug="qom" country-slug="iran" lat="34.6416" lng="50.8746" tz="Asia/Tehran" page="true"/>
+    <city name="Beirut" country="Lebanon" cc="LB" slug="beirut" country-slug="lebanon" lat="33.8938" lng="35.5018" tz="Asia/Beirut" page="true"/>
+    <city name="Muscat" country="Oman" cc="OM" slug="muscat" country-slug="oman" lat="23.588" lng="58.3829" tz="Asia/Muscat" page="true"/>
+    <city name="Manama" country="Bahrain" cc="BH" slug="manama" country-slug="bahrain" lat="26.2285" lng="50.586" tz="Asia/Bahrain" page="true"/>
+    <city name="Abu Dhabi" country="United Arab Emirates" cc="AE" slug="abu-dhabi" country-slug="united-arab-emirates" lat="24.4539" lng="54.3773" tz="Asia/Dubai" page="true"/>
+    <city name="Jerusalem" country="Palestine" cc="PS" slug="jerusalem" country-slug="palestine" lat="31.7683" lng="35.2137" tz="Asia/Jerusalem" page="true"/>
+    <city name="Gaza" country="Palestine" cc="PS" slug="gaza" country-slug="palestine" lat="31.5069" lng="34.456" tz="Asia/Gaza" page="true"/>
+    <city name="Srinagar" country="India" cc="IN" slug="srinagar" country-slug="india" lat="34.0837" lng="74.7973" tz="Asia/Kolkata" page="true"/>
+    <city name="Almaty" country="Kazakhstan" cc="KZ" slug="almaty" country-slug="kazakhstan" lat="43.222" lng="76.8512" tz="Asia/Almaty" page="true"/>
+    <city name="Bishkek" country="Kyrgyzstan" cc="KG" slug="bishkek" country-slug="kyrgyzstan" lat="42.8746" lng="74.5698" tz="Asia/Bishkek" page="true"/>
+    <city name="Dushanbe" country="Tajikistan" cc="TJ" slug="dushanbe" country-slug="tajikistan" lat="38.5598" lng="68.787" tz="Asia/Dushanbe" page="true"/>
+    <city name="Ashgabat" country="Turkmenistan" cc="TM" slug="ashgabat" country-slug="turkmenistan" lat="37.9601" lng="58.3261" tz="Asia/Ashgabat" page="true"/>
+    <city name="Samarkand" country="Uzbekistan" cc="UZ" slug="samarkand" country-slug="uzbekistan" lat="39.6542" lng="66.9597" tz="Asia/Samarkand" page="true"/>
+    <city name="Sarajevo" country="Bosnia and Herzegovina" cc="BA" slug="sarajevo" country-slug="bosnia-and-herzegovina" lat="43.8563" lng="18.4131" tz="Europe/Sarajevo" page="true"/>
+    <city name="Tirana" country="Albania" cc="AL" slug="tirana" country-slug="albania" lat="41.3275" lng="19.8187" tz="Europe/Tirane" page="true"/>
+    <city name="Moscow" country="Russia" cc="RU" slug="moscow" country-slug="russia" lat="55.7558" lng="37.6173" tz="Europe/Moscow" page="true"/>
+    <city name="London" country="United Kingdom" cc="GB" slug="london" country-slug="united-kingdom" lat="51.5074" lng="-0.1278" tz="Europe/London" page="true"/>
+    <city name="Birmingham" country="United Kingdom" cc="GB" slug="birmingham" country-slug="united-kingdom" lat="52.4862" lng="-1.8904" tz="Europe/London" page="true"/>
+    <city name="Bradford" country="United Kingdom" cc="GB" slug="bradford" country-slug="united-kingdom" lat="53.796" lng="-1.7594" tz="Europe/London" page="true"/>
+    <city name="Manchester" country="United Kingdom" cc="GB" slug="manchester" country-slug="united-kingdom" lat="53.4808" lng="-2.2426" tz="Europe/London" page="true"/>
+    <city name="Paris" country="France" cc="FR" slug="paris" country-slug="france" lat="48.8566" lng="2.3522" tz="Europe/Paris" page="true"/>
+    <city name="Marseille" country="France" cc="FR" slug="marseille" country-slug="france" lat="43.2965" lng="5.3698" tz="Europe/Paris" page="true"/>
+    <city name="Berlin" country="Germany" cc="DE" slug="berlin" country-slug="germany" lat="52.52" lng="13.405" tz="Europe/Berlin" page="true"/>
+    <city name="New York" country="United States" cc="US" slug="new-york" country-slug="united-states" lat="40.7128" lng="-74.006" tz="America/New_York" page="true"/>
+    <city name="Chicago" country="United States" cc="US" slug="chicago" country-slug="united-states" lat="41.8781" lng="-87.6298" tz="America/Chicago" page="true"/>
+    <city name="Toronto" country="Canada" cc="CA" slug="toronto" country-slug="canada" lat="43.6532" lng="-79.3832" tz="America/Toronto" page="true"/>
+    <city name="Sydney" country="Australia" cc="AU" slug="sydney" country-slug="australia" lat="-33.8688" lng="151.2093" tz="Australia/Sydney" page="true"/>
+    <city name="Melbourne" country="Australia" cc="AU" slug="melbourne" country-slug="australia" lat="-37.8136" lng="144.9631" tz="Australia/Melbourne" page="true"/>
+    <city name="Singapore" country="Singapore" cc="SG" slug="singapore" country-slug="singapore" lat="1.3521" lng="103.8198" tz="Asia/Singapore" page="true"/>
+    <city name="Colombo" country="Sri Lanka" cc="LK" slug="colombo" country-slug="sri-lanka" lat="6.9271" lng="79.8612" tz="Asia/Colombo" page="true"/>
+    <city name="Kandy" country="Sri Lanka" cc="LK" slug="kandy" country-slug="sri-lanka" lat="7.2906" lng="80.6337" tz="Asia/Colombo" page="true"/>
+    <city name="Herat" country="Afghanistan" cc="AF" slug="herat" country-slug="afghanistan" lat="34.3419" lng="62.2031" tz="Asia/Kabul" page="true"/>
+    <city name="Jalalabad" country="Afghanistan" cc="AF" slug="jalalabad" country-slug="afghanistan" lat="34.4265" lng="70.4515" tz="Asia/Kabul" page="true"/>
+    <city name="Kandahar" country="Afghanistan" cc="AF" slug="kandahar" country-slug="afghanistan" lat="31.6167" lng="65.7167" tz="Asia/Kabul" page="true"/>
+    <city name="Mazar-i-Sharif" country="Afghanistan" cc="AF" slug="mazar-i-sharif" country-slug="afghanistan" lat="36.709" lng="67.1109" tz="Asia/Kabul" page="true"/>
+    <city name="Annaba" country="Algeria" cc="DZ" slug="annaba" country-slug="algeria" lat="36.9" lng="7.7667" tz="Africa/Algiers" page="true"/>
+    <city name="Constantine" country="Algeria" cc="DZ" slug="constantine" country-slug="algeria" lat="36.365" lng="6.6147" tz="Africa/Algiers" page="true"/>
+    <city name="Oran" country="Algeria" cc="DZ" slug="oran" country-slug="algeria" lat="35.6969" lng="-0.6331" tz="Africa/Algiers" page="true"/>
+    <city name="Adelaide" country="Australia" cc="AU" slug="adelaide" country-slug="australia" lat="-34.9285" lng="138.6007" tz="Australia/Adelaide" page="true"/>
+    <city name="Brisbane" country="Australia" cc="AU" slug="brisbane" country-slug="australia" lat="-27.4698" lng="153.0251" tz="Australia/Brisbane" page="true"/>
+    <city name="Perth" country="Australia" cc="AU" slug="perth" country-slug="australia" lat="-31.9505" lng="115.8605" tz="Australia/Perth" page="true"/>
+    <city name="Vienna" country="Austria" cc="AT" slug="vienna" country-slug="austria" lat="48.2082" lng="16.3738" tz="Europe/Vienna" page="true"/>
+    <city name="Ganja" country="Azerbaijan" cc="AZ" slug="ganja" country-slug="azerbaijan" lat="40.6828" lng="46.3606" tz="Asia/Baku" page="true"/>
+    <city name="Barisal" country="Bangladesh" cc="BD" slug="barisal" country-slug="bangladesh" lat="22.701" lng="90.3535" tz="Asia/Dhaka" page="true"/>
+    <city name="Khulna" country="Bangladesh" cc="BD" slug="khulna" country-slug="bangladesh" lat="22.8456" lng="89.5403" tz="Asia/Dhaka" page="true"/>
+    <city name="Mymensingh" country="Bangladesh" cc="BD" slug="mymensingh" country-slug="bangladesh" lat="24.7471" lng="90.4203" tz="Asia/Dhaka" page="true"/>
+    <city name="Rajshahi" country="Bangladesh" cc="BD" slug="rajshahi" country-slug="bangladesh" lat="24.3745" lng="88.6042" tz="Asia/Dhaka" page="true"/>
+    <city name="Rangpur" country="Bangladesh" cc="BD" slug="rangpur" country-slug="bangladesh" lat="25.7439" lng="89.2752" tz="Asia/Dhaka" page="true"/>
+    <city name="Brussels" country="Belgium" cc="BE" slug="brussels" country-slug="belgium" lat="50.8503" lng="4.3517" tz="Europe/Brussels" page="true"/>
+    <city name="Mostar" country="Bosnia and Herzegovina" cc="BA" slug="mostar" country-slug="bosnia-and-herzegovina" lat="43.3438" lng="17.8078" tz="Europe/Sarajevo" page="true"/>
+    <city name="Zenica" country="Bosnia and Herzegovina" cc="BA" slug="zenica" country-slug="bosnia-and-herzegovina" lat="44.2034" lng="17.9077" tz="Europe/Sarajevo" page="true"/>
+    <city name="Rio de Janeiro" country="Brazil" cc="BR" slug="rio-de-janeiro" country-slug="brazil" lat="-22.9068" lng="-43.1729" tz="America/Sao_Paulo" page="true"/>
+    <city name="Sao Paulo" country="Brazil" cc="BR" slug="sao-paulo" country-slug="brazil" lat="-23.5505" lng="-46.6333" tz="America/Sao_Paulo" page="true"/>
+    <city name="Bandar Seri Begawan" country="Brunei" cc="BN" slug="bandar-seri-begawan" country-slug="brunei" lat="4.8903" lng="114.9422" tz="Asia/Brunei" page="true"/>
+    <city name="Bobo-Dioulasso" country="Burkina Faso" cc="BF" slug="bobo-dioulasso" country-slug="burkina-faso" lat="11.1771" lng="-4.2979" tz="Africa/Ouagadougou" page="true"/>
+    <city name="Douala" country="Cameroon" cc="CM" slug="douala" country-slug="cameroon" lat="4.0511" lng="9.7679" tz="Africa/Douala" page="true"/>
+    <city name="Calgary" country="Canada" cc="CA" slug="calgary" country-slug="canada" lat="51.0447" lng="-114.0719" tz="America/Edmonton" page="true"/>
+    <city name="Edmonton" country="Canada" cc="CA" slug="edmonton" country-slug="canada" lat="53.5461" lng="-113.4938" tz="America/Edmonton" page="true"/>
+    <city name="Mississauga" country="Canada" cc="CA" slug="mississauga" country-slug="canada" lat="43.589" lng="-79.6441" tz="America/Toronto" page="true"/>
+    <city name="Montreal" country="Canada" cc="CA" slug="montreal" country-slug="canada" lat="45.5017" lng="-73.5673" tz="America/Toronto" page="true"/>
+    <city name="Vancouver" country="Canada" cc="CA" slug="vancouver" country-slug="canada" lat="49.2827" lng="-123.1207" tz="America/Vancouver" page="true"/>
+    <city name="Moroni" country="Comoros" cc="KM" slug="moroni" country-slug="comoros" lat="-11.6989" lng="43.2556" tz="Indian/Comoro" page="true"/>
+    <city name="Copenhagen" country="Denmark" cc="DK" slug="copenhagen" country-slug="denmark" lat="55.6761" lng="12.5683" tz="Europe/Copenhagen" page="true"/>
+    <city name="Djibouti" country="Djibouti" cc="DJ" slug="djibouti" country-slug="djibouti" lat="11.5721" lng="43.1456" tz="Africa/Djibouti" page="true"/>
+    <city name="Giza" country="Egypt" cc="EG" slug="giza" country-slug="egypt" lat="30.0131" lng="31.2089" tz="Africa/Cairo" page="true"/>
+    <city name="Mansoura" country="Egypt" cc="EG" slug="mansoura" country-slug="egypt" lat="31.0409" lng="31.3785" tz="Africa/Cairo" page="true"/>
+    <city name="Port Said" country="Egypt" cc="EG" slug="port-said" country-slug="egypt" lat="31.2653" lng="32.3019" tz="Africa/Cairo" page="true"/>
+    <city name="Tanta" country="Egypt" cc="EG" slug="tanta" country-slug="egypt" lat="30.7865" lng="31.0004" tz="Africa/Cairo" page="true"/>
+    <city name="Asmara" country="Eritrea" cc="ER" slug="asmara" country-slug="eritrea" lat="15.3229" lng="38.9251" tz="Africa/Asmara" page="true"/>
+    <city name="Addis Ababa" country="Ethiopia" cc="ET" slug="addis-ababa" country-slug="ethiopia" lat="9.032" lng="38.7469" tz="Africa/Addis_Ababa" page="true"/>
+    <city name="Lille" country="France" cc="FR" slug="lille" country-slug="france" lat="50.6292" lng="3.0573" tz="Europe/Paris" page="true"/>
+    <city name="Lyon" country="France" cc="FR" slug="lyon" country-slug="france" lat="45.764" lng="4.8357" tz="Europe/Paris" page="true"/>
+    <city name="Toulouse" country="France" cc="FR" slug="toulouse" country-slug="france" lat="43.6047" lng="1.4442" tz="Europe/Paris" page="true"/>
+    <city name="Banjul" country="Gambia" cc="GM" slug="banjul" country-slug="gambia" lat="13.4549" lng="-16.579" tz="Africa/Banjul" page="true"/>
+    <city name="Cologne" country="Germany" cc="DE" slug="cologne" country-slug="germany" lat="50.9375" lng="6.9603" tz="Europe/Berlin" page="true"/>
+    <city name="Frankfurt" country="Germany" cc="DE" slug="frankfurt" country-slug="germany" lat="50.1109" lng="8.6821" tz="Europe/Berlin" page="true"/>
+    <city name="Hamburg" country="Germany" cc="DE" slug="hamburg" country-slug="germany" lat="53.5511" lng="9.9937" tz="Europe/Berlin" page="true"/>
+    <city name="Munich" country="Germany" cc="DE" slug="munich" country-slug="germany" lat="48.1351" lng="11.582" tz="Europe/Berlin" page="true"/>
+    <city name="Accra" country="Ghana" cc="GH" slug="accra" country-slug="ghana" lat="5.6037" lng="-0.187" tz="Africa/Accra" page="true"/>
+    <city name="Tamale" country="Ghana" cc="GH" slug="tamale" country-slug="ghana" lat="9.4008" lng="-0.8393" tz="Africa/Accra" page="true"/>
+    <city name="Athens" country="Greece" cc="GR" slug="athens" country-slug="greece" lat="37.9838" lng="23.7275" tz="Europe/Athens" page="true"/>
+    <city name="Georgetown" country="Guyana" cc="GY" slug="georgetown" country-slug="guyana" lat="6.8013" lng="-58.1551" tz="America/Guyana" page="true"/>
+    <city name="Ahmedabad" country="India" cc="IN" slug="ahmedabad" country-slug="india" lat="23.0225" lng="72.5714" tz="Asia/Kolkata" page="true"/>
+    <city name="Aligarh" country="India" cc="IN" slug="aligarh" country-slug="india" lat="27.8974" lng="78.088" tz="Asia/Kolkata" page="true"/>
+    <city name="Bengaluru" country="India" cc="IN" slug="bengaluru" country-slug="india" lat="12.9716" lng="77.5946" tz="Asia/Kolkata" page="true"/>
+    <city name="Bhopal" country="India" cc="IN" slug="bhopal" country-slug="india" lat="23.2599" lng="77.4126" tz="Asia/Kolkata" page="true"/>
+    <city name="Chennai" country="India" cc="IN" slug="chennai" country-slug="india" lat="13.0827" lng="80.2707" tz="Asia/Kolkata" page="true"/>
+    <city name="Jaipur" country="India" cc="IN" slug="jaipur" country-slug="india" lat="26.9124" lng="75.7873" tz="Asia/Kolkata" page="true"/>
+    <city name="Kozhikode" country="India" cc="IN" slug="kozhikode" country-slug="india" lat="11.2588" lng="75.7804" tz="Asia/Kolkata" page="true"/>
+    <city name="Patna" country="India" cc="IN" slug="patna" country-slug="india" lat="25.5941" lng="85.1376" tz="Asia/Kolkata" page="true"/>
+    <city name="Pune" country="India" cc="IN" slug="pune" country-slug="india" lat="18.5204" lng="73.8567" tz="Asia/Kolkata" page="true"/>
+    <city name="Varanasi" country="India" cc="IN" slug="varanasi" country-slug="india" lat="25.3176" lng="82.9739" tz="Asia/Kolkata" page="true"/>
+    <city name="Balikpapan" country="Indonesia" cc="ID" slug="balikpapan" country-slug="indonesia" lat="-1.2379" lng="116.8529" tz="Asia/Makassar" page="true"/>
+    <city name="Banda Aceh" country="Indonesia" cc="ID" slug="banda-aceh" country-slug="indonesia" lat="5.5483" lng="95.3238" tz="Asia/Jakarta" page="true"/>
+    <city name="Bandar Lampung" country="Indonesia" cc="ID" slug="bandar-lampung" country-slug="indonesia" lat="-5.4295" lng="105.261" tz="Asia/Jakarta" page="true"/>
+    <city name="Banjarmasin" country="Indonesia" cc="ID" slug="banjarmasin" country-slug="indonesia" lat="-3.3186" lng="114.5944" tz="Asia/Makassar" page="true"/>
+    <city name="Denpasar" country="Indonesia" cc="ID" slug="denpasar" country-slug="indonesia" lat="-8.6705" lng="115.2126" tz="Asia/Makassar" page="true"/>
+    <city name="Malang" country="Indonesia" cc="ID" slug="malang" country-slug="indonesia" lat="-7.9666" lng="112.6326" tz="Asia/Jakarta" page="true"/>
+    <city name="Padang" country="Indonesia" cc="ID" slug="padang" country-slug="indonesia" lat="-0.9471" lng="100.4172" tz="Asia/Jakarta" page="true"/>
+    <city name="Pekanbaru" country="Indonesia" cc="ID" slug="pekanbaru" country-slug="indonesia" lat="0.5071" lng="101.4478" tz="Asia/Jakarta" page="true"/>
+    <city name="Pontianak" country="Indonesia" cc="ID" slug="pontianak" country-slug="indonesia" lat="-0.0263" lng="109.3425" tz="Asia/Jakarta" page="true"/>
+    <city name="Semarang" country="Indonesia" cc="ID" slug="semarang" country-slug="indonesia" lat="-6.9903" lng="110.4229" tz="Asia/Jakarta" page="true"/>
+    <city name="Yogyakarta" country="Indonesia" cc="ID" slug="yogyakarta" country-slug="indonesia" lat="-7.7956" lng="110.3695" tz="Asia/Jakarta" page="true"/>
+    <city name="Ahvaz" country="Iran" cc="IR" slug="ahvaz" country-slug="iran" lat="31.3183" lng="48.6706" tz="Asia/Tehran" page="true"/>
+    <city name="Karaj" country="Iran" cc="IR" slug="karaj" country-slug="iran" lat="35.84" lng="50.9391" tz="Asia/Tehran" page="true"/>
+    <city name="Kermanshah" country="Iran" cc="IR" slug="kermanshah" country-slug="iran" lat="34.3142" lng="47.065" tz="Asia/Tehran" page="true"/>
+    <city name="Zahedan" country="Iran" cc="IR" slug="zahedan" country-slug="iran" lat="29.4958" lng="60.8625" tz="Asia/Tehran" page="true"/>
+    <city name="Kirkuk" country="Iraq" cc="IQ" slug="kirkuk" country-slug="iraq" lat="35.4681" lng="44.3922" tz="Asia/Baghdad" page="true"/>
+    <city name="Sulaymaniyah" country="Iraq" cc="IQ" slug="sulaymaniyah" country-slug="iraq" lat="35.557" lng="45.4351" tz="Asia/Baghdad" page="true"/>
+    <city name="Milan" country="Italy" cc="IT" slug="milan" country-slug="italy" lat="45.4642" lng="9.19" tz="Europe/Rome" page="true"/>
+    <city name="Rome" country="Italy" cc="IT" slug="rome" country-slug="italy" lat="41.9028" lng="12.4964" tz="Europe/Rome" page="true"/>
+    <city name="Irbid" country="Jordan" cc="JO" slug="irbid" country-slug="jordan" lat="32.5556" lng="35.85" tz="Asia/Amman" page="true"/>
+    <city name="Zarqa" country="Jordan" cc="JO" slug="zarqa" country-slug="jordan" lat="32.0728" lng="36.088" tz="Asia/Amman" page="true"/>
+    <city name="Astana" country="Kazakhstan" cc="KZ" slug="astana" country-slug="kazakhstan" lat="51.1605" lng="71.4704" tz="Asia/Almaty" page="true"/>
+    <city name="Shymkent" country="Kazakhstan" cc="KZ" slug="shymkent" country-slug="kazakhstan" lat="42.3417" lng="69.5901" tz="Asia/Almaty" page="true"/>
+    <city name="Mombasa" country="Kenya" cc="KE" slug="mombasa" country-slug="kenya" lat="-4.0435" lng="39.6682" tz="Africa/Nairobi" page="true"/>
+    <city name="Nairobi" country="Kenya" cc="KE" slug="nairobi" country-slug="kenya" lat="-1.2921" lng="36.8219" tz="Africa/Nairobi" page="true"/>
+    <city name="Pristina" country="Kosovo" cc="XK" slug="pristina" country-slug="kosovo" lat="42.6629" lng="21.1655" tz="Europe/Belgrade" page="true"/>
+    <city name="Osh" country="Kyrgyzstan" cc="KG" slug="osh" country-slug="kyrgyzstan" lat="40.514" lng="72.8161" tz="Asia/Bishkek" page="true"/>
+    <city name="Sidon" country="Lebanon" cc="LB" slug="sidon" country-slug="lebanon" lat="33.5571" lng="35.3729" tz="Asia/Beirut" page="true"/>
+    <city name="Tripoli" country="Lebanon" cc="LB" slug="tripoli" country-slug="lebanon" lat="34.4367" lng="35.8497" tz="Asia/Beirut" page="true"/>
+    <city name="Benghazi" country="Libya" cc="LY" slug="benghazi" country-slug="libya" lat="32.1194" lng="20.0868" tz="Africa/Tripoli" page="true"/>
+    <city name="Misrata" country="Libya" cc="LY" slug="misrata" country-slug="libya" lat="32.3754" lng="15.0925" tz="Africa/Tripoli" page="true"/>
+    <city name="George Town" country="Malaysia" cc="MY" slug="george-town" country-slug="malaysia" lat="5.4141" lng="100.3288" tz="Asia/Kuala_Lumpur" page="true"/>
+    <city name="Ipoh" country="Malaysia" cc="MY" slug="ipoh" country-slug="malaysia" lat="4.5975" lng="101.0901" tz="Asia/Kuala_Lumpur" page="true"/>
+    <city name="Johor Bahru" country="Malaysia" cc="MY" slug="johor-bahru" country-slug="malaysia" lat="1.4927" lng="103.7414" tz="Asia/Kuala_Lumpur" page="true"/>
+    <city name="Kota Bharu" country="Malaysia" cc="MY" slug="kota-bharu" country-slug="malaysia" lat="6.1254" lng="102.2381" tz="Asia/Kuala_Lumpur" page="true"/>
+    <city name="Kota Kinabalu" country="Malaysia" cc="MY" slug="kota-kinabalu" country-slug="malaysia" lat="5.9804" lng="116.0735" tz="Asia/Kuching" page="true"/>
+    <city name="Kuching" country="Malaysia" cc="MY" slug="kuching" country-slug="malaysia" lat="1.5533" lng="110.3592" tz="Asia/Kuching" page="true"/>
+    <city name="Male" country="Maldives" cc="MV" slug="male" country-slug="maldives" lat="4.1755" lng="73.5093" tz="Indian/Maldives" page="true"/>
+    <city name="Agadir" country="Morocco" cc="MA" slug="agadir" country-slug="morocco" lat="30.4278" lng="-9.5981" tz="Africa/Casablanca" page="true"/>
+    <city name="Meknes" country="Morocco" cc="MA" slug="meknes" country-slug="morocco" lat="33.8935" lng="-5.5473" tz="Africa/Casablanca" page="true"/>
+    <city name="Oujda" country="Morocco" cc="MA" slug="oujda" country-slug="morocco" lat="34.6814" lng="-1.9086" tz="Africa/Casablanca" page="true"/>
+    <city name="Tangier" country="Morocco" cc="MA" slug="tangier" country-slug="morocco" lat="35.7595" lng="-5.834" tz="Africa/Casablanca" page="true"/>
+    <city name="Yangon" country="Myanmar" cc="MM" slug="yangon" country-slug="myanmar" lat="16.8661" lng="96.1951" tz="Asia/Yangon" page="true"/>
+    <city name="Amsterdam" country="Netherlands" cc="NL" slug="amsterdam" country-slug="netherlands" lat="52.3676" lng="4.9041" tz="Europe/Amsterdam" page="true"/>
+    <city name="Rotterdam" country="Netherlands" cc="NL" slug="rotterdam" country-slug="netherlands" lat="51.9244" lng="4.4777" tz="Europe/Amsterdam" page="true"/>
+    <city name="The Hague" country="Netherlands" cc="NL" slug="the-hague" country-slug="netherlands" lat="52.0705" lng="4.3007" tz="Europe/Amsterdam" page="true"/>
+    <city name="Auckland" country="New Zealand" cc="NZ" slug="auckland" country-slug="new-zealand" lat="-36.8485" lng="174.7633" tz="Pacific/Auckland" page="true"/>
+    <city name="Ilorin" country="Nigeria" cc="NG" slug="ilorin" country-slug="nigeria" lat="8.4966" lng="4.5426" tz="Africa/Lagos" page="true"/>
+    <city name="Kaduna" country="Nigeria" cc="NG" slug="kaduna" country-slug="nigeria" lat="10.5105" lng="7.4165" tz="Africa/Lagos" page="true"/>
+    <city name="Maiduguri" country="Nigeria" cc="NG" slug="maiduguri" country-slug="nigeria" lat="11.8311" lng="13.151" tz="Africa/Lagos" page="true"/>
+    <city name="Sokoto" country="Nigeria" cc="NG" slug="sokoto" country-slug="nigeria" lat="13.0644" lng="5.2425" tz="Africa/Lagos" page="true"/>
+    <city name="Zaria" country="Nigeria" cc="NG" slug="zaria" country-slug="nigeria" lat="11.0855" lng="7.7199" tz="Africa/Lagos" page="true"/>
+    <city name="Skopje" country="North Macedonia" cc="MK" slug="skopje" country-slug="north-macedonia" lat="41.9973" lng="21.428" tz="Europe/Skopje" page="true"/>
+    <city name="Oslo" country="Norway" cc="NO" slug="oslo" country-slug="norway" lat="59.9139" lng="10.7522" tz="Europe/Oslo" page="true"/>
+    <city name="Salalah" country="Oman" cc="OM" slug="salalah" country-slug="oman" lat="17.0151" lng="54.0924" tz="Asia/Muscat" page="true"/>
+    <city name="Bahawalpur" country="Pakistan" cc="PK" slug="bahawalpur" country-slug="pakistan" lat="29.3956" lng="71.6836" tz="Asia/Karachi" page="true"/>
+    <city name="Gujranwala" country="Pakistan" cc="PK" slug="gujranwala" country-slug="pakistan" lat="32.1877" lng="74.1945" tz="Asia/Karachi" page="true"/>
+    <city name="Sialkot" country="Pakistan" cc="PK" slug="sialkot" country-slug="pakistan" lat="32.4945" lng="74.5229" tz="Asia/Karachi" page="true"/>
+    <city name="Sukkur" country="Pakistan" cc="PK" slug="sukkur" country-slug="pakistan" lat="27.7052" lng="68.8574" tz="Asia/Karachi" page="true"/>
+    <city name="Hebron" country="Palestine" cc="PS" slug="hebron" country-slug="palestine" lat="31.5326" lng="35.0998" tz="Asia/Hebron" page="true"/>
+    <city name="Nablus" country="Palestine" cc="PS" slug="nablus" country-slug="palestine" lat="32.2211" lng="35.2544" tz="Asia/Hebron" page="true"/>
+    <city name="Ramallah" country="Palestine" cc="PS" slug="ramallah" country-slug="palestine" lat="31.8996" lng="35.2042" tz="Asia/Hebron" page="true"/>
+    <city name="Manila" country="Philippines" cc="PH" slug="manila" country-slug="philippines" lat="14.5995" lng="120.9842" tz="Asia/Manila" page="true"/>
+    <city name="Zamboanga" country="Philippines" cc="PH" slug="zamboanga" country-slug="philippines" lat="6.9214" lng="122.079" tz="Asia/Manila" page="true"/>
+    <city name="Grozny" country="Russia" cc="RU" slug="grozny" country-slug="russia" lat="43.3169" lng="45.6981" tz="Europe/Moscow" page="true"/>
+    <city name="Kazan" country="Russia" cc="RU" slug="kazan" country-slug="russia" lat="55.8304" lng="49.0661" tz="Europe/Moscow" page="true"/>
+    <city name="Makhachkala" country="Russia" cc="RU" slug="makhachkala" country-slug="russia" lat="42.9849" lng="47.5047" tz="Europe/Moscow" page="true"/>
+    <city name="Saint Petersburg" country="Russia" cc="RU" slug="saint-petersburg" country-slug="russia" lat="59.9311" lng="30.3609" tz="Europe/Moscow" page="true"/>
+    <city name="Ufa" country="Russia" cc="RU" slug="ufa" country-slug="russia" lat="54.7388" lng="55.9721" tz="Asia/Yekaterinburg" page="true"/>
+    <city name="Buraidah" country="Saudi Arabia" cc="SA" slug="buraidah" country-slug="saudi-arabia" lat="26.326" lng="43.975" tz="Asia/Riyadh" page="true"/>
+    <city name="Dammam" country="Saudi Arabia" cc="SA" slug="dammam" country-slug="saudi-arabia" lat="26.4207" lng="50.0888" tz="Asia/Riyadh" page="true"/>
+    <city name="Tabuk" country="Saudi Arabia" cc="SA" slug="tabuk" country-slug="saudi-arabia" lat="28.3838" lng="36.555" tz="Asia/Riyadh" page="true"/>
+    <city name="Taif" country="Saudi Arabia" cc="SA" slug="taif" country-slug="saudi-arabia" lat="21.2703" lng="40.4158" tz="Asia/Riyadh" page="true"/>
+    <city name="Touba" country="Senegal" cc="SN" slug="touba" country-slug="senegal" lat="14.85" lng="-15.8833" tz="Africa/Dakar" page="true"/>
+    <city name="Freetown" country="Sierra Leone" cc="SL" slug="freetown" country-slug="sierra-leone" lat="8.4657" lng="-13.2317" tz="Africa/Freetown" page="true"/>
+    <city name="Hargeisa" country="Somalia" cc="SO" slug="hargeisa" country-slug="somalia" lat="9.56" lng="44.065" tz="Africa/Mogadishu" page="true"/>
+    <city name="Cape Town" country="South Africa" cc="ZA" slug="cape-town" country-slug="south-africa" lat="-33.9249" lng="18.4241" tz="Africa/Johannesburg" page="true"/>
+    <city name="Durban" country="South Africa" cc="ZA" slug="durban" country-slug="south-africa" lat="-29.8587" lng="31.0218" tz="Africa/Johannesburg" page="true"/>
+    <city name="Johannesburg" country="South Africa" cc="ZA" slug="johannesburg" country-slug="south-africa" lat="-26.2041" lng="28.0473" tz="Africa/Johannesburg" page="true"/>
+    <city name="Barcelona" country="Spain" cc="ES" slug="barcelona" country-slug="spain" lat="41.3874" lng="2.1686" tz="Europe/Madrid" page="true"/>
+    <city name="Madrid" country="Spain" cc="ES" slug="madrid" country-slug="spain" lat="40.4168" lng="-3.7038" tz="Europe/Madrid" page="true"/>
+    <city name="Batticaloa" country="Sri Lanka" cc="LK" slug="batticaloa" country-slug="sri-lanka" lat="7.717" lng="81.7" tz="Asia/Colombo" page="true"/>
+    <city name="Galle" country="Sri Lanka" cc="LK" slug="galle" country-slug="sri-lanka" lat="6.0535" lng="80.221" tz="Asia/Colombo" page="true"/>
+    <city name="Jaffna" country="Sri Lanka" cc="LK" slug="jaffna" country-slug="sri-lanka" lat="9.6615" lng="80.0255" tz="Asia/Colombo" page="true"/>
+    <city name="Negombo" country="Sri Lanka" cc="LK" slug="negombo" country-slug="sri-lanka" lat="7.2008" lng="79.8737" tz="Asia/Colombo" page="true"/>
+    <city name="Trincomalee" country="Sri Lanka" cc="LK" slug="trincomalee" country-slug="sri-lanka" lat="8.5874" lng="81.2152" tz="Asia/Colombo" page="true"/>
+    <city name="Port Sudan" country="Sudan" cc="SD" slug="port-sudan" country-slug="sudan" lat="19.6158" lng="37.2164" tz="Africa/Khartoum" page="true"/>
+    <city name="Paramaribo" country="Suriname" cc="SR" slug="paramaribo" country-slug="suriname" lat="5.852" lng="-55.2038" tz="America/Paramaribo" page="true"/>
+    <city name="Malmo" country="Sweden" cc="SE" slug="malmo" country-slug="sweden" lat="55.605" lng="13.0038" tz="Europe/Stockholm" page="true"/>
+    <city name="Stockholm" country="Sweden" cc="SE" slug="stockholm" country-slug="sweden" lat="59.3293" lng="18.0686" tz="Europe/Stockholm" page="true"/>
+    <city name="Zurich" country="Switzerland" cc="CH" slug="zurich" country-slug="switzerland" lat="47.3769" lng="8.5417" tz="Europe/Zurich" page="true"/>
+    <city name="Homs" country="Syria" cc="SY" slug="homs" country-slug="syria" lat="34.7324" lng="36.7137" tz="Asia/Damascus" page="true"/>
+    <city name="Latakia" country="Syria" cc="SY" slug="latakia" country-slug="syria" lat="35.5196" lng="35.7915" tz="Asia/Damascus" page="true"/>
+    <city name="Khujand" country="Tajikistan" cc="TJ" slug="khujand" country-slug="tajikistan" lat="40.2837" lng="69.6329" tz="Asia/Dushanbe" page="true"/>
+    <city name="Zanzibar City" country="Tanzania" cc="TZ" slug="zanzibar-city" country-slug="tanzania" lat="-6.1659" lng="39.2026" tz="Africa/Dar_es_Salaam" page="true"/>
+    <city name="Bangkok" country="Thailand" cc="TH" slug="bangkok" country-slug="thailand" lat="13.7563" lng="100.5018" tz="Asia/Bangkok" page="true"/>
+    <city name="Port of Spain" country="Trinidad and Tobago" cc="TT" slug="port-of-spain" country-slug="trinidad-and-tobago" lat="10.6549" lng="-61.5019" tz="America/Port_of_Spain" page="true"/>
+    <city name="Kairouan" country="Tunisia" cc="TN" slug="kairouan" country-slug="tunisia" lat="35.6781" lng="10.0963" tz="Africa/Tunis" page="true"/>
+    <city name="Sfax" country="Tunisia" cc="TN" slug="sfax" country-slug="tunisia" lat="34.7406" lng="10.7603" tz="Africa/Tunis" page="true"/>
+    <city name="Adana" country="Turkey" cc="TR" slug="adana" country-slug="turkey" lat="37.0" lng="35.3213" tz="Europe/Istanbul" page="true"/>
+    <city name="Antalya" country="Turkey" cc="TR" slug="antalya" country-slug="turkey" lat="36.8969" lng="30.7133" tz="Europe/Istanbul" page="true"/>
+    <city name="Diyarbakir" country="Turkey" cc="TR" slug="diyarbakir" country-slug="turkey" lat="37.9144" lng="40.2306" tz="Europe/Istanbul" page="true"/>
+    <city name="Gaziantep" country="Turkey" cc="TR" slug="gaziantep" country-slug="turkey" lat="37.0662" lng="37.3833" tz="Europe/Istanbul" page="true"/>
+    <city name="Kayseri" country="Turkey" cc="TR" slug="kayseri" country-slug="turkey" lat="38.7312" lng="35.4787" tz="Europe/Istanbul" page="true"/>
+    <city name="Konya" country="Turkey" cc="TR" slug="konya" country-slug="turkey" lat="37.8746" lng="32.4932" tz="Europe/Istanbul" page="true"/>
+    <city name="Kampala" country="Uganda" cc="UG" slug="kampala" country-slug="uganda" lat="0.3476" lng="32.5825" tz="Africa/Kampala" page="true"/>
+    <city name="Ajman" country="United Arab Emirates" cc="AE" slug="ajman" country-slug="united-arab-emirates" lat="25.4052" lng="55.5136" tz="Asia/Dubai" page="true"/>
+    <city name="Al Ain" country="United Arab Emirates" cc="AE" slug="al-ain" country-slug="united-arab-emirates" lat="24.2075" lng="55.7447" tz="Asia/Dubai" page="true"/>
+    <city name="Ras Al Khaimah" country="United Arab Emirates" cc="AE" slug="ras-al-khaimah" country-slug="united-arab-emirates" lat="25.8007" lng="55.9762" tz="Asia/Dubai" page="true"/>
+    <city name="Blackburn" country="United Kingdom" cc="GB" slug="blackburn" country-slug="united-kingdom" lat="53.7486" lng="-2.4842" tz="Europe/London" page="true"/>
+    <city name="Glasgow" country="United Kingdom" cc="GB" slug="glasgow" country-slug="united-kingdom" lat="55.8642" lng="-4.2518" tz="Europe/London" page="true"/>
+    <city name="Leeds" country="United Kingdom" cc="GB" slug="leeds" country-slug="united-kingdom" lat="53.8008" lng="-1.5491" tz="Europe/London" page="true"/>
+    <city name="Leicester" country="United Kingdom" cc="GB" slug="leicester" country-slug="united-kingdom" lat="52.6369" lng="-1.1398" tz="Europe/London" page="true"/>
+    <city name="Luton" country="United Kingdom" cc="GB" slug="luton" country-slug="united-kingdom" lat="51.8787" lng="-0.42" tz="Europe/London" page="true"/>
+    <city name="Columbus" country="United States" cc="US" slug="columbus" country-slug="united-states" lat="39.9612" lng="-82.9988" tz="America/New_York" page="true"/>
+    <city name="Dallas" country="United States" cc="US" slug="dallas" country-slug="united-states" lat="32.7767" lng="-96.797" tz="America/Chicago" page="true"/>
+    <city name="Dearborn" country="United States" cc="US" slug="dearborn" country-slug="united-states" lat="42.3223" lng="-83.1763" tz="America/Detroit" page="true"/>
+    <city name="Detroit" country="United States" cc="US" slug="detroit" country-slug="united-states" lat="42.3314" lng="-83.0458" tz="America/Detroit" page="true"/>
+    <city name="Houston" country="United States" cc="US" slug="houston" country-slug="united-states" lat="29.7604" lng="-95.3698" tz="America/Chicago" page="true"/>
+    <city name="Los Angeles" country="United States" cc="US" slug="los-angeles" country-slug="united-states" lat="34.0522" lng="-118.2437" tz="America/Los_Angeles" page="true"/>
+    <city name="Minneapolis" country="United States" cc="US" slug="minneapolis" country-slug="united-states" lat="44.9778" lng="-93.265" tz="America/Chicago" page="true"/>
+    <city name="Paterson" country="United States" cc="US" slug="paterson" country-slug="united-states" lat="40.9168" lng="-74.1718" tz="America/New_York" page="true"/>
+    <city name="Philadelphia" country="United States" cc="US" slug="philadelphia" country-slug="united-states" lat="39.9526" lng="-75.1652" tz="America/New_York" page="true"/>
+    <city name="Washington DC" country="United States" cc="US" slug="washington-dc" country-slug="united-states" lat="38.9072" lng="-77.0369" tz="America/New_York" page="true"/>
+    <city name="Andijan" country="Uzbekistan" cc="UZ" slug="andijan" country-slug="uzbekistan" lat="40.7821" lng="72.3442" tz="Asia/Tashkent" page="true"/>
+    <city name="Bukhara" country="Uzbekistan" cc="UZ" slug="bukhara" country-slug="uzbekistan" lat="39.7747" lng="64.4286" tz="Asia/Samarkand" page="true"/>
+    <city name="Namangan" country="Uzbekistan" cc="UZ" slug="namangan" country-slug="uzbekistan" lat="41.0011" lng="71.6683" tz="Asia/Tashkent" page="true"/>
+    <city name="Aden" country="Yemen" cc="YE" slug="aden" country-slug="yemen" lat="12.7855" lng="45.0187" tz="Asia/Aden" page="true"/>
+    <city name="Al Hudaydah" country="Yemen" cc="YE" slug="al-hudaydah" country-slug="yemen" lat="14.7978" lng="42.9545" tz="Asia/Aden" page="true"/>
+    <city name="Taiz" country="Yemen" cc="YE" slug="taiz" country-slug="yemen" lat="13.5795" lng="44.0209" tz="Asia/Aden" page="true"/>
 </cities>

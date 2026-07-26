@@ -5,13 +5,12 @@
  */
 package systems.asymm.cipn.svc.accessor.classpath;
 
-import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 import systems.asymm.cipn.fw.contract.data.AuthorityTimetable;
 import systems.asymm.cipn.fw.contract.data.TimetableRow;
-import systems.asymm.cipn.fw.contract.data.TimetableZone;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -23,20 +22,18 @@ class ClasspathTimetableAccessorTest {
     private final ClasspathTimetableAccessor accessor = new ClasspathTimetableAccessor(2026);
 
     @Test
-    void enumeratesOnlyCountriesWithAZoneIndex() {
-        assertEquals(java.util.Set.of("LK"), accessor.countries());
+    void enumeratesCoveredCountriesFromTheManifest() {
+        assertEquals(Set.of("LK", "MY"), accessor.countries());
     }
 
     @Test
-    void readsZoneIndexWithCentroids() {
-        List<TimetableZone> zones = accessor.zones("LK");
-        assertEquals(2, zones.size());
-        assertTrue(zones.stream().anyMatch(z -> z.id().equals("01")));
-        assertTrue(zones.stream().anyMatch(z -> z.id().equals("07")));
+    void readsEveryZoneIndex() {
+        assertEquals(13, accessor.zones("LK").size());
+        assertEquals(60, accessor.zones("MY").size());
     }
 
     @Test
-    void readsAnnualTableStampedWithItsYearAndSolarNoon() {
+    void readsAnnualTableStampedWithItsYear() {
         AuthorityTimetable table = accessor.timetable("LK", "01").orElseThrow();
         assertEquals("ACJU", table.authority());
         assertEquals("All Ceylon Jamiyyathul Ulama", table.authorityName());
@@ -45,7 +42,14 @@ class ClasspathTimetableAccessorTest {
         assertEquals(1, first.month());
         assertEquals(1, first.day());
         assertEquals(300, first.fajr());
-        assertEquals(734, first.solarNoon());
+        assertEquals(0, first.solarNoon(), "solar-noon is a later enrichment, absent in source data");
+    }
+
+    @Test
+    void readsAMalaysianTable() {
+        AuthorityTimetable table = accessor.timetable("MY", "WLY01").orElseThrow();
+        assertEquals(2026, table.year());
+        assertFalse(table.rows().isEmpty());
     }
 
     @Test

@@ -22,11 +22,11 @@ class ClasspathCityAccessorTest {
     @Test
     void readsEveryCityInFileOrder() {
         List<City> cities = accessor.all();
-        assertEquals(2, cities.size());
-        assertEquals("Colombo", cities.get(0).name());
-        assertEquals("LK", cities.get(0).cc());
-        assertEquals("sri-lanka", cities.get(0).countrySlug());
-        assertTrue(cities.get(0).page());
-        assertEquals("London", cities.get(1).name());
+        assertEquals(301, cities.size());
+        assertEquals("Jakarta", cities.get(0).name());
+        assertEquals("ID", cities.get(0).cc());
+        assertEquals("indonesia", cities.get(0).countrySlug());
+        assertTrue(cities.stream().anyMatch(c -> c.cc().equals("MY")),
+                "the dataset includes table countries (MY)");
     }
 }
