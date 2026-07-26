@@ -50,9 +50,10 @@ jobs:
           key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: maven-${{ runner.os }}-
 
+      # Make orchestrates the pipeline (reactor generates city content, then JBake bakes).
       - name: Build site
         if: steps.guard.outputs.on_main == 'true'
-        run: ./mvnw -Pproduction -pl application/cipn-app-site -am clean process-resources --batch-mode --no-transfer-progress
+        run: make site
 
       # Deploy the edge Worker (/go, /api) before Pages. Its routes take precedence over
       # the Pages project for those paths; if this step fails the job stops and Pages is

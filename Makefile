@@ -16,7 +16,7 @@ MVNW        := ./mvnw
 MVN_FLAGS   := --batch-mode --no-transfer-progress -Dpmd.skip=true
 BATCH       := application/cipn-app-batch
 SITE        := application/cipn-app-site
-OUTPUT_DIR  ?= $(BATCH)/target/site
+CONTENT     := $(SITE)/src/main/jbake/content
 PORT        ?= 8020
 
 # The mandated JDK. Override only if Eliya lives elsewhere; never point at another vendor.
@@ -60,14 +60,21 @@ scrape:  ## (S1) Scrape an authority's tables -> classpath XML. NOT YET BUILT (T
 
 ## ----------------------------------------------------------------- generate (S2)
 
-generate: install  ## (S2) Generate per-city pages from the bundled data -> OUTPUT_DIR (current + next year)
-	$(MVNW) -pl $(BATCH) exec:java@generate-site $(MVN_FLAGS) -Dcipn.output.dir=$(OUTPUT_DIR)
-	@echo "Generated pages under $(OUTPUT_DIR)"
+generate:  ## (S2) Generate current-year city content into the JBake content dir
+	$(MVNW) -pl $(BATCH) -am install $(MVN_FLAGS) -Dmaven.test.skip=true
+	$(MVNW) -pl $(BATCH) $(MVN_FLAGS) exec:java \
+		-Dexec.mainClass=systems.asymm.cipn.app.batch.SiteGeneratorApp \
+		-Dexec.arguments=$(CONTENT),--canonical-only
+	@echo "Generated current-year city content into $(CONTENT)"
 
 ## ----------------------------------------------------------------- site: JBake bake
+##
+## Make (not Maven) orchestrates the pipeline: `site` runs `generate` first (the reactor
+## writes city content), then JBake bakes it. The two modules stay independent - no Maven
+## app->app dependency; Make sequences the stages (ADR-0009 / lifecycle).
 
-site:  ## Site: production JBake build (clean URLs) -> $(SITE)/target/site
-	$(MVNW) -Pproduction -pl $(SITE) -am clean process-resources $(MVN_FLAGS)
+site: generate  ## (site) Generate city content, then bake the static site (clean URLs)
+	$(MVNW) -Pproduction -pl $(SITE) clean process-resources $(MVN_FLAGS)
 
 dev serve:  ## Live-reload JBake dev server on http://localhost:$(PORT)
 	$(MVNW) -pl $(SITE) jbake:inline -Djbake.port=$(PORT) $(MVN_FLAGS)

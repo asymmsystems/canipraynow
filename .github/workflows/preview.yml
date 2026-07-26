@@ -31,8 +31,10 @@ jobs:
           key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: maven-${{ runner.os }}-
 
+      # Make orchestrates the pipeline (generate the city content with the reactor, then bake
+      # the JBake site); it is the single definition CI and humans share.
       - name: Build site
-        run: ./mvnw -Pproduction -pl application/cipn-app-site -am clean process-resources --batch-mode --no-transfer-progress
+        run: make site
 
       - name: Deploy to Cloudflare Pages (preview)
         uses: cloudflare/wrangler-action@v3
