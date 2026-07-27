@@ -91,9 +91,12 @@ export function renderRuler(events, windows, ruleSet, now, ctx) {
             // and a full-length tick here would strike through the row beneath.
             const line = `<line x1="${tx}" y1="${ROW_MINOR_Y + 4}" x2="${tx}" y2="${ROW_MINOR_Y + 12}" class="ruler-tick ruler-tick-minor"/>`;
             if (tk.hideText) return line;
-            // The minor labels are the terms nobody knows - they carry their
-            // own explanation on hover (Ishrāq, Zenith, Isfirār).
-            const tip = tk.tipKey ? ` data-tip="${esc(t(tk.tipKey))}" tabindex="0"` : '';
+            // The minor labels are the terms nobody knows - on hover they carry
+            // their exact clock time (like the majors) plus a one-line explanation
+            // (Ishrāq, Zenith, Isfirār).
+            const tip = tk.tipKey
+                ? ` data-tip="${esc(t(tk.tipKey, { time: fmtTime(tk.at, ctx.tz, ctx.clock24) }))}" tabindex="0"`
+                : '';
             const cls = tk.tipKey ? 'ruler-label ruler-label-minor ruler-label-tip' : 'ruler-label ruler-label-minor';
             return `${line}<text x="${tx}" y="${ROW_MINOR_Y}" text-anchor="middle" class="${cls}"${tip}>${esc(tk.label)}</text>`;
         }
