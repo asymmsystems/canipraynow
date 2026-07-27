@@ -42,7 +42,7 @@ class ClasspathTimetableAccessorTest {
         assertEquals(1, first.month());
         assertEquals(1, first.day());
         assertEquals(300, first.fajr());
-        assertEquals(0, first.solarNoon(), "solar-noon is a later enrichment, absent in source data");
+        assertEquals(734, first.solarNoon(), "solar noon (E3 transit) is enriched into the tables");
     }
 
     @Test
