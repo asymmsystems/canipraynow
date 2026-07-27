@@ -10,16 +10,18 @@ name = "cipn-worker-fn-production"
 main = "src/main/js/index.js"
 compatibility_date = "2026-07-01"
 
-# Production logs/metrics for the Worker (visible under the Worker in the dashboard).
-[observability]
-enabled = true
-
 # Workers routes take precedence over the Pages project for these paths, so the static
 # site (Pages) keeps serving everything else on the zone.
+# NOTE: top-level keys (routes) MUST come before any [table] header, or TOML folds them
+# into the preceding table (wrangler then ignores them and the routes never bind).
 routes = [
     { pattern = "canipraynow.com/go/*", zone_name = "canipraynow.com" },
     { pattern = "canipraynow.com/api/*", zone_name = "canipraynow.com" }
 ]
+
+# Production logs/metrics for the Worker (visible under the Worker in the dashboard).
+[observability]
+enabled = true
 
 # Sponsor click counter (best-effort aggregate analytics; the redirect works without it).
 # This is the single source of truth for the binding - do NOT also bind it in the Worker's
