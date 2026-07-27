@@ -251,66 +251,75 @@ cd /home/fahimfarookme/Documents/projects/canipraynow/repository/code/can-i-pray
 | Check the Eliya gate | `./mvnw validate` |
 | One module + deps | `./mvnw verify -Dpmd.skip=true -pl application/cipn-app-batch -am` |
 
-### 8.1 By lifecycle stage (Makefile)
+### 8.1 By lifecycle stage (Makefile) - Make orchestrates, Maven builds
 
-The `Makefile` wraps these per **stage** (section 3), so you build exactly the stage you mean.
-Run `make help` for the list. It defaults `JAVA_HOME=/opt/eliya`.
+The `Makefile` is the **orchestrator**: Maven builds one module, Make sequences the pipeline
+(`scrape -> generate -> bake`). The two application modules never depend on each other in Maven;
+the ordering lives in Make. Full rationale + every target and Maven goal: **ADR-0014**. Run
+`make help` for the list. It defaults `JAVA_HOME=/opt/eliya` but honours an existing `JAVA_HOME`.
 
 | Stage | Make target | What it does |
 | --- | --- | --- |
-| whole reactor | `make build` | compile + test + package everything |
-| whole reactor | `make test` | run every test suite |
+| whole reactor | `make build` | compile + test + package everything (`mvn verify`) |
+| whole reactor | `make test` | run every test suite (`mvn test`) |
 | JDK check | `make doctor` | print the active JDK (must be Eliya) |
 | **S1 scrape** | `make scrape` | scrape authority tables -> XML. **Not built yet (T-26)** - prints a notice |
-| **S2 generate** | `make generate` | install, then generate per-city pages into `OUTPUT_DIR` |
-| **site bake** | `make site` | production JBake build (clean URLs) |
+| **S2 generate** | `make generate` | install the batch chain, then write the current year's city content into `src/main/jbake/content` (`SiteGeneratorApp --canonical-only`) |
+| **site bake** | `make site` | run `generate`, then bake the static site (production, clean URLs) |
 | site (dev) | `make dev` | live-reload JBake server on `:8020` |
+
+`make site` is the whole build+bake: it runs `generate` (the reactor writes the city content,
+including the baked authority table for LK/MY) and then JBake bakes it.
 
 ### 8.2 CI
 
-Three GitHub workflows build the site: `validate` (PRs), `preview` (push to develop),
-`production` (tags on main). Each provisions the **Eliya JDK** via the composite action
-`.github/actions/setup-eliya` (download + GPG-signature + SHA-256 verification, then exports
-`JAVA_HOME`), so CI satisfies the same `RequireJavaVendor` gate as local builds.
+Three GitHub workflows: `validate` (PRs), `preview` (push to develop), `production` (tags on
+main). Each provisions the **Eliya JDK** via the composite action `.github/actions/setup-eliya`
+(authenticated release download + GPG-signature + SHA-256 verification, then exports
+`JAVA_HOME`), so CI satisfies the same `RequireJavaVendor` gate as local builds. The site
+workflows' build step is **`make site`** - the same command humans run (ADR-0014).
 
 ---
 
 ## 9. Running the stages
 
-### 9.1 S2 - generate the per-city pages (works today)
+### 9.1 Build the site (S2 generate -> JBake bake)
 
-`SiteGeneratorApp` reads the **bundled classpath data** and writes HTML to the output root. The
-output root defaults inside the codebase, so you pass nothing:
-
-- Output root default: `application/cipn-app-batch/target/site` (under `target/`, not committed).
-- Years default to **current + next**; override with trailing year arguments.
+One command runs the whole pipeline (Make orchestrates it, ADR-0014):
 
 ```sh
-export JAVA_HOME=/opt/eliya
 cd /home/fahimfarookme/Documents/projects/canipraynow/repository/code/can-i-pray-now-code-pfw
-
-./mvnw install -Dpmd.skip=true -Dmaven.test.skip=true          # once, to populate ~/.m2
-./mvnw -pl application/cipn-app-batch exec:java@generate-site   # generate
-
-find application/cipn-app-batch/target/site -name '*.html'
+make site
 ```
 
-Output layout:
+That runs, in order:
+1. **generate (S2)** - the reactor (`cipn-app-batch`) reads the bundled classpath data and writes
+   the current year's city content into `application/cipn-app-site/src/main/jbake/content/`
+   (git-ignored, derived). For LK/MY cities the authority table is baked into the content body.
+2. **bake** - JBake renders the content with `page/city.ftl`, emitting the full site (including
+   the baked table) under `application/cipn-app-site/target/site`.
+
+Inspect the result:
+
+```sh
+find application/cipn-app-site/target/site -name '*.html' | wc -l     # ~320 pages
+grep -l authority-timetable application/cipn-app-site/target/site/malaysia/*.html
+```
+
+To generate the city content **without** baking (e.g. to inspect the reactor's output alone),
+run the reactor directly - it defaults to the current + next year with per-year archives:
+
+```sh
+./mvnw install -Dpmd.skip=true -Dmaven.test.skip=true
+./mvnw -pl application/cipn-app-batch exec:java@generate-site   # -> application/cipn-app-batch/target/site
+```
+
+Output layout of that standalone run:
 
 ```
 target/site/sri-lanka/colombo.html            <- canonical (current year), clean URL
 target/site/2026/sri-lanka/colombo.html       <- per-year archive
 target/site/2027/sri-lanka/colombo.html       <- next year (WARNING if its data is absent)
-```
-
-Override output root or years:
-
-```sh
-./mvnw -pl application/cipn-app-batch exec:java@generate-site -Dcipn.output.dir=/some/dir
-# specific years (positional, after the output root - here via exec.args):
-./mvnw -pl application/cipn-app-batch exec:java \
-  -Dexec.mainClass=systems.asymm.cipn.app.batch.SiteGeneratorApp \
-  -Dexec.args="application/cipn-app-batch/target/site 2026"
 ```
 
 ### 9.2 S1 - scrape into the standard XML (not yet available)
