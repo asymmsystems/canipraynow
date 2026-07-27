@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
   Manager ports and ManagerResult types.
   Volatility-based structure - see architecture/module-structure.md.
 
@@ -23,4 +23,13 @@
 
     <name>cipn-fw-contract-manager</name>
     <description>Manager ports and ManagerResult types.</description>
+
+    <dependencies>
+        <!-- Manager ports may reference the engine contracts they orchestrate (e.g. ZoneResolver). -->
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

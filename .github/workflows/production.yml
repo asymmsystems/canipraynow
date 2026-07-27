@@ -38,17 +38,34 @@ jobs:
             echo "::warning::Tag $GITHUB_REF_NAME is not on main — skipping production deploy."
           fi
 
-      - name: Set up Java 25
+      - name: Set up Eliya JDK
         if: steps.guard.outputs.on_main == 'true'
-        uses: actions/setup-java@v4
-        with:
-          distribution: zulu
-          java-version: 25
-          cache: maven
+        uses: ./.github/actions/setup-eliya
 
+      - name: Cache Maven
+        if: steps.guard.outputs.on_main == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: maven-${{ runner.os }}-
+
+      # Make orchestrates the pipeline (reactor generates city content, then JBake bakes).
       - name: Build site
         if: steps.guard.outputs.on_main == 'true'
-        run: ./mvnw -Pproduction -pl application/cipn-app-site -am clean process-resources --batch-mode --no-transfer-progress
+        run: make site
+
+      # Deploy the edge Worker (/go, /api) before Pages. Its routes take precedence over
+      # the Pages project for those paths; if this step fails the job stops and Pages is
+      # not redeployed, so production is never left in a half-updated state.
+      - name: Deploy edge Worker (production)
+        if: steps.guard.outputs.on_main == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: application/cipn-app-fn
+          command: deploy
 
       - name: Deploy to Cloudflare Pages (production)
         if: steps.guard.outputs.on_main == 'true'

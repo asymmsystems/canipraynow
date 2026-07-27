@@ -1,0 +1,29 @@
+# Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+#
+# Cloudflare Worker for canipraynow.com edge routes: /go (sponsor redirect) and /api (geo).
+# Naming standard (ADR-0013): cipn-<type>-<concern>-<env>, kebab-case, for dashboard
+# resources; code bindings are UPPER_SNAKE and env-agnostic (wrangler maps them per env).
+#
+# @author Fahim Farook
+
+name = "cipn-worker-fn-production"
+main = "src/main/js/index.js"
+compatibility_date = "2026-07-01"
+
+# Production logs/metrics for the Worker (visible under the Worker in the dashboard).
+[observability]
+enabled = true
+
+# Workers routes take precedence over the Pages project for these paths, so the static
+# site (Pages) keeps serving everything else on the zone.
+routes = [
+    { pattern = "canipraynow.com/go/*", zone_name = "canipraynow.com" },
+    { pattern = "canipraynow.com/api/*", zone_name = "canipraynow.com" }
+]
+
+# Sponsor click counter (best-effort aggregate analytics; the redirect works without it).
+# This is the single source of truth for the binding - do NOT also bind it in the Worker's
+# dashboard, or the two will fight on deploy. Namespace: cipn-kv-sponsor-production.
+[[kv_namespaces]]
+binding = "SPONSOR_CLICKS"
+id = "59c5d4bf11504a1f8468dc82aca60058"

@@ -1,0 +1,85 @@
+/*
+ * Copyright (c) 2026 Asymm Systems. All rights reserved.
+ *
+ * @author Fahim Farook
+ */
+package systems.asymm.cipn.svc.accessor.classpath;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import systems.asymm.cipn.fw.common.util.ResourceParseException;
+import systems.asymm.cipn.fw.common.util.ResourceParser;
+import systems.asymm.cipn.fw.common.util.StructuredXmlParser;
+import systems.asymm.cipn.fw.contract.access.CountryAccessor;
+import systems.asymm.cipn.fw.contract.data.CountryDefaults;
+
+/**
+ * Classpath-backed {@link CountryAccessor} reading the bundled {@code country.xml}.
+ *
+ * <p>4-Concerns (ADR-032): Location = classpath (this class); Type/Schema = XML (internal, via
+ * {@link StructuredXmlParser}); Consumed Type = country defaults (the contract). Reads the file
+ * once at construction and serves an immutable view; an unknown country yields empty-string
+ * defaults with the standard method phrase.
+ *
+ * @see CountryAccessor
+ */
+public class ClasspathCountryAccessor implements CountryAccessor {
+
+    private static final String DEFAULT_RESOURCE = "country.xml";
+    private static final String DEFAULT_METHOD_PHRASE = "a standard convention";
+
+    private final Map<String, CountryDefaults> byCode;
+
+    /** Loads from the bundled {@code country.xml}. */
+    public ClasspathCountryAccessor() {
+        this(DEFAULT_RESOURCE, new StructuredXmlParser<>(Countries.class));
+    }
+
+    public ClasspathCountryAccessor(String resourcePath, ResourceParser<Countries> parser) {
+        Countries doc = load(resourcePath, parser);
+        Map<String, CountryDefaults> map = new LinkedHashMap<>();
+        if (doc.country() != null) {
+            for (CountryElement c : doc.country()) {
+                map.put(c.cc().toUpperCase(Locale.ROOT),
+                        new CountryDefaults(c.cc(), nullToEmpty(c.authority()),
+                                nullToEmpty(c.method()), nullToEmpty(c.madhhab())));
+            }
+        }
+        this.byCode = Map.copyOf(map);
+    }
+
+    @Override
+    public CountryDefaults defaults(String countryCode) {
+        CountryDefaults found = byCode.get(countryCode.toUpperCase(Locale.ROOT));
+        return found != null ? found : new CountryDefaults(countryCode, "", DEFAULT_METHOD_PHRASE, "");
+    }
+
+    private static String nullToEmpty(String s) {
+        return s == null ? "" : s;
+    }
+
+    private static Countries load(String resourcePath, ResourceParser<Countries> parser) {
+        ClassLoader loader = ClasspathCountryAccessor.class.getClassLoader();
+        try (InputStream in = loader.getResourceAsStream(resourcePath)) {
+            if (in == null) {
+                throw new ResourceParseException("Resource not found on classpath: " + resourcePath);
+            }
+            return parser.parse(in);
+        } catch (IOException e) {
+            throw new ResourceParseException("Failed reading " + resourcePath, e);
+        }
+    }
+
+    /** XML binding for {@code country.xml}. */
+    record Countries(List<CountryElement> country) {
+    }
+
+    /** XML binding for one {@code <country .../>}. */
+    record CountryElement(String cc, String authority, String method, String madhhab) {
+    }
+}

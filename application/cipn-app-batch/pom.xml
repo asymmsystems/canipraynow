@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  Client: build-time generator - yearly M1 extraction / M2 computation of the annual tables.
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
+  Application: build-time generator (S2). Thin entry point - depends only on the wiring
+  assembly and the contracts it references; no svc-* (impl) dependencies.
   Volatility-based structure - see architecture/module-structure.md.
 
   @author Fahim Farook
@@ -22,5 +23,83 @@
     <packaging>jar</packaging>
 
     <name>cipn-app-batch</name>
-    <description>Client: build-time generator - yearly M1 extraction / M2 computation of the annual tables.</description>
+    <description>Application: build-time generator (S2). Thin - depends only on the wiring assembly.</description>
+
+    <properties>
+        <!-- Default output root for the S2 generate target, so it runs with no arguments.
+             Input data is bundled on the classpath (ADR-0012); only the output root is passed,
+             and it stays inside the codebase under target/ (never committed). Override with
+             -Dcipn.output.dir=/path. The years default to current + next inside the app. -->
+        <cipn.output.dir>${project.build.directory}/site</cipn.output.dir>
+    </properties>
+
+    <dependencies>
+        <!-- The app depends on the wiring assembly, never on impl (svc-*) modules. -->
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-wiring-assembly-standard</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Contract types the entry point references (SiteGenerationManager/Result). -->
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-manager</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- ArchUnit enforces the volatility-based layering. app-batch sees the whole graph
+             (assembly -> variants -> impls -> contracts), so the rules live here. -->
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5</artifactId>
+            <version>${archunit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+                <configuration>
+                    <!-- Put the full classpath on java.class.path so ArchUnit can scan the
+                         dependency modules (otherwise surefire's manifest-only jar hides them). -->
+                    <useManifestOnlyJar>false</useManifestOnlyJar>
+                </configuration>
+            </plugin>
+            <!--
+              S2 generate target. Run from the reactor root with:
+                ./mvnw -pl application/cipn-app-batch exec:java@generate-site
+              It reads the checked-in data/ directory and writes pages under target/site,
+              so no arguments are needed. Override with -Dcipn.data.dir / -Dcipn.output.dir.
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-site</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>systems.asymm.cipn.app.batch.SiteGeneratorApp</mainClass>
+                            <arguments>
+                                <argument>${cipn.output.dir}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

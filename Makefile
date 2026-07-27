@@ -1,104 +1,80 @@
 # Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
 #
-# Task runner for canipraynow.com (Maven multi-module reactor).
-# The live site is the cipn-app-site module; most targets act on it.
+# Task runner for canipraynow.com. Targets are named for the pipeline STAGE they
+# drive (see docs/developer-guide.md section 3 for the lifecycle):
 #
-# Two kinds of target live here, and the difference matters:
+#   scrape    (S1) authority tables -> standard XML    (native Java; JAKIM first; T-26)
+#   generate  (S2) per-city pages   -> HTML            (cipn-app-batch)
+#   site           bake the static site                (cipn-app-site, JBake)
 #
-#   BUILD targets wrap Maven. They are hermetic - no network beyond Maven's own
-#   dependency resolution, reproducible, safe in CI.
-#
-#   DATA targets (timetables, coverage) reach out to third-party websites and
-#   REWRITE COMMITTED DATA. They are deliberately NOT wired into the build. Run
-#   them by hand, review the diff, commit.
+# Plus whole-reactor build/test targets. Everything runs on the Eliya JDK, which the
+# reactor enforces (RequireJavaVendor); no Node anywhere (ADR-0002).
 #
 # @author Fahim Farook
 
 MVNW        := ./mvnw
-MVN_FLAGS   := --batch-mode --no-transfer-progress
-MODULE      := application/cipn-app-site
-PL          := -pl $(MODULE) -am
-SITE        := $(MODULE)/target/site
-SCRIPTS     := $(MODULE)/scripts
+MVN_FLAGS   := --batch-mode --no-transfer-progress -Dpmd.skip=true
+BATCH       := application/cipn-app-batch
+SITE        := application/cipn-app-site
+CONTENT     := $(SITE)/src/main/jbake/content
 PORT        ?= 8020
-RESEARCH    := ../../../research
 
-# Maven needs a JDK on PATH; SDKMAN's "current" symlink is the project convention.
-JAVA_HOME   ?= $(HOME)/.sdkman/candidates/java/current
+# The mandated JDK. Override only if Eliya lives elsewhere; never point at another vendor.
+JAVA_HOME   ?= /opt/eliya
 export JAVA_HOME
 
 .DEFAULT_GOAL := help
-.PHONY: help build site dev serve clean verify test lint check \
-        timetables authorities coverage data release \
-        package-server package-batch package-mobile
-
-## ----------------------------------------------------------------- build
+.PHONY: help doctor build test install validate clean \
+        scrape generate site dev serve
 
 help:  ## Show this help
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
-		| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z0-9_ -]+:.*?## .*$$' $(MAKEFILE_LIST) \
+		| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
-build:  ## Dev build -> the site module (keeps .html links, browsable locally)
-	$(MVNW) $(PL) clean process-resources $(MVN_FLAGS)
+## ----------------------------------------------------------------- whole reactor
 
-site release:  ## Production build (strips .html for Cloudflare clean URLs)
-	$(MVNW) -Pproduction $(PL) clean process-resources $(MVN_FLAGS)
+doctor:  ## Verify the active JDK is Eliya (what the build enforces)
+	@$(JAVA_HOME)/bin/java -version
 
-dev serve:  ## Live-reload dev server on http://localhost:$(PORT)
-	$(MVNW) -pl $(MODULE) jbake:inline -Djbake.port=$(PORT) $(MVN_FLAGS)
+build:  ## Compile + test + package the whole reactor (Eliya enforced)
+	$(MVNW) verify $(MVN_FLAGS)
 
-clean:  ## Remove target/ and the generated city stubs
+test:  ## Run every test suite (ArchUnit, integration, accessors, engine parity)
+	$(MVNW) test $(MVN_FLAGS)
+
+install:  ## Install artifacts to ~/.m2 (prerequisite for the generate target)
+	$(MVNW) install $(MVN_FLAGS) -Dmaven.test.skip=true
+
+validate:  ## Check only the Eliya JDK enforcer gate
+	$(MVNW) validate $(MVN_FLAGS)
+
+clean:  ## Remove all target/ output
 	$(MVNW) clean $(MVN_FLAGS)
 
-## ----------------------------------------------------------------- checks
+## ----------------------------------------------------------------- scrape (S1)
 
-test:  ## Run the fiqh engine suite (needs node on PATH; migrating to JVM per ADR-0002)
-	@command -v node >/dev/null || { echo "node not found - see scripts/README"; exit 1; }
-	@node $(SCRIPTS)/test-engine.mjs
+scrape:  ## (S1) Scrape an authority's tables -> classpath XML. NOT YET BUILT (T-26; JAKIM first)
+	@echo "S1 (native-Java scraper) is not implemented yet - T-26/F2, JAKIM first."
+	@echo "It will write timetable/<year>/<cc>/*.xml + index.xml and XSD-validate. See ADR-0012 section 7."
+	@exit 1
 
-lint:  ## Syntax-check every JS file
-	@command -v node >/dev/null || { echo "node not found"; exit 1; }
-	@find $(MODULE)/src/main/jbake/assets/js -name '*.js' -exec node --check {} \; && echo "js: clean"
+## ----------------------------------------------------------------- generate (S2)
 
-check: lint test release  ## Everything CI runs, in CI's order
+generate:  ## (S2) Generate current-year city content into the JBake content dir
+	$(MVNW) -pl $(BATCH) -am install $(MVN_FLAGS) -Dmaven.test.skip=true
+	$(MVNW) -pl $(BATCH) $(MVN_FLAGS) exec:java \
+		-Dexec.mainClass=systems.asymm.cipn.app.batch.SiteGeneratorApp \
+		-Dexec.arguments=$(CONTENT),--canonical-only
+	@echo "Generated current-year city content into $(CONTENT)"
 
-verify: release  ## Build, then report budgets and broken internal links
-	@echo "pages:  $$(find $(SITE) -name '*.html' | wc -l)"
-	@echo "js gz:  $$(for f in $$(find $(SITE)/js -name '*.js'); do gzip -c $$f; done | wc -c) B"
-	@echo "css gz: $$(gzip -c $(SITE)/css/style.css | wc -c) B"
-	@python3 $(SCRIPTS)/check-links.py $(SITE)
-
-## ------------------------------------------------- future module builds (stubs)
-
-package-server:  ## Package the Spring API (ADR-0010) once cipn-app-server exists
-	@echo "cipn-app-server not yet implemented (ADR-0010)"
-
-package-batch:  ## Package the yearly generator once cipn-app-batch exists
-	@echo "cipn-app-batch not yet implemented (ADR-0009 M1/M2)"
-
-package-mobile:  ## Build the Capacitor shell once cipn-app-mobile exists
-	@if [ -f application/cipn-app-mobile/package.json ]; then \
-		cd application/cipn-app-mobile && npm install && npm run build; \
-	else echo "cipn-app-mobile not yet initialized (ADR-0008)"; fi
-
-## ----------------------------------------------------------------- data
+## ----------------------------------------------------------------- site: JBake bake
 ##
-## These hit the network and rewrite committed data. Never run by the build.
+## Make (not Maven) orchestrates the pipeline: `site` runs `generate` first (the reactor
+## writes city content), then JBake bakes it. The two modules stay independent - no Maven
+## app->app dependency; Make sequences the stages (ADR-0009 / lifecycle).
 
-timetables:  ## Fetch + parse an authority's timetable (yearly). AUTH=lk (default) | my | --list
-	@echo "Fetching official timetables. This hits third-party sites and rewrites"
-	@echo "committed data - review the diff before committing."
-	@if [ "$(AUTH)" = "lk" ] || [ -z "$(AUTH)" ]; then \
-		node $(SCRIPTS)/fetch-timetables.mjs; \
-	else \
-		node $(SCRIPTS)/fetch-authority.mjs $(AUTH); \
-	fi
+site: generate  ## (site) Generate city content, then bake the static site (clean URLs)
+	$(MVNW) -Pproduction -pl $(SITE) clean process-resources $(MVN_FLAGS)
 
-authorities:  ## List every authority and its scrape status
-	@node $(SCRIPTS)/fetch-authority.mjs --list
-
-coverage:  ## Regenerate the country coverage report
-	@python3 $(SCRIPTS)/coverage-report.py > $(RESEARCH)/prayer-time-coverage.md
-	@echo "wrote $(RESEARCH)/prayer-time-coverage.md"
-
-data: timetables coverage  ## All data refreshes (yearly-ish)
+dev serve:  ## Live-reload JBake dev server on http://localhost:$(PORT)
+	$(MVNW) -pl $(SITE) jbake:inline -Djbake.port=$(PORT) $(MVN_FLAGS)

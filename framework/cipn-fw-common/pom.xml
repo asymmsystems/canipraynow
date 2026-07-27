@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
   Utilities: pure technical helpers (resource parsers, formatters, transforms). No business logic, no I/O.
   Volatility-based structure - see architecture/module-structure.md.
 
@@ -23,4 +23,26 @@
 
     <name>cipn-fw-common</name>
     <description>Utilities: pure technical helpers (resource parsers, formatters, transforms). No business logic, no I/O.</description>
+
+    <dependencies>
+        <!-- Utilities may operate on the pure data types (e.g. Geometry on GeoPoint). -->
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- XML is the house config format (ADR-049); Jackson XML is an internal detail. -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <!-- Record/constructor-based deserialization. -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-parameter-names</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+    </dependencies>
 </project>

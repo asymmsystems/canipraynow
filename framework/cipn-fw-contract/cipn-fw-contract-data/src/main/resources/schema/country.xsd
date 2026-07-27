@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+
+  Standard schema for country.xml: per-country presentation defaults (authority name,
+  calculation-method phrase, predominant madhhab) shown on each city page. One row per
+  country code. Namespace-unaware; attributes are lower-case kebab-case.
+
+  @author Fahim Farook
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified">
+
+    <xs:element name="countries">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="country" type="country" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="country">
+        <!-- ISO 3166-1 alpha-2 country code, upper-case. -->
+        <xs:attribute name="cc" type="countryCode" use="required"/>
+        <!-- The official authority's display name, e.g. "All Ceylon Jamiyyathul Ulama (ACJU)".
+             May be empty where the country has no named authority. -->
+        <xs:attribute name="authority" type="xs:string" use="required"/>
+        <!-- The calculation-method phrase, e.g. "the Umm al-Qura convention". -->
+        <xs:attribute name="method" type="xs:string" use="required"/>
+        <!-- The predominant madhhab display name, e.g. "Ḥanbalī". May be empty. -->
+        <xs:attribute name="madhhab" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="countryCode">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

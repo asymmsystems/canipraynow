@@ -1,0 +1,36 @@
+/*
+ * Copyright (c) 2026 Asymm Systems. All rights reserved.
+ *
+ * @author Fahim Farook
+ */
+package systems.asymm.cipn.fw.contract.engine;
+
+import java.time.LocalDate;
+
+import systems.asymm.cipn.fw.contract.data.CalculationParameters;
+import systems.asymm.cipn.fw.contract.data.Coordinates;
+import systems.asymm.cipn.fw.contract.data.DayEvents;
+
+/**
+ * Engine contract for solar/prayer-time astronomy: the single general engine (E3)
+ * that computes a day's events for a location and calculation parameters.
+ *
+ * <p>Pure and I/O-free: identical results on the JVM (build/server) and, once
+ * compiled, in the browser (WASM). Validated to the minute against the vendored
+ * adhan.js reference (ADR-0009). The method registry (E2) that supplies the
+ * parameters is a separate concern, served by a {@code CalculationMethodAccessor}.
+ *
+ * @see Engine
+ */
+public interface AstronomyEngine extends Engine {
+
+    /**
+     * Compute the seven daily events (E3).
+     *
+     * @param coordinates the observer's location
+     * @param date        the local calendar date to compute for
+     * @param params      the calculation parameters (angles/interval, madhab, rounding, ...)
+     * @return the day's events in UTC
+     */
+    DayEvents compute(Coordinates coordinates, LocalDate date, CalculationParameters params);
+}

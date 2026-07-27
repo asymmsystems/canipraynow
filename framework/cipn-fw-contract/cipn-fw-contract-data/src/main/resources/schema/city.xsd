@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+
+  Standard schema for cities.xml: the master list of cities the generator (S2) walks.
+  This is a country-independent contract. Whatever S1 scrapes, and from whichever
+  authority, the city list it emits must validate against this file.
+
+  Namespace-unaware by design (matches StructuredXmlParser). Attribute names are
+  lower-case kebab-case.
+
+  @author Fahim Farook
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified">
+
+    <xs:element name="cities">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="city" type="city" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="city">
+        <!-- Display name of the city, e.g. "Colombo". -->
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <!-- Display name of the country, e.g. "Sri Lanka". -->
+        <xs:attribute name="country" type="xs:string" use="required"/>
+        <!-- ISO 3166-1 alpha-2 country code, upper-case, e.g. "LK". Links the city to
+             its authority timetables under timetables/<lower-case cc>/. -->
+        <xs:attribute name="cc" type="countryCode" use="required"/>
+        <!-- URL slug for the city, lower-case kebab, e.g. "colombo". -->
+        <xs:attribute name="slug" type="slug" use="required"/>
+        <!-- URL slug for the country, lower-case kebab, e.g. "sri-lanka". The page path
+             is <country-slug>/<slug>.html. -->
+        <xs:attribute name="country-slug" type="slug" use="required"/>
+        <!-- Latitude in decimal degrees. -->
+        <xs:attribute name="lat" type="latitude" use="required"/>
+        <!-- Longitude in decimal degrees. -->
+        <xs:attribute name="lng" type="longitude" use="required"/>
+        <!-- IANA timezone id, e.g. "Asia/Colombo". -->
+        <xs:attribute name="tz" type="xs:string" use="required"/>
+        <!-- true to generate a page for this city, false to list it without a page. -->
+        <xs:attribute name="page" type="xs:boolean" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="countryCode">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="slug">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z0-9]+(-[a-z0-9]+)*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="latitude">
+        <xs:restriction base="xs:decimal">
+            <xs:minInclusive value="-90"/>
+            <xs:maxInclusive value="90"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="longitude">
+        <xs:restriction base="xs:decimal">
+            <xs:minInclusive value="-180"/>
+            <xs:maxInclusive value="180"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

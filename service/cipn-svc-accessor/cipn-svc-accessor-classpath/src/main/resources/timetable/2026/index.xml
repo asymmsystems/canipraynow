@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Coverage manifest for 2026: countries with an extracted authority table.
+  @author Fahim Farook
+-->
+<timetable-index year="2026">
+    <country cc="LK"/>
+    <country cc="MY"/>
+</timetable-index>

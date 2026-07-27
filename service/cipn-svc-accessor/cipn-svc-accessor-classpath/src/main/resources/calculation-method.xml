@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
+
+  The calculation-method registry (E2 configuration): each authority's published
+  Fajr/Isha angles and any offsets, read by ClasspathCalculationMethodAccessor.
+  Mirrors the site's method table so the JVM (and WASM) agree.
+
+  Only non-default fields are given. Defaults: isha-angle 0 (ignored when interval > 0),
+  isha-interval 0, maghrib-angle 0 (0 = sunset), rounding nearest, every *-offset 0.
+  Keys are lower-case kebab-case; a CamelCase method id normalizes to its slug on lookup.
+  The madhab (Asr shadow factor) is supplied per lookup, not stored here.
+-->
+<calculation-methods default-method="muslim-world-league">
+
+    <!-- Custom-angle methods: bare parameters, no Dhuhr offset. -->
+    <method key="acju" fajr-angle="20" isha-angle="18"/>
+    <method key="kemenag" fajr-angle="20" isha-angle="18"/>
+    <method key="france" fajr-angle="12" isha-angle="12"/>
+    <method key="russia" fajr-angle="16" isha-angle="15"/>
+
+    <!-- adhan.js presets. -->
+    <method key="muslim-world-league" fajr-angle="18" isha-angle="17" dhuhr-offset="1"/>
+    <method key="egyptian" fajr-angle="19.5" isha-angle="17.5" dhuhr-offset="1"/>
+    <method key="karachi" fajr-angle="18" isha-angle="18" dhuhr-offset="1"/>
+    <method key="north-america" fajr-angle="15" isha-angle="15" dhuhr-offset="1"/>
+    <method key="umm-al-qura" fajr-angle="18.5" isha-interval="90"/>
+    <method key="dubai" fajr-angle="18.2" isha-angle="18.2"
+            sunrise-offset="-3" dhuhr-offset="3" asr-offset="3" maghrib-offset="3"/>
+    <method key="moonsighting-committee" fajr-angle="18" isha-angle="18"
+            dhuhr-offset="5" maghrib-offset="3"/>
+    <method key="kuwait" fajr-angle="18" isha-angle="17.5"/>
+    <method key="qatar" fajr-angle="18" isha-interval="90"/>
+    <method key="singapore" fajr-angle="20" isha-angle="18" rounding="up" dhuhr-offset="1"/>
+    <method key="tehran" fajr-angle="17.7" isha-angle="14" maghrib-angle="4.5"/>
+    <method key="turkey" fajr-angle="18" isha-angle="17"
+            sunrise-offset="-7" dhuhr-offset="5" asr-offset="4" maghrib-offset="7"/>
+
+</calculation-methods>

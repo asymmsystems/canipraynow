@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
+  Plain-Java wiring for cipn-svc-manager. Keeps the manager impl framework-free.
+  See architecture/module-structure.md.
+
+  @author Fahim Farook
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>systems.asymm.cipn</groupId>
+        <artifactId>cipn-wiring-variant</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>cipn-wiring-manager</artifactId>
+    <packaging>jar</packaging>
+
+    <name>cipn-wiring-manager</name>
+    <description>Plain-Java wiring for cipn-svc-manager. Keeps the manager impl framework-free.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-svc-manager</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>

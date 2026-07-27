@@ -124,6 +124,11 @@ ${cityName} stands this minute.</p>
 <p><em>The verdict below updates live for ${cityName} (${content.city_tz}) and follows your selected
 madhhab and prayer type. See the
 <a href="/methodology.html">methodology</a>.</em></p>
+<#-- Baked authority timetable (T-11 / M1): the reactor writes it into the content body for
+     authority-table cities (LK/MY). Empty for computed-only cities, which stay client-side. -->
+<#if content.body?? && content.body?has_content>
+${content.body}
+</#if>
 </article>
 <#include "/partial/app.ftl">
 </body>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
   Wiring (Layer -1): all DI configuration. Variants wire one service type for one framework; assemblies compose variants into a deployment.
   See architecture/module-structure.md.
 

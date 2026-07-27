@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+
+  Standard schema for a year's timetable coverage manifest (index.xml), at
+  timetable/<year>/index.xml. Lists the countries that have an extracted authority table for
+  the year, so the accessor can enumerate coverage without listing a classpath directory
+  (jar-safe). S1 writes it. Namespace-unaware; attributes are lower-case kebab-case.
+
+  @author Fahim Farook
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified">
+
+    <xs:element name="timetable-index">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="country" type="country" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <!-- The four-digit Gregorian year this manifest covers. -->
+            <xs:attribute name="year" type="xs:integer" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="country">
+        <!-- ISO 3166-1 alpha-2 country code with an extracted table, e.g. "LK". -->
+        <xs:attribute name="cc" type="xs:string" use="required"/>
+    </xs:complexType>
+
+</xs:schema>

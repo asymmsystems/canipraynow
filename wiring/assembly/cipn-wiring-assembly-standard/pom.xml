@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
+
+  Standard assembly: composes the engine + file-accessor + manager wiring variants into
+  the wired site-generation use case (SiteGenerationWiring). An application depends on this
+  ONE artifact - never on impl (svc-*) modules or the individual variants.
+
+  @author Fahim Farook
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>systems.asymm.cipn</groupId>
+        <artifactId>cipn-wiring-assembly</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>cipn-wiring-assembly-standard</artifactId>
+    <packaging>jar</packaging>
+
+    <name>cipn-wiring-assembly-standard</name>
+    <description>Standard deployment: composes engine + file accessor + manager wiring into the site-generation use case.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-wiring-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-wiring-accessor-classpath</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-wiring-accessor-file</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-wiring-manager</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>

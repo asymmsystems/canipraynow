@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  Accessor (Location = file/classpath): reads and writes the baked timetable and rule-set JSON. Resource I/O only.
-  See architecture/module-structure.md.
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
+  Accessor (Location = filesystem): writes generated content under the output root and sweeps
+  prior runs (FileContentAccessor). Write-side I/O only; the read-side accessors are classpath
+  (cipn-svc-accessor-classpath). See architecture/module-structure.md and ADR-0012.
 
   @author Fahim Farook
 -->
@@ -21,5 +22,35 @@
     <packaging>jar</packaging>
 
     <name>cipn-svc-accessor-file</name>
-    <description>Accessor (Location = file/classpath): reads and writes the baked timetable and rule-set JSON. Resource I/O only.</description>
+    <description>Accessor (Location = filesystem): writes generated content and sweeps prior runs. Write-side I/O only.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-access</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>

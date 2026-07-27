@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
+  Plain-Java wiring for cipn-svc-engine. Keeps svc-engine framework-free (ADR-029).
+  See architecture/module-structure.md.
+
+  @author Fahim Farook
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>systems.asymm.cipn</groupId>
+        <artifactId>cipn-wiring-variant</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>cipn-wiring-engine</artifactId>
+    <packaging>jar</packaging>
+
+    <name>cipn-wiring-engine</name>
+    <description>Plain-Java wiring for cipn-svc-engine. Keeps svc-engine framework-free (ADR-029).</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-svc-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-access</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- The centroid provider implements the manager's ZoneResolverProvider port. -->
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-manager</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>

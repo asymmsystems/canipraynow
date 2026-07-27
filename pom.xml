@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
 
   canipraynow.com - reactor (Maven multi-module root).
   Layered, volatility-based structure mirroring m360-code-system:
@@ -43,10 +43,17 @@
         <module>application/cipn-app-site</module>
         <module>application/cipn-app-server</module>
         <module>application/cipn-app-batch</module>
+        <module>application/cipn-app-fn</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>25</maven.compiler.release>
+        <!-- Shared test-library versions for the Java modules. -->
+        <junit.version>5.11.3</junit.version>
+        <jackson.version>2.18.2</jackson.version>
+        <surefire.version>3.5.2</surefire.version>
+        <archunit.version>1.4.1</archunit.version>
         <jbake.version>2.7.0-rc.7</jbake.version>
         <jbake.plugin.version>2.7.0-rc.7</jbake.plugin.version>
         <freemarker.version>2.3.33</freemarker.version>
@@ -55,6 +62,47 @@
         <minify.plugin.version>1.7.11</minify.plugin.version>
         <htmlcompressor.plugin.version>2.1.1</htmlcompressor.plugin.version>
         <exec.plugin.version>3.1.0</exec.plugin.version>
+        <enforcer.plugin.version>3.5.0</enforcer.plugin.version>
+        <!-- The mandated JDK: Eliya (Asymm Systems' OpenJDK). See ADR-00037 in asymm-engineering. -->
+        <java.vendor.required>Asymm Systems</java.vendor.required>
         <skip.optimize>false</skip.optimize>
     </properties>
+
+    <build>
+        <plugins>
+            <!--
+              Enforce the Eliya JDK on every module (inherited by all children), mirroring
+              asymm-build-parent's RequireJavaVendor gate: java.vendor must be "Asymm Systems"
+              (Eliya). This fails the build on Temurin/Zulu/etc. Until canipraynow adopts
+              asymm-build-parent (T-06), this gate carries the mandate here.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${enforcer.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-eliya-jdk</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[${maven.compiler.release},)</version>
+                                </requireJavaVersion>
+                                <requireJavaVendor>
+                                    <includes>
+                                        <include>${java.vendor.required}</include>
+                                    </includes>
+                                    <message>Build requires the Eliya JDK (java.vendor = "Asymm Systems"). Install it at /opt/eliya and set JAVA_HOME=/opt/eliya. See docs/developer-guide.md and ADR-00037.</message>
+                                </requireJavaVendor>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
