@@ -232,7 +232,12 @@ async function recompute() {
     state.degraded = false;
     state.today = today.result.events;
     state.tomorrow = tomorrow.result.valid ? tomorrow.result.events : null;
+    // Force a full re-render of BOTH the ruler (lastSig) and the prayer list +
+    // its authority attribution (lastMinute). The prayer list is otherwise gated
+    // per-minute, so a location/method/madhhab change within the same minute would
+    // leave the sidebar showing the previous city's times until the minute ticked.
     state.lastSig = null;
+    state.lastMinute = null;
     startLoop();
     tick();
 }
