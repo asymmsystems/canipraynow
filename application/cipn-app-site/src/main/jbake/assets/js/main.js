@@ -9,7 +9,8 @@
  * @author Fahim Farook
  */
 
-import { computeDayEvents, assembleAuthorityEvents, currentPeriod, nextEvent } from './astronomy.js';
+import { computeDayEvents } from './engine.js';
+import { assembleAuthorityEvents, currentPeriod, nextEvent } from './astronomy.js';
 import { computeWindows } from './engine/windows.js';
 import { computeVerdict, isVerified, ruleParams } from './engine/verdict.js';
 import { storage } from './storage.js';
@@ -26,7 +27,7 @@ import { hasAuthorityTimetable, authorityDayEvents, AUTHORITY_METHOD } from './t
 
 const state = {
     location: null,      // {name, lat, lng, tz, cc}
-    method: null,        // resolved lazily from method-defaults.json by country
+    method: null,        // derived from the location's baked country method (country.xml)
     madhhab: 'hanafi',
     clock24: false,
     makkah: false,
@@ -52,6 +53,26 @@ function adoptLocation(loc) {
     storage.setLocation(loc);
 }
 
+/** Within this, the nearest baked city is "here", so we navigate to its page (ADR-0016). */
+const LOCALITY_KM = 50;
+
+/**
+ * Route a resolved location (ADR-0016). A baked city within the locality navigates to its own
+ * page, so a covered city serves its exact published table (R1) and every location lands on its
+ * city page (the single R1-vs-compute decision point). An off-grid location - no city within the
+ * locality - is adopted here at its exact coordinates and computed inline. Navigation is
+ * client-side (a link, not a 301/302); see ADR-0016 for why.
+ */
+function route(loc) {
+    if (!loc) return;
+    if (loc.uri && loc.nearKm <= LOCALITY_KM) {
+        window.location.assign('/' + loc.uri);
+        return;
+    }
+    adoptLocation(loc);
+    recompute();
+}
+
 boot();
 
 async function boot() {
@@ -71,12 +92,12 @@ async function boot() {
     // is DERIVED from this plus the country on every recompute - never stored,
     // never stale.
     state.methodChoice = storage.getMethodChoice();
-    state.location = storage.getLocation();
 
-    // City/question pages preset a location for visitors without one (spec §8);
-    // never persisted - it is the page's city, not necessarily the user's.
+    // On a city/question page the page's OWN city wins, so the baked authority table always
+    // matches the location it is served for (R1, ADR-0016). The saved location is used only off a
+    // preset page (the home page). The preset carries the country's method, baked from country.xml.
     const ds = document.body.dataset;
-    if (!state.location && ds.presetLat) {
+    if (ds.presetLat) {
         state.location = {
             name: ds.presetName,
             country: ds.presetCountry || null,
@@ -84,8 +105,12 @@ async function boot() {
             lng: Number(ds.presetLng),
             tz: ds.presetTz,
             cc: ds.presetCc || null,
+            method: ds.countryMethod || null,
+            madhhab: ds.countryMadhhab || null,
             preset: true
         };
+    } else {
+        state.location = storage.getLocation();
     }
 
     renderFooter();
@@ -98,11 +123,8 @@ async function boot() {
     initSettings({
         settings: state,
         onChange(patch) {
+            if ('location' in patch) { route(patch.location); return; }   // may navigate away
             Object.assign(state, patch);
-            if ('location' in patch) {
-                adoptLocation(patch.location);
-                state.location.preset = false;
-            }
             if ('method' in patch) { state.methodChoice = patch.method; storage.setMethodChoice(patch.method); }
             if ('madhhab' in patch) { storage.setMadhhab(patch.madhhab); renderFooter(); }
             if ('clock24' in patch) storage.setClock24(patch.clock24);
@@ -113,7 +135,7 @@ async function boot() {
     // The city is shown on the canvas and the sidebar; both are inline search
     // slots (no full-screen overlay). Picking a city there flows through the
     // same adoptLocation path as the settings drawer.
-    const pick = (loc) => { adoptLocation(loc); recompute(); };
+    const pick = (loc) => route(loc);
     initLocationSlot(document.getElementById('location-slot-canvas'), pick);
     initLocationSlot(document.getElementById('location-slot-sidebar'), pick);
     renderSponsor(document.getElementById('sponsor'));
@@ -128,11 +150,11 @@ async function boot() {
         renderNeutral();
         const detected = await autoLocate();
         if (detected) {
-            adoptLocation(detected);
-        } else {
-            initLocationSlot(document.getElementById('location-slot-canvas'), pick, { openNow: true });
+            route(detected);   // navigates to the nearest city page, or adopts + computes off-grid
             return;
         }
+        initLocationSlot(document.getElementById('location-slot-canvas'), pick, { openNow: true });
+        return;
     }
     await recompute();
 }
@@ -153,28 +175,16 @@ const DEFAULT_RULESET = 'evidence';
  * no longer exists - there is nothing to fall back to. An explicit user choice
  * is persisted and always wins.
  */
-async function resolveDefaults() {
-    let defs = state.methodDefaults;
-    if (!defs) {
-        try {
-            defs = await (await fetch('/data/method-defaults.json')).json();
-            state.methodDefaults = defs;
-        } catch (e) { /* offline first-run: fall back to the shipped constants */ }
-    }
-    // Method = pure function of (explicit choice, country), recomputed EVERY
-    // time. No stored state.method to go stale, so changing New York never
-    // keeps Karachi: with no explicit choice, the country default wins.
-    //
-    // The LOCAL AUTHORITY is the default everywhere: where we have baked its
-    // real timetable, the default is the AUTHORITY sentinel (serve those exact
-    // times); everywhere else the default is the authority's own calculation
-    // convention (byCountry). Either way the dropdown is live - an explicit
-    // choice always wins, so a Sri Lanka user can switch to a computed method
-    // and see it. `computeMethodFor` resolves AUTHORITY to a real method for
-    // computation and for any day the timetable does not cover.
+function resolveDefaults() {
+    // Method = pure function of (explicit choice, country), recomputed EVERY time. No stored
+    // state.method to go stale, so changing New York never keeps Karachi. The country's own
+    // method is baked onto the location from country.xml - the preset carries it on a city page,
+    // the routed / off-grid location carries it from the directory - so there is no
+    // method-defaults.json fetch. Where we have baked an authority's real timetable the default is
+    // the AUTHORITY sentinel (serve those exact times); elsewhere it is the country's computed
+    // convention. The dropdown stays live: an explicit choice always wins.
     const cc = state.location && state.location.cc;
-    const countryMethod = (defs && cc && defs.byCountry[cc])
-        || (defs && defs.default) || 'MuslimWorldLeague';
+    const countryMethod = (state.location && state.location.method) || 'MuslimWorldLeague';
     let m = state.methodChoice;
     if (m === AUTHORITY_METHOD && !hasAuthorityTimetable(cc)) m = null;   // stale after travel
     if (!m) m = hasAuthorityTimetable(cc) ? AUTHORITY_METHOD : countryMethod;
@@ -205,7 +215,7 @@ function dateFor(cd) {
 /** Full recompute (spec §4 triggers): location/method/madhhab change, midnight, tz change. */
 async function recompute() {
     if (!state.location) return;
-    await resolveDefaults();
+    resolveDefaults();
     const now = new Date();
     const cd = civilDate(state.location.tz, now);
     state.dateKey = cd.key;
@@ -216,7 +226,7 @@ async function recompute() {
     // so re-render it from live state now: it must show the city, method, madhhab
     // AND the authority the app is ACTUALLY computing with, not what it guessed
     // at boot. In particular the method note depends on timesSource being set.
-    syncSettings(state, state.methodDefaults);
+    syncSettings(state);
     if (!today.result.valid) {
         // A degraded day is a property of THIS date and place: at high latitude
         // the very next day may compute fine. Keep watching for the rollover
@@ -259,9 +269,9 @@ async function dayEvents(date, coords) {
             if (result.valid) return { result, source: auth };
         }
         // A day the table does not cover: compute with the country's real method.
-        return { result: computeDayEvents(date, coords, state.countryMethod, state.madhhab), source: null };
+        return { result: await computeDayEvents(date, coords, state.countryMethod, state.madhhab), source: null };
     }
-    return { result: computeDayEvents(date, coords, state.method, state.madhhab), source: null };
+    return { result: await computeDayEvents(date, coords, state.method, state.madhhab), source: null };
 }
 
 /**

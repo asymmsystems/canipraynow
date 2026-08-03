@@ -45,7 +45,7 @@ final class TimetableViewModel {
                 }
             }
             if (!days.isEmpty()) {
-                months.add(Map.of("name", MONTHS[month - 1], "days", days));
+                months.add(Map.of("number", month, "name", MONTHS[month - 1], "days", days));
             }
         }
         model.put("months", months);

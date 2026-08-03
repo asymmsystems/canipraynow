@@ -6,91 +6,91 @@
   @author Fahim Farook
 -->
 <countries>
-    <country cc="AE" authority="GAIAE (Awqaf) federal; IACAD for Dubai" method="the Dubai (UAE) convention" madhhab="Mālikī"/>
-    <country cc="AF" authority="Ministry of Hajj and Religious Affairs (MOHIA)" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
-    <country cc="AL" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="AT" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="AU" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="AZ" authority="Caucasus Muslims Board (QMI)" method="the Muslim World League convention" madhhab=""/>
-    <country cc="BA" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="BD" authority="Islamic Foundation Bangladesh" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
-    <country cc="BE" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="BF" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="BH" authority="Ministry of Justice, Islamic Affairs and Awqaf" method="the Umm al-Qura convention" madhhab="Mālikī"/>
-    <country cc="BN" authority="" method="the MUIS (Singapore) convention" madhhab=""/>
-    <country cc="BR" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="CA" authority="" method="the ISNA (North America) convention" madhhab=""/>
-    <country cc="CH" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="CI" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="CM" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="DE" authority="" method="the Diyanet (Turkey) convention" madhhab=""/>
-    <country cc="DJ" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="DK" authority="" method="the Moonsighting Committee Worldwide convention" madhhab=""/>
-    <country cc="DZ" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="EG" authority="" method="the Egyptian Survey Authority convention" madhhab=""/>
-    <country cc="ER" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="ES" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="ET" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="FR" authority="" method="the UOIF (France) convention" madhhab=""/>
-    <country cc="GB" authority="" method="the Moonsighting Committee Worldwide convention" madhhab=""/>
-    <country cc="GH" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="GM" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="GN" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="GR" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="GY" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="ID" authority="Kementerian Agama (Kemenag)" method="the Kemenag (Indonesia) convention" madhhab=""/>
-    <country cc="IN" authority="" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
-    <country cc="IQ" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="IR" authority="" method="the Institute of Geophysics, Tehran convention" madhhab="Jaʿfarī"/>
-    <country cc="IT" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="JO" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="KE" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="KG" authority="Spiritual Administration of Muslims of Kyrgyzstan (KMDB)" method="the Muslim World League convention" madhhab=""/>
-    <country cc="KM" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="KW" authority="Ministry of Awqaf and Islamic Affairs" method="the Kuwait convention" madhhab="Mālikī"/>
-    <country cc="KZ" authority="Spiritual Administration of Muslims of Kazakhstan (QMDB)" method="the Muslim World League convention" madhhab=""/>
-    <country cc="LB" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="LK" authority="All Ceylon Jamiyyathul Ulama (ACJU)" method="the ACJU (Sri Lanka) convention" madhhab=""/>
-    <country cc="LY" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="MA" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="MK" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="ML" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="MM" authority="" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
-    <country cc="MR" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="MV" authority="Ministry of Islamic Affairs" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
-    <country cc="MY" authority="JAKIM (e-Solat)" method="the MUIS (Singapore) convention" madhhab=""/>
-    <country cc="NE" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="NG" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="NL" authority="" method="the Diyanet (Turkey) convention" madhhab=""/>
-    <country cc="NO" authority="" method="the Moonsighting Committee Worldwide convention" madhhab=""/>
-    <country cc="NZ" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="OM" authority="Ministry of Endowments and Religious Affairs (MARA)" method="the Umm al-Qura convention" madhhab="Ibāḍī"/>
-    <country cc="PH" authority="Bangsamoro Regional Darul Ifta (BARMM only)" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
-    <country cc="PK" authority="" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
-    <country cc="PS" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="QA" authority="Qatar Calendar House (published via MOI)" method="the Qatar convention" madhhab="Ḥanbalī"/>
-    <country cc="RU" authority="" method="the Spiritual Administration of Muslims of Russia convention" madhhab=""/>
-    <country cc="SA" authority="Umm al-Qura Calendar (KACST)" method="the Umm al-Qura convention" madhhab="Ḥanbalī"/>
-    <country cc="SD" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="SE" authority="" method="the Moonsighting Committee Worldwide convention" madhhab=""/>
-    <country cc="SG" authority="MUIS (Majlis Ugama Islam Singapura)" method="the MUIS (Singapore) convention" madhhab=""/>
-    <country cc="SL" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="SN" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="SO" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="SR" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="SY" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="TD" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="TH" authority="" method="the MUIS (Singapore) convention" madhhab=""/>
-    <country cc="TJ" authority="Islamic Center of the Republic of Tajikistan (Council of Ulema)" method="the Muslim World League convention" madhhab=""/>
-    <country cc="TM" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="TN" authority="" method="the Muslim World League convention" madhhab="Mālikī"/>
-    <country cc="TR" authority="" method="the Diyanet (Turkey) convention" madhhab=""/>
-    <country cc="TT" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="TZ" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="UG" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="US" authority="" method="the ISNA (North America) convention" madhhab=""/>
-    <country cc="UZ" authority="Muslim Board of Uzbekistan" method="the Muslim World League convention" madhhab=""/>
-    <country cc="XK" authority="" method="the Muslim World League convention" madhhab=""/>
-    <country cc="YE" authority="" method="the Umm al-Qura convention" madhhab=""/>
-    <country cc="ZA" authority="" method="the Muslim World League convention" madhhab=""/>
+    <country cc="AE" authority="GAIAE (Awqaf) federal; IACAD for Dubai" method-key="Dubai" method="the Dubai (UAE) convention" madhhab="Mālikī"/>
+    <country cc="AF" authority="Ministry of Hajj and Religious Affairs (MOHIA)" method-key="Karachi" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
+    <country cc="AL" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="AT" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="AU" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="AZ" authority="Caucasus Muslims Board (QMI)" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="BA" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="BD" authority="Islamic Foundation Bangladesh" method-key="Karachi" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
+    <country cc="BE" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="BF" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="BH" authority="Ministry of Justice, Islamic Affairs and Awqaf" method-key="UmmAlQura" method="the Umm al-Qura convention" madhhab="Mālikī"/>
+    <country cc="BN" authority="" method-key="Singapore" method="the MUIS (Singapore) convention" madhhab=""/>
+    <country cc="BR" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="CA" authority="" method-key="NorthAmerica" method="the ISNA (North America) convention" madhhab=""/>
+    <country cc="CH" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="CI" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="CM" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="DE" authority="" method-key="Turkey" method="the Diyanet (Turkey) convention" madhhab=""/>
+    <country cc="DJ" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="DK" authority="" method-key="MoonsightingCommittee" method="the Moonsighting Committee Worldwide convention" madhhab=""/>
+    <country cc="DZ" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="EG" authority="" method-key="Egyptian" method="the Egyptian Survey Authority convention" madhhab=""/>
+    <country cc="ER" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="ES" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="ET" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="FR" authority="" method-key="France" method="the UOIF (France) convention" madhhab=""/>
+    <country cc="GB" authority="" method-key="MoonsightingCommittee" method="the Moonsighting Committee Worldwide convention" madhhab=""/>
+    <country cc="GH" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="GM" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="GN" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="GR" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="GY" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="ID" authority="Kementerian Agama (Kemenag)" method-key="Kemenag" method="the Kemenag (Indonesia) convention" madhhab=""/>
+    <country cc="IN" authority="" method-key="Karachi" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
+    <country cc="IQ" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="IR" authority="" method-key="Tehran" method="the Institute of Geophysics, Tehran convention" madhhab="Jaʿfarī"/>
+    <country cc="IT" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="JO" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="KE" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="KG" authority="Spiritual Administration of Muslims of Kyrgyzstan (KMDB)" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="KM" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="KW" authority="Ministry of Awqaf and Islamic Affairs" method-key="Kuwait" method="the Kuwait convention" madhhab="Mālikī"/>
+    <country cc="KZ" authority="Spiritual Administration of Muslims of Kazakhstan (QMDB)" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="LB" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="LK" authority="All Ceylon Jamiyyathul Ulama (ACJU)" method-key="ACJU" method="the ACJU (Sri Lanka) convention" madhhab=""/>
+    <country cc="LY" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="MA" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="MK" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="ML" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="MM" authority="" method-key="Karachi" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
+    <country cc="MR" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="MV" authority="Ministry of Islamic Affairs" method-key="Karachi" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
+    <country cc="MY" authority="JAKIM (e-Solat)" method-key="Singapore" method="the MUIS (Singapore) convention" madhhab=""/>
+    <country cc="NE" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="NG" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="NL" authority="" method-key="Turkey" method="the Diyanet (Turkey) convention" madhhab=""/>
+    <country cc="NO" authority="" method-key="MoonsightingCommittee" method="the Moonsighting Committee Worldwide convention" madhhab=""/>
+    <country cc="NZ" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="OM" authority="Ministry of Endowments and Religious Affairs (MARA)" method-key="UmmAlQura" method="the Umm al-Qura convention" madhhab="Ibāḍī"/>
+    <country cc="PH" authority="Bangsamoro Regional Darul Ifta (BARMM only)" method-key="Karachi" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
+    <country cc="PK" authority="" method-key="Karachi" method="the University of Islamic Sciences, Karachi convention" madhhab=""/>
+    <country cc="PS" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="QA" authority="Qatar Calendar House (published via MOI)" method-key="Qatar" method="the Qatar convention" madhhab="Ḥanbalī"/>
+    <country cc="RU" authority="" method-key="Russia" method="the Spiritual Administration of Muslims of Russia convention" madhhab=""/>
+    <country cc="SA" authority="Umm al-Qura Calendar (KACST)" method-key="UmmAlQura" method="the Umm al-Qura convention" madhhab="Ḥanbalī"/>
+    <country cc="SD" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="SE" authority="" method-key="MoonsightingCommittee" method="the Moonsighting Committee Worldwide convention" madhhab=""/>
+    <country cc="SG" authority="MUIS (Majlis Ugama Islam Singapura)" method-key="Singapore" method="the MUIS (Singapore) convention" madhhab=""/>
+    <country cc="SL" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="SN" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="SO" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="SR" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="SY" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="TD" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="TH" authority="" method-key="Singapore" method="the MUIS (Singapore) convention" madhhab=""/>
+    <country cc="TJ" authority="Islamic Center of the Republic of Tajikistan (Council of Ulema)" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="TM" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="TN" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab="Mālikī"/>
+    <country cc="TR" authority="" method-key="Turkey" method="the Diyanet (Turkey) convention" madhhab=""/>
+    <country cc="TT" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="TZ" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="UG" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="US" authority="" method-key="NorthAmerica" method="the ISNA (North America) convention" madhhab=""/>
+    <country cc="UZ" authority="Muslim Board of Uzbekistan" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="XK" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
+    <country cc="YE" authority="" method-key="UmmAlQura" method="the Umm al-Qura convention" madhhab=""/>
+    <country cc="ZA" authority="" method-key="MuslimWorldLeague" method="the Muslim World League convention" madhhab=""/>
 </countries>

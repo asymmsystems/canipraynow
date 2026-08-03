@@ -44,6 +44,7 @@
         <module>application/cipn-app-server</module>
         <module>application/cipn-app-batch</module>
         <module>application/cipn-app-fn</module>
+        <module>application/cipn-app-wasm</module>
     </modules>
 
     <properties>
@@ -52,6 +53,10 @@
         <!-- Shared test-library versions for the Java modules. -->
         <junit.version>5.11.3</junit.version>
         <jackson.version>2.18.2</jackson.version>
+        <!-- Java->WebAssembly (WASM-GC) compiler for the browser fallback engine (ADR-0015).
+             Supports Java 25 (Eliya) bytecode. Used only by cipn-wiring-assembly-wasm (@JSExport
+             API) and cipn-app-wasm (the TeaVM plugin, behind the `wasm` profile). -->
+        <teavm.version>0.15.0</teavm.version>
         <surefire.version>3.5.2</surefire.version>
         <archunit.version>1.4.1</archunit.version>
         <jbake.version>2.7.0-rc.7</jbake.version>

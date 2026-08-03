@@ -1,43 +1,19 @@
 /*
  * Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
  *
- * Astronomy layer (spec §4): Adhan.js wrapper plus astronomical solar noon.
- * W3 (zenith) derives from solar transit computed here, never from a
- * timetable or the (possibly method-adjusted) Dhuhr entry (spec §3.6 inv 2).
+ * Astronomy helpers (spec §4): astronomical solar noon plus the pure period/next-event
+ * helpers shared by the covered (authority-table) and computed (WASM engine) paths. The
+ * prayer-time kernel itself moved to engine.js (the WASM engine; ADR-0015) - this module
+ * is framework-free and has no adhan.js dependency. W3 (zenith) derives from the solar
+ * transit computed here, never from a timetable or the method-adjusted Dhuhr (spec §3.6 inv 2).
  *
  * @author Fahim Farook
  */
 
-import * as Adhan from './vendor/adhan.js';
-
 /**
- * Custom methods matching a national authority's published timetable, where
- * Adhan.js ships no preset. Angles are FITTED to the authority's own tables
- * and the residual error is recorded, so the claim is checkable rather than
- * asserted. See research/prayer-time-authorities.md.
- */
-const CUSTOM_METHODS = {
-    // Fitted against ACJU's official 2025 Colombo-district monthly tables:
-    // mean error Fajr 0.74 min, Isha 0.97 min across July. ACJU's own
-    // calculation follows the late Al-'Alim M.I. Abdus Samad Makdoomi.
-    ACJU: { fajrAngle: 20, ishaAngle: 18 },
-    // Indonesia's Ministry of Religious Affairs. Kemenag publishes Subuh 20 /
-    // Isya 18 (same angles as the MUIS/Singapore preset); its published tables
-    // additionally apply a small ihtiyat safety margin that Adhan.js does not,
-    // so this matches the convention, not the printed minute exactly.
-    Kemenag: { fajrAngle: 20, ishaAngle: 18 },
-    // France - Union des Organisations Islamiques de France (UOIF / Musulmans
-    // de France). Uses a notably shallow 12/12, so Fajr is much later and Isha
-    // much earlier than the 18/17 default. Its own convention, not a preset.
-    France: { fajrAngle: 12, ishaAngle: 12 },
-    // Russia - Spiritual Administration of Muslims of Russia (SAMR). 16/15.
-    Russia: { fajrAngle: 16, ishaAngle: 15 }
-};
-
-/**
- * Calculation methods exposed in settings (spec §4). Labels name the AUTHORITY
- * each convention belongs to, since that is what a user recognises and trusts;
- * ACJU and Kemenag are fitted customs, the rest are Adhan.js presets.
+ * Calculation methods exposed in settings (spec §4). Labels name the AUTHORITY each
+ * convention belongs to, since that is what a user recognises and trusts. The angles/offsets
+ * behind each key live in calculation-method.xml, read by the WASM engine (engine.js).
  */
 export const METHODS = Object.freeze([
     { key: 'ACJU', label: 'ACJU (Sri Lanka)' },
@@ -85,61 +61,10 @@ export function solarNoon(date, lng) {
 }
 
 /**
- * @param {string} methodKey  METHODS key
- * @param {string} madhhab    'hanafi' | 'shafii' - sets the Asr shadow factor (spec §4)
- * @returns {Object} Adhan CalculationParameters
- */
-function buildParams(methodKey, madhhab) {
-    const custom = CUSTOM_METHODS[methodKey];
-    const params = custom
-        ? new Adhan.CalculationParameters(methodKey, custom.fajrAngle, custom.ishaAngle)
-        : (Adhan.CalculationMethod[methodKey] || Adhan.CalculationMethod.MuslimWorldLeague)();
-    params.madhab = madhhab === 'hanafi' ? Adhan.Madhab.Hanafi : Adhan.Madhab.Shafi;
-    return params;
-}
-
-/**
  * @typedef {Object} DayResult
  * @property {boolean} valid  false -> degrade honestly (spec §3.7), never invent a window
  * @property {import('./engine/windows.js').DayEvents|null} events
  */
-
-/**
- * Compute one civil day's events for coordinates.
- * @param {Date} date
- * @param {{lat:number, lng:number}} coords
- * @param {string} methodKey
- * @param {string} madhhab
- * @returns {DayResult}
- */
-export function computeDayEvents(date, coords, methodKey, madhhab) {
-    let times;
-    try {
-        times = new Adhan.PrayerTimes(
-            new Adhan.Coordinates(coords.lat, coords.lng), date, buildParams(methodKey, madhhab));
-    } catch (e) {
-        return { valid: false, events: null };
-    }
-    const events = {
-        fajr: times.fajr,
-        sunrise: times.sunrise,
-        solarNoon: solarNoon(date, coords.lng),
-        dhuhr: times.dhuhr,
-        asr: times.asr,
-        maghrib: times.maghrib,
-        isha: times.isha
-    };
-    const ordered = [events.fajr, events.sunrise, events.dhuhr, events.asr, events.maghrib, events.isha];
-    for (let i = 0; i < ordered.length; i++) {
-        if (!(ordered[i] instanceof Date) || !isFinite(ordered[i].getTime())) {
-            return { valid: false, events: null };
-        }
-        if (i > 0 && ordered[i].getTime() <= ordered[i - 1].getTime()) {
-            return { valid: false, events: null }; // distorted high-latitude day
-        }
-    }
-    return { valid: true, events };
-}
 
 /**
  * Assemble a DayEvents from an AUTHORITY's five published prayer times plus a

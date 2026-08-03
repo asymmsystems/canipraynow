@@ -26,6 +26,9 @@
         <xs:attribute name="authority" type="xs:string" use="required"/>
         <!-- The calculation-method phrase, e.g. "the Umm al-Qura convention". -->
         <xs:attribute name="method" type="xs:string" use="required"/>
+        <!-- The calculation-method KEY, e.g. "UmmAlQura": the compute id (maps to
+             calculation-method.xml), read by the client to compute a non-covered city's times. -->
+        <xs:attribute name="method-key" type="xs:string" use="required"/>
         <!-- The predominant madhhab display name, e.g. "Ḥanbalī". May be empty. -->
         <xs:attribute name="madhhab" type="xs:string" use="required"/>
     </xs:complexType>

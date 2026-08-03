@@ -7,24 +7,26 @@
  *     build surfaces on the next load. Pure cache-first (the old behaviour)
  *     never updated CSS/JS across builds unless VERSION changed by hand, which
  *     is why theme changes appeared to do nothing.
- *   - big immutable assets (fonts, adhan vendor, rule sets, cities, data):
- *     cache-first - they rarely change and are large.
+ *   - big immutable assets (fonts, the WASM engine, rule sets, data): cache-first
+ *     - they rarely change and are large. The ~130 KB WASM engine caches on first
+ *     fallback use rather than being precached, keeping the install light.
  *   - navigations (HTML): network-first, cache fallback.
  *   - sponsors.json: network-first.
- * The core answer still works fully offline once cached - astronomy is
- * entirely client-side.
+ * The core answer still works fully offline once cached - the covered path reads the
+ * baked table with no engine, and the WASM engine caches after its first use.
  *
  * @author Fahim Farook
  */
 
 // Bump on any release that must invalidate old caches. The activate handler
 // deletes every cache that is not this version.
-const VERSION = 'cipn-v12';
+const VERSION = 'cipn-v14';
 
 const SHELL = [
     '/',
     '/css/style.css',
     '/js/main.js',
+    '/js/engine.js',
     '/js/astronomy.js',
     '/js/location.js',
     '/js/storage.js',
@@ -38,12 +40,9 @@ const SHELL = [
     '/js/ui/prayers.js',
     '/js/ui/settings.js',
     '/js/ui/sponsor.js',
-    '/js/vendor/adhan.js',
     '/js/strings/en.json',
     '/data/rule_sets/hanafi.json',
     '/data/rule_sets/shafii.json',
-    '/data/cities.json',
-    '/data/method-defaults.json',
     '/fonts/inter-latin-wght-normal.woff2',
     '/manifest.webmanifest'
 ];
@@ -72,10 +71,10 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(networkFirst(event.request));
     } else if (event.request.mode === 'navigate') {
         event.respondWith(networkFirst(event.request));   // HTML: fresh when online
-    } else if (p.startsWith('/css/') || (p.startsWith('/js/') && !p.startsWith('/js/vendor/'))) {
+    } else if (p.startsWith('/css/') || p.startsWith('/js/')) {
         event.respondWith(staleWhileRevalidate(event.request));  // code & style
     } else {
-        event.respondWith(cacheFirst(event.request));    // fonts, vendor, data
+        event.respondWith(cacheFirst(event.request));    // fonts, /wasm/ engine, data
     }
 });
 

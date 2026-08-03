@@ -25,5 +25,6 @@
 
     <modules>
         <module>cipn-wiring-assembly-standard</module>
+        <module>cipn-wiring-assembly-wasm</module>
     </modules>
 </project>

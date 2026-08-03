@@ -1519,3 +1519,24 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
         transition-duration: 0.01ms !important;
     }
 }
+
+/* City page (Option A, ADR-0016): the article sits BELOW the live app as a FULL-WIDTH band with a
+   distinct ground, so it reads as a separate section edge-to-edge - not just the centred prose
+   column. The band spans the viewport; the prose (.page-wrap) stays centred inside it. Only city
+   pages emit .city-article, so other pages are untouched. */
+.city-article {
+    background: var(--surface-raised);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+
+    /* The band's fill must run all the way to its top edge (a margin would be transparent, showing
+       the app's ground through the gap). So no margin; the prose gets its breathing room from
+       padding INSIDE the band, which is filled. Extra top room here since the app-first layout no
+       longer has a headline buffer above the prose. */
+    > .page-wrap { padding-top: var(--space-2xl); }
+}
+
+/* The kicker (e.g. "SRI LANKA") is the eyebrow above the lead heading. That lead is now an h2,
+   but .page-wrap h2 carries a large top margin for mid-article section breaks - so tighten only
+   the h2 sitting directly under the kicker, matching the old kicker->h1 spacing. */
+.page-wrap .kicker + h2 { margin-top: var(--space-xs); }

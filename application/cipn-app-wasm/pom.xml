@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
+
+  Application: the browser WASM deployable. Runs TeaVM over the WASM assembly
+  (cipn-wiring-assembly-wasm) to emit the WebAssembly-GC engine + its JS runtime that the
+  site (cipn-app-site) loads for the fallback path (ADR-0009, ADR-0015). Thin - depends only
+  on the wiring assembly, never on impl (svc-*) modules.
+
+  The TeaVM compile is gated behind the `wasm` profile so a normal reactor `verify` stays fast
+  (plain javac only); `make wasm` activates it. See ADR-0014 (Make orchestration).
+
+  @author Fahim Farook
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>systems.asymm.cipn</groupId>
+        <artifactId>canipraynow</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
+    </parent>
+
+    <artifactId>cipn-app-wasm</artifactId>
+    <packaging>jar</packaging>
+
+    <name>cipn-app-wasm</name>
+    <description>Application: browser WASM deployable. Runs TeaVM over the WASM assembly to emit the WebAssembly-GC engine.</description>
+
+    <properties>
+        <!-- Where TeaVM writes the .wasm + its .wasm-runtime.js. `make wasm` copies these into
+             the site's JBake assets; kept under target/ and never committed. -->
+        <cipn.wasm.dir>${project.build.directory}/wasm</cipn.wasm.dir>
+    </properties>
+
+    <dependencies>
+        <!-- The app depends on the wiring assembly, never on impl (svc-*) modules. -->
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-wiring-assembly-wasm</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- TeaVM's emulation of the Java class library, needed on the classpath to compile
+             to WASM. Provided: only the TeaVM compile uses it, never the runtime. -->
+        <dependency>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-classlib</artifactId>
+            <version>${teavm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- This module has no Java of its own: it only runs the TeaVM plugin over the WASM
+                 assembly (see the `wasm` profile below). packaging=jar is kept so the plugin has a
+                 process-classes phase to bind to, but there are no classes, so skip the empty jar. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <skipIfEmpty>true</skipIfEmpty>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>wasm</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.teavm</groupId>
+                        <artifactId>teavm-maven-plugin</artifactId>
+                        <version>${teavm.version}</version>
+                        <executions>
+                            <execution>
+                                <id>compile-wasm-gc</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>systems.asymm.cipn.wiring.assembly.wasm.PrayerTimesWasm</mainClass>
+                                    <targetType>WEBASSEMBLY_GC</targetType>
+                                    <targetDirectory>${cipn.wasm.dir}</targetDirectory>
+                                    <!-- Aggressive size/speed optimisation: this artefact ships to browsers,
+                                         so the G1 bundle-size gate (ADR-0009) cares about bytes. -->
+                                    <optimizationLevel>FULL</optimizationLevel>
+                                    <minifying>true</minifying>
+                                    <mainPageIncluded>false</mainPageIncluded>
+                                    <debugInformationGenerated>false</debugInformationGenerated>
+                                    <sourceMapsGenerated>false</sourceMapsGenerated>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

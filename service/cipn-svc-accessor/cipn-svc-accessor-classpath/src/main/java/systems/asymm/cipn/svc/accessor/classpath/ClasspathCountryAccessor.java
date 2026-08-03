@@ -32,6 +32,7 @@ public class ClasspathCountryAccessor implements CountryAccessor {
 
     private static final String DEFAULT_RESOURCE = "country.xml";
     private static final String DEFAULT_METHOD_PHRASE = "a standard convention";
+    private static final String DEFAULT_METHOD_KEY = "MuslimWorldLeague";
 
     private final Map<String, CountryDefaults> byCode;
 
@@ -47,7 +48,7 @@ public class ClasspathCountryAccessor implements CountryAccessor {
             for (CountryElement c : doc.country()) {
                 map.put(c.cc().toUpperCase(Locale.ROOT),
                         new CountryDefaults(c.cc(), nullToEmpty(c.authority()),
-                                nullToEmpty(c.method()), nullToEmpty(c.madhhab())));
+                                nullToEmpty(c.method()), methodKey(c.methodKey()), nullToEmpty(c.madhhab())));
             }
         }
         this.byCode = Map.copyOf(map);
@@ -56,11 +57,18 @@ public class ClasspathCountryAccessor implements CountryAccessor {
     @Override
     public CountryDefaults defaults(String countryCode) {
         CountryDefaults found = byCode.get(countryCode.toUpperCase(Locale.ROOT));
-        return found != null ? found : new CountryDefaults(countryCode, "", DEFAULT_METHOD_PHRASE, "");
+        return found != null
+                ? found
+                : new CountryDefaults(countryCode, "", DEFAULT_METHOD_PHRASE, DEFAULT_METHOD_KEY, "");
     }
 
     private static String nullToEmpty(String s) {
         return s == null ? "" : s;
+    }
+
+    /** A missing key falls back to the global default convention (Muslim World League). */
+    private static String methodKey(String key) {
+        return key == null || key.isBlank() ? DEFAULT_METHOD_KEY : key;
     }
 
     private static Countries load(String resourcePath, ResourceParser<Countries> parser) {
@@ -80,6 +88,6 @@ public class ClasspathCountryAccessor implements CountryAccessor {
     }
 
     /** XML binding for one {@code <country .../>}. */
-    record CountryElement(String cc, String authority, String method, String madhhab) {
+    record CountryElement(String cc, String authority, String method, String methodKey, String madhhab) {
     }
 }
