@@ -81,10 +81,10 @@ class DefaultSiteGenerationManagerTest {
         }
     };
 
-    /** Country-defaults double: a method phrase for every country, an authority for LK. */
+    /** Country-defaults double: a method phrase + key for every country, an authority for LK. */
     private static final CountryAccessor COUNTRIES = cc -> new CountryDefaults(
             cc, "LK".equals(cc) ? "All Ceylon Jamiyyathul Ulama" : "",
-            "the Muslim World League convention", "Shāfiʿī");
+            "the Muslim World League convention", "MuslimWorldLeague", "Shāfiʿī");
 
     private SiteGenerationManager manager() {
         CityAccessor cities = () -> List.of(COLOMBO, LONDON);

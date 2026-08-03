@@ -16,8 +16,16 @@ MVNW        := ./mvnw
 MVN_FLAGS   := --batch-mode --no-transfer-progress -Dpmd.skip=true
 BATCH       := application/cipn-app-batch
 SITE        := application/cipn-app-site
+WASM        := application/cipn-app-wasm
 CONTENT     := $(SITE)/src/main/jbake/content
+WASM_ASSETS := $(SITE)/src/main/jbake/assets/wasm
+METHOD_XML  := service/cipn-svc-accessor/cipn-svc-accessor-classpath/src/main/resources/calculation-method.xml
 PORT        ?= 8020
+
+# TeaVM version is read from the reactor POM so the runtime-loader we extract always matches
+# the compiler that produced the .wasm. The generic WASM-GC loader ships inside teavm-core.
+TEAVM_VERSION := $(shell grep -oP '(?<=<teavm.version>)[^<]+' pom.xml)
+TEAVM_CORE  := $(HOME)/.m2/repository/org/teavm/teavm-core/$(TEAVM_VERSION)/teavm-core-$(TEAVM_VERSION).jar
 
 # The mandated JDK. Override only if Eliya lives elsewhere; never point at another vendor.
 JAVA_HOME   ?= /opt/eliya
@@ -25,7 +33,7 @@ export JAVA_HOME
 
 .DEFAULT_GOAL := help
 .PHONY: help doctor build test install validate clean \
-        scrape generate site dev serve
+        scrape generate wasm site dev serve
 
 help:  ## Show this help
 	@grep -E '^[a-zA-Z0-9_ -]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -67,14 +75,29 @@ generate:  ## (S2) Generate current-year city content into the JBake content dir
 		-Dexec.arguments=$(CONTENT),--canonical-only
 	@echo "Generated current-year city content into $(CONTENT)"
 
+## ----------------------------------------------------------------- wasm: browser engine
+##
+## Compile the engine + XML parser to WebAssembly-GC (TeaVM, behind the `wasm` profile) and
+## stage the .wasm + its generic runtime loader into the site's assets, so JBake bakes them.
+## The client loads them only for the fallback (off-grid / non-default method); the common
+## covered-city path reads the baked table and never touches WASM (ADR-0009, ADR-0015).
+
+wasm:  ## (wasm) Compile the browser engine to WASM-GC and stage it into the site assets
+	$(MVNW) -pl $(WASM) -am -Pwasm process-classes $(MVN_FLAGS) -Dmaven.test.skip=true
+	@mkdir -p $(WASM_ASSETS)
+	cp $(WASM)/target/wasm/classes.wasm $(WASM_ASSETS)/prayer-times.wasm
+	unzip -o -j "$(TEAVM_CORE)" 'org/teavm/backend/wasm/wasm-gc-runtime.min.js' -d $(WASM_ASSETS)
+	cp $(METHOD_XML) $(WASM_ASSETS)/calculation-method.xml
+	@echo "Staged prayer-times.wasm + wasm-gc-runtime.min.js + calculation-method.xml into $(WASM_ASSETS)"
+
 ## ----------------------------------------------------------------- site: JBake bake
 ##
-## Make (not Maven) orchestrates the pipeline: `site` runs `generate` first (the reactor
-## writes city content), then JBake bakes it. The two modules stay independent - no Maven
-## app->app dependency; Make sequences the stages (ADR-0009 / lifecycle).
+## Make (not Maven) orchestrates the pipeline: `site` runs `generate` + `wasm` first (the
+## reactor writes city content and the browser engine), then JBake bakes it all. The modules
+## stay independent - no Maven app->app dependency; Make sequences the stages (ADR-0009/0014).
 
-site: generate  ## (site) Generate city content, then bake the static site (clean URLs)
+site: generate wasm  ## (site) Generate city content + WASM engine, then bake the static site
 	$(MVNW) -Pproduction -pl $(SITE) clean process-resources $(MVN_FLAGS)
 
-dev serve:  ## Live-reload JBake dev server on http://localhost:$(PORT)
+dev serve: wasm  ## Live-reload JBake dev server on http://localhost:$(PORT)
 	$(MVNW) -pl $(SITE) jbake:inline -Djbake.port=$(PORT) $(MVN_FLAGS)

@@ -1,10 +1,11 @@
 <#--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
 
-  City index (type=citiesindex). Reads assets/data/cities.json straight from
-  JBake's data model (data.folder=assets/data) - no generator involved, because
-  this is ONE page from one dataset, which is exactly what a template does.
-  Only the 110-way fan-out needs a program.
+  City index: iterates the published city pages (published_content, type=city) -
+  no cities.json. This one page is ALSO the client's city dataset: each <li>
+  carries the city's coordinates, timezone, country code, method, madhhab and
+  slug, so location.js reads search + nearest-city from this baked DOM instead of
+  fetching JSON (ADR-0015, ADR-0016).
 
   Without this page the city pages are orphans, reachable only via sitemap.xml
   and with no internal links: the classic doorway-page signature that search
@@ -51,7 +52,7 @@ are.</p>
         <h2 class="country-head">${c.country_name?html}</h2>
         <ul class="city-index">
     </#if>
-    <li data-city="${c.city_name?lower_case?html} ${c.country_name?lower_case?html}"><a href="/${c.uri}">Can I pray now in ${c.city_name?html}?</a></li>
+    <li data-city="${c.city_name?lower_case?html} ${c.country_name?lower_case?html}" data-name="${c.city_name?html}" data-country="${c.country_name?html}" data-lat="${c.city_lat}" data-lng="${c.city_lng}" data-tz="${c.city_tz}" data-cc="${c.city_cc}" data-method="${c.city_method_key}" data-madhhab="${c.city_madhhab}" data-uri="${c.uri}"><a href="/${c.uri}">Can I pray now in ${c.city_name?html}?</a></li>
     <#if !c_has_next></ul></div></#if>
 </#list>
 </article>

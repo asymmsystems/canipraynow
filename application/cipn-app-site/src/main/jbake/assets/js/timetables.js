@@ -1,114 +1,96 @@
 /*
  * Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
  *
- * Authority timetable layer. Where a national authority publishes its own
- * prayer times and we have scraped them (scripts/fetch-timetables.mjs), this
- * serves those EXACT published times instead of a computed approximation. The
- * only country wired so far is Sri Lanka (ACJU): a location is matched to the
- * nearest of ACJU's 13 district zones, and that zone's baked year table is
- * looked up by day of the month.
+ * Authority timetable layer (R1, ADR-0015). Where a national authority publishes its own prayer
+ * times and we have baked them, the covered city's page carries that authority's ANNUAL TABLE in
+ * the DOM (see timetable.ftl). This module reads TODAY's row straight from that baked table -
+ * no fetch, no JSON - and serves those exact published times instead of a computed approximation.
+ * A location off the covered city, or a day the table does not cover (a gap, a leap day), returns
+ * null so the caller computes with the WASM engine; the answer is always defined.
  *
- * Zenith is not in the tables (authorities publish the five prayers, not solar
- * noon), so the caller still computes it. Any day missing from a table - an
- * unscraped month, a leap day - falls back to computation, so the answer is
- * always defined.
+ * Zenith is not in the tables (authorities publish the five prayers, not solar noon), so the
+ * caller still computes it.
  *
  * @author Fahim Farook
  */
 
 /**
- * Countries with a baked authority timetable, by ISO2. `folder` is the data
- * directory; `name` / `url` label the authority in the UI (the method dropdown
- * offers "{name} published timetable" as the default for that country). Add a
- * country here once scripts/fetch-timetables.mjs has baked its tables.
+ * Countries with a baked authority timetable, by ISO2. Small synchronous registry used for the
+ * method dropdown (it offers "{name} published timetable" as that country's default) and to know
+ * a country is covered before the table itself is read from the DOM. The times themselves are
+ * NOT here - they are baked into each covered city's page. Add a country once its tables are baked.
  */
 const AUTHORITY_TIMETABLES = {
     LK: { folder: 'lk', name: 'ACJU', url: 'https://www.acju.lk/prayer-times/' },
     MY: { folder: 'my', name: 'JAKIM', url: 'https://www.e-solat.gov.my/' }
 };
 
-/** Sentinel method value: "serve the country's extracted authority timetable". */
+/** Sentinel method value: "serve the country's baked authority timetable". */
 export const AUTHORITY_METHOD = 'AUTHORITY';
 
-const zonesCache = {};   // folder -> zones.json
-const zoneTableCache = {};   // "folder/zoneId" -> table json
+/** Beyond this the location is not this page's covered city, so R1 does not apply (degrees). */
+const SAME_CITY_DEG = 0.5;
 
 /** Is there an authority timetable for this location's country? */
 export function hasAuthorityTimetable(cc) {
     return Boolean(cc && AUTHORITY_TIMETABLES[cc]);
 }
 
-/** The authority's display name + url for a country, or null. Synchronous, so
- *  settings can label the dropdown option without awaiting the zone files. */
+/** The authority's display name + url for a country, or null. Synchronous, so settings can label
+ *  the dropdown option without touching the table. */
 export function authorityInfo(cc) {
     return (cc && AUTHORITY_TIMETABLES[cc]) || null;
 }
 
-async function loadZones(folder) {
-    if (!zonesCache[folder]) {
-        const res = await fetch(`/data/timetables/${folder}/zones.json`);
-        zonesCache[folder] = await res.json();
-    }
-    return zonesCache[folder];
-}
-
-async function loadZoneTable(folder, zoneId) {
-    const key = `${folder}/${zoneId}`;
-    if (!(key in zoneTableCache)) {
-        try {
-            const res = await fetch(`/data/timetables/${folder}/zone-${zoneId}.json`);
-            zoneTableCache[key] = res.ok ? await res.json() : null;
-        } catch (e) {
-            zoneTableCache[key] = null;
-        }
-    }
-    return zoneTableCache[key];
-}
-
-/** Nearest zone centroid to the coordinates (flat approximation is fine at this scale). */
-function nearestZone(zones, lat, lng) {
-    let best = null;
-    let bestD = Infinity;
-    for (const z of zones) {
-        const d = (z.lat - lat) ** 2 + ((z.lng - lng) * Math.cos((lat * Math.PI) / 180)) ** 2;
-        if (d < bestD) { bestD = d; best = z; }
-    }
-    return best;
+/** Minutes from local midnight for a 24-hour "HH:MM" cell. */
+function minutesOf(hhmm) {
+    const [h, m] = hhmm.trim().split(':').map(Number);
+    return Number.isFinite(h) && Number.isFinite(m) ? h * 60 + m : NaN;
 }
 
 /**
- * The authority's published events for one civil day, or null if there is no
- * table for this location / no row for this day (caller then computes).
- *
- * @param {Date} date       any instant of the civil day (used for month/day and the y/m/d base)
- * @param {{lat:number, lng:number, cc:string}} loc
- * @returns {Promise<{source:string, sourceUrl:string, zone:string,
- *   events:{fajr:Date,sunrise:Date,dhuhr:Date,asr:Date,maghrib:Date,isha:Date}}|null>}
+ * The baked authority table belongs to THIS page's city. It only applies when the active
+ * location is that city (the covered-city navigation invariant keeps them aligned); if the
+ * location is elsewhere, R1 does not apply and the caller computes.
  */
-export async function authorityDayEvents(date, loc) {
-    const entry = AUTHORITY_TIMETABLES[loc.cc];
-    if (!entry) return null;
-    const folder = entry.folder;
+function locMatchesPage(loc) {
+    const ds = document.body.dataset;
+    if (!ds.presetLat || !ds.presetLng) return true;   // no preset to disagree with
+    return Math.abs(Number(ds.presetLat) - loc.lat) <= SAME_CITY_DEG
+        && Math.abs(Number(ds.presetLng) - loc.lng) <= SAME_CITY_DEG;
+}
 
-    const zonesDoc = await loadZones(folder);
-    const zone = nearestZone(zonesDoc.zones, loc.lat, loc.lng);
-    if (!zone) return null;
-
-    const table = await loadZoneTable(folder, zone.id);
-    if (!table) return null;
+/**
+ * The authority's published events for one civil day, read from the baked table on the page, or
+ * null if this page carries no table / the location is not this page's city / the day has no row
+ * (caller then computes).
+ *
+ * @param {Date} date  any instant of the civil day (used for month/day and the y/m/d base)
+ * @param {{lat:number, lng:number, cc:string}} loc
+ * @returns {{source:string, sourceUrl:string, zone:string,
+ *   events:{fajr:Date,sunrise:Date,dhuhr:Date,asr:Date,maghrib:Date,isha:Date}}|null}
+ */
+export function authorityDayEvents(date, loc) {
+    const section = document.querySelector('.authority-timetable');
+    if (!section || !locMatchesPage(loc)) return null;
 
     const key = `${date.getMonth() + 1}-${date.getDate()}`;
-    const row = table.times[key];
-    if (!row || row.length < 6) return null;   // gap -> caller computes
+    const row = section.querySelector(`tr[data-md="${key}"]`);
+    if (!row) return null;   // gap / leap day -> caller computes
 
-    // Build Dates in the civil day, from minutes-of-local-midnight. Adhan gives
-    // device-local Dates too, so downstream time math stays consistent.
-    const at = (mins) => new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, mins, 0);
-    const [fajr, sunrise, dhuhr, asr, maghrib, isha] = row;
+    // Cells: [day, fajr, sunrise, dhuhr, asr, maghrib, isha]; indices 1..6 are the times.
+    const cells = row.querySelectorAll('td');
+    if (cells.length < 7) return null;
+    const mins = [1, 2, 3, 4, 5, 6].map((i) => minutesOf(cells[i].textContent));
+    if (mins.some((m) => !Number.isFinite(m))) return null;
+
+    // Build Dates in the civil day, from minutes-of-local-midnight (matches the computed path).
+    const at = (m) => new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, m, 0);
+    const [fajr, sunrise, dhuhr, asr, maghrib, isha] = mins;
     return {
-        source: zonesDoc.authorityName || table.authority,
-        sourceUrl: zonesDoc.authorityUrl || table.source,
-        zone: zone.name,
+        source: section.dataset.authority,
+        sourceUrl: section.dataset.authorityUrl,
+        zone: section.dataset.zone,
         events: {
             fajr: at(fajr), sunrise: at(sunrise), dhuhr: at(dhuhr),
             asr: at(asr), maghrib: at(maghrib), isha: at(isha)

@@ -15,7 +15,7 @@
 import { METHODS } from '../astronomy.js';
 import { authorityInfo, AUTHORITY_METHOD } from '../timetables.js';
 import { t } from '../strings.js';
-import { esc } from '../utils.js';
+import { esc, distanceKm } from '../utils.js';
 import { loadCities, searchCities, detectByGps, detectByEdge, nearestCity } from '../location.js';
 
 let current = null;   // {settings, onChange} - kept so syncSettings can re-render
@@ -40,12 +40,10 @@ export function initSettings(opts) {
  * Re-render the drawer from live app state. Called after every recompute, so
  * the controls always show what the app is actually computing with.
  * @param {Object} settings
- * @param {Object} [methodDefaults]  parsed method-defaults.json, for the recommendation
  */
-export function syncSettings(settings, methodDefaults) {
+export function syncSettings(settings) {
     if (!current) return;
     current.settings = settings;
-    if (methodDefaults) current.methodDefaults = methodDefaults;
     const drawer = document.getElementById('settings-drawer');
     const wasOpen = drawer.classList.contains('drawer-open');
     render(drawer, current);
@@ -71,7 +69,7 @@ function toggle(drawer, btn, open) {
  * convention other than their country's default, and this app must not decide
  * that for them. So: recommended first, everything else still reachable.
  */
-function methodOptions(settings, defaults) {
+function methodOptions(settings) {
     const cc = settings.location && settings.location.cc;
     const country = settings.location && settings.location.country;
     const authority = authorityInfo(cc);
@@ -87,7 +85,9 @@ function methodOptions(settings, defaults) {
             + `</optgroup>`
         : '';
 
-    const recKey = (defaults && cc && defaults.byCountry[cc]) || (defaults && defaults.default);
+    // The recommended method is the country's own convention, baked onto the location from
+    // country.xml (ADR-0015) - no method-defaults.json. Everything else stays selectable below.
+    const recKey = (settings.location && settings.location.method) || 'MuslimWorldLeague';
     const rec = METHODS.find((m) => m.key === recKey);
     const methodOpt = (m) => opt(m.key, m.label);
     if (!rec) return authorityGroup + METHODS.map(methodOpt).join('');
@@ -117,7 +117,7 @@ function methodNote(settings) {
 }
 
 function render(drawer, opts) {
-    const { settings, onChange, methodDefaults } = opts;
+    const { settings, onChange } = opts;
     const hasLoc = Boolean(settings.location);
     drawer.innerHTML = `
     <div class="drawer-head">
@@ -148,7 +148,7 @@ function render(drawer, opts) {
         </section>
         <section class="setting">
             <h3><label for="setting-method">${esc(t('settings.METHOD'))}</label></h3>
-            <select id="setting-method">${methodOptions(settings, methodDefaults)}</select>
+            <select id="setting-method">${methodOptions(settings)}</select>
             ${methodNote(settings)}
         </section>
         <section class="setting">
@@ -194,7 +194,11 @@ function render(drawer, opts) {
         { openNow: !hasLoc });
 }
 
-/** Label raw coordinates with the nearest bundled city (name, country, cc). */
+/**
+ * Label raw coordinates with the nearest baked city and carry that city's method, madhhab, slug
+ * and distance, so the caller can route (ADR-0016): within a locality -> navigate to its page;
+ * off-grid -> compute inline with the nearest city's method.
+ */
 async function enrich(loc) {
     if (!loc) return null;
     const cities = await loadCities();
@@ -205,7 +209,11 @@ async function enrich(loc) {
         lat: loc.lat,
         lng: loc.lng,
         tz: loc.tz,
-        cc: loc.cc || (near ? near.cc : null)
+        cc: loc.cc || (near ? near.cc : null),
+        method: near ? near.method : null,
+        madhhab: near ? near.madhhab : null,
+        uri: near ? near.uri : null,
+        nearKm: near ? distanceKm(loc, near) : Infinity
     };
 }
 
@@ -317,7 +325,9 @@ function wireCitySearch(input, list, onPick) {
                 const c = hits[Number(b.dataset.i)];
                 list.innerHTML = '';
                 input.value = '';
-                onPick({ name: c.name, country: c.country, lat: c.lat, lng: c.lng, tz: c.tz, cc: c.cc });
+                // An explicit pick IS a baked city (nearKm 0), so the caller navigates to its page.
+                onPick({ name: c.name, country: c.country, lat: c.lat, lng: c.lng, tz: c.tz, cc: c.cc,
+                    method: c.method, madhhab: c.madhhab, uri: c.uri, nearKm: 0 });
             });
         }
     });

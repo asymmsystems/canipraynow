@@ -26,22 +26,10 @@ jobs:
           key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: maven-${{ runner.os }}-
 
-      - name: Build site
-        run: ./mvnw -Pproduction -pl application/cipn-app-site -am clean process-resources --batch-mode --no-transfer-progress
-
-      # Syntax gate for the client-side ES modules and data files, using the
-      # node binary preinstalled on the runner. No npm, no package.json - the
-      # build itself stays Maven-only. Full engine tests: TASK-C0001.
-      - name: Check JS syntax and JSON validity
-        run: |
-          set -e
-          find application/cipn-app-site/src/main/jbake/assets/js application/cipn-app-site/functions -name '*.js' -print0 \
-            | xargs -0 -n1 sh -c 'node --input-type=module --check < "$1" || { echo "SYNTAX: $1"; exit 1; }' _
-          find application/cipn-app-site/src/main/jbake/assets/data application/cipn-app-site/src/main/jbake/assets/js/strings -name '*.json' -print0 \
-            | xargs -0 -n1 node -e 'JSON.parse(require("fs").readFileSync(process.argv[1]))'
-
-      # Fiqh engine golden-matrix + hard-invariant suite. Gates every PR: a
-      # rule-data change that breaks a cell or invariant 1 fails here. Needs
-      # only the runner's node (no npm).
-      - name: Run fiqh engine tests
-        run: node application/cipn-app-site/scripts/test-engine.mjs
+      # Compile + run the whole reactor test suite on Eliya: the fiqh engine golden vectors and
+      # hard invariants, the WASM method-table parity, the accessors, and the ArchUnit layering
+      # rules. Replaces the old `node scripts/test-engine.mjs` gate (the engine is Java now, and
+      # the build stays Node-free per ADR-0002). The site bake + WASM compile are exercised by the
+      # preview deploy (`make site`) on the same PR.
+      - name: Build and test (Eliya, no Node)
+        run: make build

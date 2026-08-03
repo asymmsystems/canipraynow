@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
+
+  WASM assembly: composes the engine (E3) - and, once added (T-15b), the framework-free XML
+  parser - into the single browser fallback artefact (ADR-0015), the same way the standard
+  assembly composes the site-generation impls for the JVM. The deployable that runs TeaVM
+  over this assembly is application/cipn-app-wasm.
+
+  @author Fahim Farook
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>systems.asymm.cipn</groupId>
+        <artifactId>cipn-wiring-assembly</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>cipn-wiring-assembly-wasm</artifactId>
+    <packaging>jar</packaging>
+
+    <name>cipn-wiring-assembly-wasm</name>
+    <description>WASM assembly: composes the engine (and the framework-free XML parser) into the browser fallback artefact (ADR-0015).</description>
+
+    <dependencies>
+        <!-- The engine variant; instantiates the pure E3 kernel via EngineWiring. -->
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-wiring-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Value types the entry point references (Coordinates/CalculationParameters/DayEvents). -->
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- @JSExport: compile-only API that marks the methods exposed to JavaScript. TeaVM
+             supplies the implementation when it compiles this to WASM, so scope is provided. -->
+        <dependency>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-jso</artifactId>
+            <version>${teavm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- JS interop types (Float64Array): the entry returns a native typed array to JS. -->
+        <dependency>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-jso-apis</artifactId>
+            <version>${teavm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Parser + mapping are plain Java: JVM tests validate them (parity oracle) before
+             TeaVM compiles the same code to WASM, since the sandbox cannot execute WASM-GC. -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

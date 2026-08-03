@@ -59,30 +59,27 @@
       data-preset-lat="${content.city_lat}"
       data-preset-lng="${content.city_lng}"
       data-preset-tz="${content.city_tz}"
-      data-preset-cc="${content.city_cc}">
-<nav class="site-nav">
-    <a class="brand" href="/index.html">Can I Pray Now?</a>
-    <a href="/cities.html">Cities</a>
-    <a href="/methodology.html">Rulings &amp; evidence</a>
-</nav>
+      data-preset-cc="${content.city_cc}"
+      data-country-method="${content.city_method_key}"
+      data-country-madhhab="${content.city_madhhab}">
+<#-- Option A (ADR-0016 UX): the live app is the whole first screenful - no top nav bar, no
+     visible headline (the location box already names the city). The h1 stays for search engines,
+     visually hidden like the home page; the article moves BELOW the app; nav lives in the app
+     footer (the sidebar). -->
+<h1 class="visually-hidden">Can I pray now in ${cityName}?</h1>
+<#include "/partial/app.ftl">
+<div class="city-article">
 <article class="page-wrap">
 <span class="kicker">${countryName}</span>
-<h1>Can I pray now in ${cityName}?</h1>
-
-<#-- The article is the SEO payload; the app below it is the product. This
-     pulls the live answer to the centre of the screen without auto-scrolling
-     the reader somewhere they did not ask to go. -->
-<a class="jump-to-answer" href="#answer-canvas">See the live answer for ${cityName}
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-</a>
+<h2>Prayer times in ${cityName}</h2>
 
 <p>The five restricted windows move with the sun over ${cityName} every day: the strict sunrise,
 zenith, and sunset times in which prayer is withheld, and the extended after-Fajr and after-Asr
 windows in which voluntary prayer waits. A fixed timetable cannot answer &ldquo;right now&rdquo; -
-the verdict below is computed astronomically for ${cityName} (${content.city_tz}) this very minute,
-and follows your madhhab and what you intend to pray.</p>
+the live answer above is computed astronomically for ${cityName} (${content.city_tz}) this very
+minute, and follows your madhhab and what you intend to pray.</p>
 
-<h2>Prayer times in ${countryName}</h2>
+<h2>How ${cityName}&rsquo;s times are calculated</h2>
 <#if (content.city_authority)?? && content.city_authority?has_content>
 <p>In ${countryName}, published prayer timetables generally follow <strong>${content.city_authority}</strong>, using ${content.city_method}. Can I Pray Now computes ${cityName}&rsquo;s times with that same convention on your device - or serves the authority&rsquo;s own published table where we have extracted it - so the list matches what your local mosque prays by. You can change the method in settings.</p>
 <#else>
@@ -121,8 +118,8 @@ ${cityName} stands this minute.</p>
 </#list></ul>
 </#if>
 
-<p><em>The verdict below updates live for ${cityName} (${content.city_tz}) and follows your selected
-madhhab and prayer type. See the
+<p><em>The live answer above updates every minute for ${cityName} (${content.city_tz}) and follows
+your selected madhhab and prayer type. See the
 <a href="/methodology.html">methodology</a>.</em></p>
 <#-- Baked authority timetable (T-11 / M1): the reactor writes it into the content body for
      authority-table cities (LK/MY). Empty for computed-only cities, which stay client-side. -->
@@ -130,6 +127,6 @@ madhhab and prayer type. See the
 ${content.body}
 </#if>
 </article>
-<#include "/partial/app.ftl">
+</div>
 </body>
 </html>

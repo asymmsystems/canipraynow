@@ -40,6 +40,7 @@ final class CityPageRenderer {
         // Distinct keys: the timetable view-model also has an "authority" (the table's authority).
         model.put("countryAuthority", country.authority());
         model.put("countryMethod", country.method());
+        model.put("countryMethodKey", country.methodKey());
         model.put("countryMadhhab", country.madhhab());
         model.put("nearby", nearbyModel(nearby));
         if (timetable != null) {

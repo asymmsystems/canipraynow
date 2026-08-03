@@ -35,5 +35,9 @@ Thumbs.db
 **/src/main/jbake/content/*/
 !**/src/main/jbake/content/q/
 
+# Browser WASM engine — compiled by the reactor (cipn-app-wasm, TeaVM) and staged into the
+# site assets by `make wasm`. Build output; never committed. Source is the Java engine+parser.
+**/src/main/jbake/assets/wasm/
+
 # Dev-only tool deps (pdfjs for scripts/fetch-timetables.mjs) - never committed
 node_modules/

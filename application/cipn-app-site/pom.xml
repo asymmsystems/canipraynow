@@ -171,7 +171,7 @@
                                 <phase>process-resources</phase>
                                 <goals><goal>exec</goal></goals>
                                 <configuration>
-                                    <executable>${project.basedir}/scripts/clean-urls.sh</executable>
+                                    <executable>${project.basedir}/script/clean-urls.sh</executable>
                                     <arguments>
                                         <argument>${project.build.directory}/site</argument>
                                     </arguments>
