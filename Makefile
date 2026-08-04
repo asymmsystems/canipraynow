@@ -3,7 +3,7 @@
 # Task runner for canipraynow.com. Targets are named for the pipeline STAGE they
 # drive (see docs/developer-guide.md section 3 for the lifecycle):
 #
-#   scrape    (S1) authority tables -> standard XML    (native Java; JAKIM first; T-26)
+#   scrape    (S1) authority tables -> standard XML    (native Java; JAKIM pilot, ADR-0017)
 #   generate  (S2) per-city pages   -> HTML            (cipn-app-batch)
 #   site           bake the static site                (cipn-app-site, JBake)
 #
@@ -15,12 +15,19 @@
 MVNW        := ./mvnw
 MVN_FLAGS   := --batch-mode --no-transfer-progress -Dpmd.skip=true
 BATCH       := application/cipn-app-batch
+SCRAPE      := application/cipn-app-scrape
 SITE        := application/cipn-app-site
 WASM        := application/cipn-app-wasm
 CONTENT     := $(SITE)/src/main/jbake/content
 WASM_ASSETS := $(SITE)/src/main/jbake/assets/wasm
-METHOD_XML  := service/cipn-svc-accessor/cipn-svc-accessor-classpath/src/main/resources/calculation-method.xml
+CLASSPATH_RES := service/cipn-svc-accessor/cipn-svc-accessor-classpath/src/main/resources
+METHOD_XML  := $(CLASSPATH_RES)/calculation-method.xml
 PORT        ?= 8020
+
+# S1 scrape parameters (override on the command line): the country to scrape and the year to
+# fetch, e.g. `make scrape CC=my YEAR=2027`. Defaults to Malaysia (JAKIM), current year.
+CC          ?= my
+YEAR        ?= $(shell date +%Y)
 
 # TeaVM version is read from the reactor POM so the runtime-loader we extract always matches
 # the compiler that produced the .wasm. The generic WASM-GC loader ships inside teavm-core.
@@ -61,10 +68,11 @@ clean:  ## Remove all target/ output
 
 ## ----------------------------------------------------------------- scrape (S1)
 
-scrape:  ## (S1) Scrape an authority's tables -> classpath XML. NOT YET BUILT (T-26; JAKIM first)
-	@echo "S1 (native-Java scraper) is not implemented yet - T-26/F2, JAKIM first."
-	@echo "It will write timetable/<year>/<cc>/*.xml + index.xml and XSD-validate. See ADR-0012 section 7."
-	@exit 1
+scrape:  ## (S1) Scrape an authority (CC=my YEAR=2027) -> classpath timetable XML + golden-diff
+	$(MVNW) -pl $(SCRAPE) -am install $(MVN_FLAGS) -Dmaven.test.skip=true
+	$(MVNW) -pl $(SCRAPE) $(MVN_FLAGS) exec:java \
+		-Dexec.arguments=$(CC),$(YEAR),$(CLASSPATH_RES)/timetable/$(YEAR)
+	@echo "Scraped $(CC) $(YEAR) into $(CLASSPATH_RES)/timetable/$(YEAR)/$(CC). Review the golden-diff, then commit the XML."
 
 ## ----------------------------------------------------------------- generate (S2)
 
