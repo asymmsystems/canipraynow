@@ -66,7 +66,8 @@ class ClasspathCalculationMethodAccessorTest {
 
     @Test
     void registryHoldsEverySupportedMethod() {
-        assertEquals(16, accessor.methodKeys().size());
+        assertEquals(17, accessor.methodKeys().size());
         assertTrue(accessor.methodKeys().contains("moonsighting-committee"));
+        assertTrue(accessor.methodKeys().contains("gulf"));
     }
 }

@@ -27,6 +27,7 @@
     <method key="umm-al-qura" fajr-angle="18.5" isha-interval="90"/>
     <method key="dubai" fajr-angle="18.2" isha-angle="18.2"
             sunrise-offset="-3" dhuhr-offset="3" asr-offset="3" maghrib-offset="3"/>
+    <method key="gulf" fajr-angle="19.5" isha-interval="90"/>
     <method key="moonsighting-committee" fajr-angle="18" isha-angle="18"
             dhuhr-offset="5" maghrib-offset="3"/>
     <method key="kuwait" fajr-angle="18" isha-angle="17.5"/>
