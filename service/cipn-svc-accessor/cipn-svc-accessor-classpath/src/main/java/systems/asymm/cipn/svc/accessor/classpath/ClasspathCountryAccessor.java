@@ -87,7 +87,17 @@ public class ClasspathCountryAccessor implements CountryAccessor {
     record Countries(List<CountryElement> country) {
     }
 
-    /** XML binding for one {@code <country .../>}. */
-    record CountryElement(String cc, String authority, String method, String methodKey, String madhhab) {
+    /**
+     * XML binding for one {@code <country .../>}. The core five (cc, authority, method, methodKey,
+     * madhhab) drive the city-page presentation defaults; the authority-first register fields
+     * (has-authority, feed, redistributable, confidence, ...) are parsed so the strict Jackson
+     * reader accepts them and the XSD-valid register round-trips. They are not yet consumed by
+     * {@link CountryDefaults} (redistribution feature-flag wiring is T-27 follow-up); capturing them
+     * here keeps {@code country.xml} the single register without a second file.
+     */
+    record CountryElement(String cc, Boolean hasAuthority, String authority, String authorityUrl,
+            String method, String methodKey, String madhhab, String servedBy, String feed,
+            String redistributable, String redistributableBasis, String confidence,
+            String sourceUrl, String note) {
     }
 }
