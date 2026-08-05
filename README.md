@@ -107,7 +107,7 @@ application/cipn-app-site/src/main/
 │     ├─ wasm/         # prayer-times.wasm + runtime + calculation-method.xml  (staged by `make wasm`, git-ignored)
 │     └─ sw.js, manifest.webmanifest, fonts/, images/
 └─ scss/style.scss     # compiled to assets/css/style.css (git-ignored)
-script/                # dev tools: clean-urls.sh (build), coverage-report.py, check-links.py, authorities.json, iso-3166.json
+script/                # dev tools: clean-urls.sh (build), coverage-report.py, check-links.py, iso-3166.json
 ```
 
 The XML dataset (`city.xml`, `country.xml`, `calculation-method.xml`, `timetable/<year>/<cc>/`) lives on the classpath in `service/cipn-svc-accessor/cipn-svc-accessor-classpath` (ADR-0012); the edge Worker is `application/cipn-app-fn` (ADR-0013).

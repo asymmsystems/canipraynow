@@ -1,15 +1,15 @@
 {
   "prayerTime": [
-    { "hijri": "1447-07-12", "date": "01-Jan-2026", "day": "Thursday",   "imsak": "05:56:00", "fajr": "06:06:00", "syuruk": "07:18:00", "dhuhr": "13:19:00", "asr": "16:42:00", "maghrib": "19:17:00", "isha": "20:31:00" },
-    { "hijri": "1447-07-13", "date": "02-Jan-2026", "day": "Friday",     "imsak": "05:57:00", "fajr": "06:07:00", "syuruk": "07:18:00", "dhuhr": "13:20:00", "asr": "16:42:00", "maghrib": "19:17:00", "isha": "20:32:00" },
-    { "hijri": "1447-07-26", "date": "15-Jan-2026", "day": "Thursday",   "imsak": "06:03:00", "fajr": "06:13:00", "syuruk": "07:23:00", "dhuhr": "13:25:00", "asr": "16:48:00", "maghrib": "19:23:00", "isha": "20:36:00" },
-    { "hijri": "1448-01-15", "date": "01-Jul-2026", "day": "Wednesday",  "imsak": "05:44:00", "fajr": "05:54:00", "syuruk": "07:07:00", "dhuhr": "13:20:00", "asr": "16:45:00", "maghrib": "19:29:00", "isha": "20:44:00" },
-    { "hijri": "1448-07-12", "date": "31-Dec-2026", "day": "Thursday",   "imsak": "05:56:00", "fajr": "06:06:00", "syuruk": "07:17:00", "dhuhr": "13:19:00", "asr": "16:41:00", "maghrib": "19:16:00", "isha": "20:31:00" },
-    { "hijri": "1448-07-13", "date": "01-Jan-2027", "day": "Friday",     "imsak": "05:56:00", "fajr": "06:06:00", "syuruk": "07:18:00", "dhuhr": "13:19:00", "asr": "16:42:00", "maghrib": "19:17:00", "isha": "20:31:00" }
+    { "hijri": "1447-07-12", "date": "01-Jan-2026", "day": "Khamis",   "imsak": "05:56:00", "fajr": "06:06:00", "syuruk": "07:18:00", "dhuhr": "13:19:00", "asr": "16:42:00", "maghrib": "19:17:00", "isha": "20:31:00" },
+    { "hijri": "1447-07-13", "date": "02-Jan-2026", "day": "Jumaat",    "imsak": "05:57:00", "fajr": "06:07:00", "syuruk": "07:18:00", "dhuhr": "13:20:00", "asr": "16:42:00", "maghrib": "19:17:00", "isha": "20:32:00" },
+    { "hijri": "1447-09-11", "date": "01-Mac-2026", "day": "Ahad",      "imsak": "06:07:00", "fajr": "06:17:00", "syuruk": "07:23:00", "dhuhr": "13:28:00", "asr": "16:43:00", "maghrib": "19:29:00", "isha": "20:38:00" },
+    { "hijri": "1448-02-17", "date": "01-Ogos-2026", "day": "Sabtu",    "imsak": "05:51:00", "fajr": "06:01:00", "syuruk": "07:11:00", "dhuhr": "13:22:00", "asr": "16:43:00", "maghrib": "19:30:00", "isha": "20:42:00" },
+    { "hijri": "1448-07-12", "date": "31-Dis-2026", "day": "Khamis",    "imsak": "05:56:00", "fajr": "06:06:00", "syuruk": "07:17:00", "dhuhr": "13:19:00", "asr": "16:41:00", "maghrib": "19:16:00", "isha": "20:31:00" },
+    { "hijri": "1448-07-13", "date": "01-Jan-2027", "day": "Jumaat",    "imsak": "05:56:00", "fajr": "06:06:00", "syuruk": "07:18:00", "dhuhr": "13:19:00", "asr": "16:42:00", "maghrib": "19:17:00", "isha": "20:31:00" }
   ],
   "status": "OK!",
   "serverTime": "2026-01-01 00:00:00",
-  "periodType": "year",
+  "periodType": "duration",
   "lang": "ms_my",
   "zone": "WLY01",
   "bearing": "292&deg; 31&acute; 45.5&Prime;"

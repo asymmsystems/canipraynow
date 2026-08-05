@@ -76,6 +76,16 @@ class JakimScraperTest {
     }
 
     @Test
+    void parsesMalayMonthNames() {
+        // e-Solat emits Malay month abbreviations (Mac = March, Dis = December). The fixture uses
+        // the real Malay tokens, so this pins the locale handling that a live run exposed.
+        List<TimetableRow> rows = new JakimFeedParser().parse(fixture(), 2026);
+        assertTrue(rows.stream().anyMatch(r -> r.month() == 3), "'Mac' must parse as March");
+        assertTrue(rows.stream().anyMatch(r -> r.month() == 8), "'Ogos' (4 letters) must parse as August");
+        assertTrue(rows.stream().anyMatch(r -> r.month() == 12 && r.day() == 31), "'Dis' must parse as December");
+    }
+
+    @Test
     void dropsDaysOutsideRequestedYear() {
         // The fixture carries a 01-Jan-2027 row; requesting 2026 must exclude it, and there is no
         // stray 2027 row when requesting 2026.

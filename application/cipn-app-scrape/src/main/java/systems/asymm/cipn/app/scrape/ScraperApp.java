@@ -124,8 +124,12 @@ public final class ScraperApp {
             committed.ifPresent(b -> diffs.add(GoldenDiff.compare(zone.id(), b, scraped)));
         }
 
-        carryZoneRegister(baseYear, ccLower, writer);
-        mergeCoverageManifest(outputRoot, year, cc, writer);
+        // Only claim coverage if at least one zone was actually written; a fully-failed scrape must
+        // not leave an orphan zone.xml/index.xml behind (it would falsely advertise the year).
+        if (written > 0) {
+            carryZoneRegister(baseYear, ccLower, writer);
+            mergeCoverageManifest(outputRoot, year, cc, writer);
+        }
 
         int worstDrift = report(diffs);
         System.out.printf("S1 scrape: wrote %d zone tables into %s/%s (%d failed)%n",

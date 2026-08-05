@@ -5,13 +5,13 @@
  */
 package systems.asymm.cipn.svc.scraper;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,14 +23,25 @@ import systems.asymm.cipn.fw.contract.scrape.ScrapeException;
  * Pure mapping of JAKIM's e-Solat {@code takwimsolat} JSON into {@link TimetableRow}s - no I/O,
  * so it is unit-tested against a captured response. The e-Solat envelope is
  * {@code { "prayerTime": [ {date, fajr, syuruk, dhuhr, asr, maghrib, isha, ...}, ... ], "status": "OK!" }};
- * {@code date} is {@code dd-MMM-yyyy} and each prayer is {@code HH:MM:SS}. Rows are converted to
- * minutes-from-midnight; e-Solat's {@code syuruk} is our sunrise. Solar noon is not published by
- * the authority (an E3 enrichment), so it is left absent (0). Days outside the requested year are
- * dropped defensively; the result is sorted in calendar order.
+ * {@code date} is {@code dd-MMM-yyyy} with a <em>Malay</em> month name (e.g. {@code 01-Mac-2026}),
+ * and each prayer is {@code HH:MM:SS}. Rows are converted to minutes-from-midnight; e-Solat's
+ * {@code syuruk} is our sunrise. Solar noon is not published by the authority (an E3 enrichment),
+ * so it is left absent (0). Days outside the requested year are dropped defensively; the result is
+ * sorted in calendar order.
  */
 final class JakimFeedParser {
 
-    private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH);
+    /**
+     * Month lookup keyed on the first three letters of the month token, which is unique across
+     * every Malay and English month name whether e-Solat sends an abbreviation or the full name
+     * ({@code Mac}, {@code Ogos}, {@code Julai}, {@code Disember}, {@code March}, ...).
+     */
+    private static final Map<String, Integer> MONTHS = Map.ofEntries(
+            Map.entry("jan", 1), Map.entry("feb", 2), Map.entry("mac", 3), Map.entry("mar", 3),
+            Map.entry("apr", 4), Map.entry("mei", 5), Map.entry("may", 5), Map.entry("jun", 6),
+            Map.entry("jul", 7), Map.entry("ogo", 8), Map.entry("aug", 8), Map.entry("sep", 9),
+            Map.entry("okt", 10), Map.entry("oct", 10), Map.entry("nov", 11),
+            Map.entry("dis", 12), Map.entry("dec", 12));
     private static final String ARRAY_FIELD = "prayerTime";
 
     private final ObjectMapper mapper = new ObjectMapper();
@@ -70,9 +81,18 @@ final class JakimFeedParser {
 
     private static LocalDate date(JsonNode day) {
         String raw = text(day, "date");
+        String[] parts = raw.split("-");
+        if (parts.length != 3) {
+            throw new ScrapeException("Unparseable e-Solat date '" + raw + "'");
+        }
+        String token = parts[1].trim().toLowerCase(Locale.ROOT);
+        Integer month = token.length() >= 3 ? MONTHS.get(token.substring(0, 3)) : null;
+        if (month == null) {
+            throw new ScrapeException("Unknown e-Solat month in date '" + raw + "'");
+        }
         try {
-            return LocalDate.parse(raw, DATE);
-        } catch (DateTimeParseException e) {
+            return LocalDate.of(Integer.parseInt(parts[2].trim()), month, Integer.parseInt(parts[0].trim()));
+        } catch (NumberFormatException | DateTimeException e) {
             throw new ScrapeException("Unparseable e-Solat date '" + raw + "'", e);
         }
     }

@@ -6,6 +6,7 @@
 package systems.asymm.cipn.app.scrape;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -103,6 +104,30 @@ class ScraperAppIntegrationTest {
         String manifest = Files.readString(outputRoot.resolve("index.xml"), StandardCharsets.UTF_8);
         assertTrue(manifest.contains("year=\"2026\""), "manifest is for the scraped year");
         assertTrue(manifest.contains("cc=\"MY\""), "manifest lists the scraped country");
+    }
+
+    @Test
+    void aFullyFailedScrapeLeavesNoOrphanCoverage(@TempDir Path outputRoot) {
+        // Every zone throws (e.g. the year isn't published yet). The run must fail loudly and write
+        // nothing - no zone.xml or index.xml that would falsely advertise the year as covered.
+        AuthorityScraper allFail = new AuthorityScraper() {
+            @Override
+            public String countryCode() {
+                return "MY";
+            }
+
+            @Override
+            public AuthorityTimetable scrape(TimetableZone zone, int year) {
+                throw new ScrapeException("no data for " + zone.id());
+            }
+        };
+
+        ScrapeReport report = ScraperApp.run(allFail, "MY", 2026, outputRoot);
+
+        assertEquals(0, report.zonesWritten());
+        assertTrue(report.failures() > 0);
+        assertFalse(Files.exists(outputRoot.resolve("index.xml")), "no manifest on a failed scrape");
+        assertFalse(Files.exists(outputRoot.resolve("my/zone.xml")), "no zone register on a failed scrape");
     }
 
     @Test

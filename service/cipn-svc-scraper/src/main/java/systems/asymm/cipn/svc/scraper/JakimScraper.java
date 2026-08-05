@@ -30,6 +30,11 @@ public final class JakimScraper implements AuthorityScraper {
     private static final String AUTHORITY = "JAKIM";
     private static final String AUTHORITY_NAME = "Jabatan Kemajuan Islam Malaysia";
     private static final String AUTHORITY_URL = "https://www.e-solat.gov.my/";
+    // e-Solat's period=year returns JAKIM's current published year (there is no year parameter;
+    // period=duration with a full-year range returns HTTP 500). The requested year is enforced
+    // client-side by the parser's year filter: it drops any row not in `year`, so a request for a
+    // year JAKIM is not yet serving yields an empty table and a clear "no days" failure. Onboard
+    // the current published year; a future year can only be fetched once JAKIM publishes it.
     private static final String ENDPOINT =
             "https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=%s";
 
