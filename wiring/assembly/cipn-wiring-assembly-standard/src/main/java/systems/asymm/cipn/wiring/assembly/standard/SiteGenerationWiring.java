@@ -44,7 +44,10 @@ public final class SiteGenerationWiring {
         ContentAccessor contentAccessor = FileAccessorWiring.contentAccessor(outputRoot);
         ZoneResolverProvider resolverProvider = EngineWiring.centroidZoneResolverProvider(timetableAccessor);
         NeighbourEngine neighbourEngine = EngineWiring.neighbourEngine();
-        return ManagerWiring.siteGenerationManager(
-                cityAccessor, countryAccessor, timetableAccessor, contentAccessor, resolverProvider, neighbourEngine);
+        // Off by default (disobey): we republish every held authority table regardless of its
+        // redistribution answer. Set -Dcipn.enforce.redistribution=true to bake only "yes" tables.
+        boolean enforceRedistribution = Boolean.getBoolean("cipn.enforce.redistribution");
+        return ManagerWiring.siteGenerationManager(cityAccessor, countryAccessor, timetableAccessor,
+                contentAccessor, resolverProvider, neighbourEngine, enforceRedistribution);
     }
 }

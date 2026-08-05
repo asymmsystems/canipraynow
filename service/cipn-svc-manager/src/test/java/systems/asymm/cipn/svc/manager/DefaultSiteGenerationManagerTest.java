@@ -81,16 +81,25 @@ class DefaultSiteGenerationManagerTest {
         }
     };
 
-    /** Country-defaults double: a method phrase + key for every country, an authority for LK. */
-    private static final CountryAccessor COUNTRIES = cc -> new CountryDefaults(
-            cc, "LK".equals(cc) ? "All Ceylon Jamiyyathul Ulama" : "",
-            "the Muslim World League convention", "MuslimWorldLeague", "Shāfiʿī");
+    /** Country-defaults double: a method phrase + key for every country, an authority for LK, with LK's
+     *  redistribution answer parameterised so the redistribution flag can be exercised. */
+    private static CountryAccessor countries(String lkRedistributable) {
+        return cc -> new CountryDefaults(
+                cc, "LK".equals(cc) ? "All Ceylon Jamiyyathul Ulama" : "",
+                "the Muslim World League convention", "MuslimWorldLeague", "Shāfiʿī",
+                "LK".equals(cc) ? lkRedistributable : "unknown");
+    }
 
     private SiteGenerationManager manager() {
+        return manager(false, countries("unknown"));
+    }
+
+    private SiteGenerationManager manager(boolean enforceRedistribution, CountryAccessor countryAccessor) {
         CityAccessor cities = () -> List.of(COLOMBO, LONDON);
         ZoneResolverProvider resolvers = cc -> (lat, lng) -> "LK".equals(cc) ? Optional.of("01") : Optional.empty();
         NeighbourEngine neighbours = (origin, candidates, count) -> List.of();
-        return new DefaultSiteGenerationManager(cities, COUNTRIES, TIMETABLES, content, resolvers, neighbours);
+        return new DefaultSiteGenerationManager(
+                cities, countryAccessor, TIMETABLES, content, resolvers, neighbours, enforceRedistribution);
     }
 
     @Test
@@ -117,5 +126,22 @@ class DefaultSiteGenerationManagerTest {
     void reportsSweptCount() {
         sweptToReturn = 7;
         assertEquals(7, manager().generate().stalePagesSwept());
+    }
+
+    @Test
+    void enforcedRedistributionSkipsTableNotClearedForReuse() {
+        // Flag on + LK redistributable="unknown": the authority table is withheld, LK bakes computed.
+        SiteGenerationResult result = manager(true, countries("unknown")).generate();
+
+        assertEquals(2, result.pagesWritten());
+        assertEquals(0, result.pagesWithTimetable());
+        assertFalse(written.get("sri-lanka/colombo.html").contains("authority-timetable"),
+                "an unknown-rights table must not be baked when redistribution is enforced");
+    }
+
+    @Test
+    void enforcedRedistributionKeepsTableClearedForReuse() {
+        // Flag on + LK redistributable="yes": the table is still baked.
+        assertEquals(1, manager(true, countries("yes")).generate().pagesWithTimetable());
     }
 }

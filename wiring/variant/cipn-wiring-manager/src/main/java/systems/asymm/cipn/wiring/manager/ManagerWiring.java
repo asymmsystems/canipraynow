@@ -27,9 +27,10 @@ public final class ManagerWiring {
     public static SiteGenerationManager siteGenerationManager(
             CityAccessor cityAccessor, CountryAccessor countryAccessor,
             TimetableAccessor timetableAccessor, ContentAccessor contentAccessor,
-            ZoneResolverProvider resolverProvider, NeighbourEngine neighbourEngine) {
+            ZoneResolverProvider resolverProvider, NeighbourEngine neighbourEngine,
+            boolean enforceRedistribution) {
         return new DefaultSiteGenerationManager(
                 cityAccessor, countryAccessor, timetableAccessor, contentAccessor,
-                resolverProvider, neighbourEngine);
+                resolverProvider, neighbourEngine, enforceRedistribution);
     }
 }

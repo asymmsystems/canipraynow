@@ -48,7 +48,8 @@ public class ClasspathCountryAccessor implements CountryAccessor {
             for (CountryElement c : doc.country()) {
                 map.put(c.cc().toUpperCase(Locale.ROOT),
                         new CountryDefaults(c.cc(), nullToEmpty(c.authority()),
-                                nullToEmpty(c.method()), methodKey(c.methodKey()), nullToEmpty(c.madhhab())));
+                                nullToEmpty(c.method()), methodKey(c.methodKey()), nullToEmpty(c.madhhab()),
+                                nullToUnknown(c.redistributable())));
             }
         }
         this.byCode = Map.copyOf(map);
@@ -59,11 +60,16 @@ public class ClasspathCountryAccessor implements CountryAccessor {
         CountryDefaults found = byCode.get(countryCode.toUpperCase(Locale.ROOT));
         return found != null
                 ? found
-                : new CountryDefaults(countryCode, "", DEFAULT_METHOD_PHRASE, DEFAULT_METHOD_KEY, "");
+                : new CountryDefaults(countryCode, "", DEFAULT_METHOD_PHRASE, DEFAULT_METHOD_KEY, "", "unknown");
     }
 
     private static String nullToEmpty(String s) {
         return s == null ? "" : s;
+    }
+
+    /** A missing redistributable answer is conservatively read as "unknown". */
+    private static String nullToUnknown(String s) {
+        return s == null ? "unknown" : s;
     }
 
     /** A missing key falls back to the global default convention (Muslim World League). */
