@@ -62,6 +62,11 @@ the final state and the diff summary; do not enumerate the debugging.
 - **JAKIM (MY), e-Solat:** `period=year` serves the current published year (there is no year
   parameter); `period=duration` for a full year returns **HTTP 500**. Dates are **Malay**
   (`01-Mac-2026`, `01-Ogos-2026`), parsed by first-three-letters. ~60 zones.
+- **KKTC (CY), `namazvakti.php`:** one year-round HTML takvim for a single location (Lefkoşa) - one
+  zone. Dates are **Turkish** (`01 Ocak 2026`); columns İmsak/Güneş/Öğle/İkindi/Akşam/Yatsı map to
+  fajr/sunrise/dhuhr/asr/maghrib/isha. Cyprus observes **DST** and Diyanet adds a dhuhr temkin, both
+  handled automatically by the sunrise/sunset-midpoint solar-noon enrichment. For a brand-new country
+  first hand-write its `zone.xml` (geography), then scrape.
 
 ## Troubleshooting
 
