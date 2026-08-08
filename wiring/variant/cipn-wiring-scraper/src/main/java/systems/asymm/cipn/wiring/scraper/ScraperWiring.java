@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import systems.asymm.cipn.fw.contract.scrape.AuthorityScraper;
 import systems.asymm.cipn.fw.contract.scrape.ScrapeException;
+import systems.asymm.cipn.svc.scraper.BosniaScraper;
 import systems.asymm.cipn.svc.scraper.BulgariaScraper;
 import systems.asymm.cipn.svc.scraper.CyprusScraper;
 import systems.asymm.cipn.svc.scraper.JakimScraper;
@@ -37,8 +38,9 @@ public final class ScraperWiring {
             case "MY" -> new JakimScraper();
             case "CY" -> new CyprusScraper();
             case "BG" -> new BulgariaScraper();
+            case "BA" -> new BosniaScraper();
             default -> throw new ScrapeException("No authority scraper wired for country '" + countryCode
-                    + "'. Wired: MY (JAKIM), CY (KKTC), BG (Muftiate). See ADR-0017 and the T-01 authority register.");
+                    + "'. Wired: MY (JAKIM), CY (KKTC), BG (Muftiate), BA (Rijaset). See ADR-0017 and the T-01 authority register.");
         };
     }
 }

@@ -51,18 +51,41 @@ final class HttpFeedReader implements FeedReader {
                 .build());
     }
 
+    /** Multi-request scrapers can trip an authority's rate limit; retry transient 5xx/429 with backoff. */
+    private static final int MAX_ATTEMPTS = 4;
+    private static final long RETRY_BASE_MS = 800;
+
     private String execute(String method, String url, HttpRequest request) {
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() / 100 != 2) {
-                throw new ScrapeException(method + " " + url + " returned HTTP " + response.statusCode());
+        for (int attempt = 1; ; attempt++) {
+            try {
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                int status = response.statusCode();
+                if (status / 100 == 2) {
+                    return response.body();
+                }
+                if ((status == 503 || status == 429 || status == 502) && attempt < MAX_ATTEMPTS) {
+                    backoff(attempt);
+                    continue;
+                }
+                throw new ScrapeException(method + " " + url + " returned HTTP " + status);
+            } catch (IOException e) {
+                if (attempt < MAX_ATTEMPTS) {
+                    backoff(attempt);
+                    continue;
+                }
+                throw new ScrapeException(method + " " + url + " failed", e);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new ScrapeException(method + " " + url + " was interrupted", e);
             }
-            return response.body();
-        } catch (IOException e) {
-            throw new ScrapeException(method + " " + url + " failed", e);
+        }
+    }
+
+    private static void backoff(int attempt) {
+        try {
+            Thread.sleep(RETRY_BASE_MS * attempt);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new ScrapeException(method + " " + url + " was interrupted", e);
         }
     }
 }

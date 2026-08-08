@@ -30,7 +30,7 @@ class SiteGenerationIntegrationTest {
     void wiredPipelineGeneratesEveryCityAndBakesAuthorityTables(@TempDir Path out) throws Exception {
         SiteGenerationResult result = SiteGenerationWiring.siteGenerationManager(out, 2026).generate();
 
-        assertEquals(303, result.pagesWritten(), "one page per bundled city");
+        assertEquals(304, result.pagesWritten(), "one page per bundled city");
         assertTrue(result.pagesWithTimetable() > 0, "LK/MY/CY cities get a baked authority table");
 
         // Kuala Lumpur (MY) snaps to a JAKIM zone -> its table is baked into the page.
