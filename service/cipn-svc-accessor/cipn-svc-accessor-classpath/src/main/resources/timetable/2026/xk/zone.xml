@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  BIK (Kosovo) zone index, 2026. BIK publishes one Prishtina reference table for all of Kosovo.
+  @author Fahim Farook
+-->
+<zones authority="BIK" authority-name="Bashkesia Islame e Kosoves (BIK)" authority-url="https://bislame.net/" country="Kosovo">
+    <zone id="Prishtina" name="Prishtine" lat="42.6629" lng="21.1655"/>
+</zones>
