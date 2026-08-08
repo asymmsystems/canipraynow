@@ -23,7 +23,7 @@ class ClasspathTimetableAccessorTest {
 
     @Test
     void enumeratesCoveredCountriesFromTheManifest() {
-        assertEquals(Set.of("LK", "MY", "CY", "BG", "BA", "SG", "XK", "HU", "UA", "KZ", "PT"), accessor.countries());
+        assertEquals(Set.of("LK", "MY", "CY", "BG", "BA", "SG", "XK", "HU", "UA", "KZ", "PT", "AL"), accessor.countries());
     }
 
     @Test
@@ -39,6 +39,7 @@ class ClasspathTimetableAccessorTest {
         assertEquals(1, accessor.zones("UA").size());
         assertEquals(3, accessor.zones("KZ").size());
         assertEquals(1, accessor.zones("PT").size());
+        assertEquals(1, accessor.zones("AL").size());
     }
 
     @Test

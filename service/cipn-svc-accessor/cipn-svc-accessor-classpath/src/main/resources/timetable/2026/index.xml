@@ -5,6 +5,7 @@
   @author Fahim Farook
 -->
 <timetable-index year="2026">
+    <country cc="AL"/>
     <country cc="BA"/>
     <country cc="BG"/>
     <country cc="CY"/>
