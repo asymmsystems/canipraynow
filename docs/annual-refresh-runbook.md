@@ -96,8 +96,13 @@ Do NOT ship these from a guessed mapping - each needs the noted input first.
 - **AL (KMSH):** annual PDF with >6 columns (Agimi/Imsaku dawn pair, Yleja/Pasditja/Iqindia afternoon
   set) split half-month-per-page over 32 pages. Needs a scholar decision on which dawn = fajr and
   which afternoon = asr before parsing. See `task/scholar-verification.md`.
-- **BW (BMA):** full-year HTML but ~34 locations and dual-asr columns (Shafi/Hanafi). Needs an
-  asr-madhhab choice and a decision on which locations to onboard as zones/cities.
+- **BW (BMA):** scraper is built and verified (`BotswanaScraper`, wired) - it segments the page by
+  `<div id="{city}-{month}">`, maps Zawwal to dhuhr and the Shafi asr column to asr, and drops the
+  Hanafi/Sunset columns (choices flagged in scholar-verification). The blocker is the source: BMA
+  publishes month by month, so as of Aug 2026 only Jan-Sep exist (Oct-Dec are empty table shells) and
+  the per-city state is uneven, so no city yields a full year yet. To onboard once BMA completes the
+  year: hand-write `timetable/2026/bw/zone.xml` (ids `gabarone`, `Francistown`, `Maun`), add the three
+  cities to `city.xml`, `make scrape CC=bw`, then flip `served-by=authority`.
 - **KR (KMF):** annual PDF, but January is image-only and July never produced a clean read - the
   source itself is incomplete. Needs OCR for January.
 - **FI (Rabita):** clean 6-column monthly HTML table (single fajr, single asr, dates in each row),
