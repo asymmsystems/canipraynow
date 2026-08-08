@@ -100,8 +100,10 @@ Do NOT ship these from a guessed mapping - each needs the noted input first.
   asr-madhhab choice and a decision on which locations to onboard as zones/cities.
 - **KR (KMF):** annual PDF, but January is image-only and July never produced a clean read - the
   source itself is incomplete. Needs OCR for January.
-- **FI (Rabita):** one month of HTML per fetch; needs the month parameter to iterate twelve fetches,
-  and the authority discloses no fajr/isha angle (high-latitude caveat).
+- **FI (Rabita):** clean 6-column monthly HTML table (single fajr, single asr, dates in each row),
+  but the month selector is a Laravel CSRF-gated multipart POST - each month needs a GET to harvest
+  the `_token` + session cookie, then a multipart POST (`year`, `month`, `_token`). Needs cookie/CSRF
+  support in the reader; the authority also discloses no fajr/isha angle (high-latitude caveat).
 - **ME (vaktija.me):** the annual PDF is behind client-side JS; needs a browser to obtain the file.
 - **SI (Islamska skupnost):** only a Ramadan vaktija PDF is published - no full-year source exists.
 - **Image feeds (AZ, RS, FJ) + scanned PDFs (BD, DZ, AF):** timetable is a JPG/scanned page with no
