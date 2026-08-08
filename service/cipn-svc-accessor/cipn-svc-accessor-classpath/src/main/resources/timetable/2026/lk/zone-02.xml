@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  ACJU zone 02 annual timetable.
+  ACJU zone 02 annual timetable (S1 generated, ADR-0017).
   @author Fahim Farook
 -->
-<timetable authority="ACJU" zone="02" name="Jaffna (Nallur)" source="https://www.acju.lk/prayer-times/" unit="minutes-from-midnight">
+<timetable authority="ACJU" zone="02" name="Jaffna (Nallur)" source="https://www.acju.lk/" unit="minutes-from-midnight">
     <day month="1" day="1" fajr="304" sunrise="387" dhuhr="735" asr="934" maghrib="1083" isha="1157" solar-noon="735"/>
     <day month="1" day="2" fajr="304" sunrise="387" dhuhr="736" asr="935" maghrib="1083" isha="1158" solar-noon="735"/>
     <day month="1" day="3" fajr="305" sunrise="388" dhuhr="736" asr="935" maghrib="1084" isha="1158" solar-noon="736"/>
@@ -64,7 +64,6 @@
     <day month="2" day="26" fajr="309" sunrise="387" dhuhr="745" asr="945" maghrib="1102" isha="1172" solar-noon="745"/>
     <day month="2" day="27" fajr="309" sunrise="387" dhuhr="745" asr="945" maghrib="1102" isha="1172" solar-noon="745"/>
     <day month="2" day="28" fajr="308" sunrise="386" dhuhr="745" asr="945" maghrib="1103" isha="1172" solar-noon="745"/>
-    <day month="2" day="29" fajr="308" sunrise="386" dhuhr="745" asr="944" maghrib="1103" isha="1172" solar-noon="745"/>
     <day month="3" day="1" fajr="308" sunrise="385" dhuhr="744" asr="944" maghrib="1103" isha="1172" solar-noon="744"/>
     <day month="3" day="2" fajr="307" sunrise="385" dhuhr="744" asr="944" maghrib="1103" isha="1172" solar-noon="744"/>
     <day month="3" day="3" fajr="307" sunrise="384" dhuhr="744" asr="943" maghrib="1103" isha="1172" solar-noon="744"/>

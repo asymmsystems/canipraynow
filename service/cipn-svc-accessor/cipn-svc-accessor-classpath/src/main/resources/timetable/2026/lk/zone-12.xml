@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  ACJU zone 12 annual timetable.
+  ACJU zone 12 annual timetable (S1 generated, ADR-0017).
   @author Fahim Farook
 -->
-<timetable authority="ACJU" zone="12" name="Galle, Matara" source="https://www.acju.lk/prayer-times/" unit="minutes-from-midnight">
+<timetable authority="ACJU" zone="12" name="Galle, Matara" source="https://www.acju.lk/" unit="minutes-from-midnight">
     <day month="1" day="1" fajr="297" sunrise="379" dhuhr="734" asr="936" maghrib="1087" isha="1161" solar-noon="733"/>
     <day month="1" day="2" fajr="297" sunrise="380" dhuhr="734" asr="936" maghrib="1088" isha="1162" solar-noon="734"/>
     <day month="1" day="3" fajr="298" sunrise="380" dhuhr="735" asr="937" maghrib="1088" isha="1162" solar-noon="734"/>
@@ -64,7 +64,6 @@
     <day month="2" day="26" fajr="306" sunrise="383" dhuhr="744" asr="942" maghrib="1103" isha="1172" solar-noon="743"/>
     <day month="2" day="27" fajr="306" sunrise="383" dhuhr="744" asr="942" maghrib="1103" isha="1172" solar-noon="743"/>
     <day month="2" day="28" fajr="305" sunrise="382" dhuhr="743" asr="942" maghrib="1103" isha="1172" solar-noon="743"/>
-    <day month="2" day="29" fajr="305" sunrise="382" dhuhr="743" asr="941" maghrib="1103" isha="1172" solar-noon="743"/>
     <day month="3" day="1" fajr="305" sunrise="382" dhuhr="743" asr="941" maghrib="1103" isha="1172" solar-noon="743"/>
     <day month="3" day="2" fajr="305" sunrise="381" dhuhr="743" asr="940" maghrib="1103" isha="1172" solar-noon="742"/>
     <day month="3" day="3" fajr="304" sunrise="381" dhuhr="743" asr="940" maghrib="1103" isha="1172" solar-noon="742"/>

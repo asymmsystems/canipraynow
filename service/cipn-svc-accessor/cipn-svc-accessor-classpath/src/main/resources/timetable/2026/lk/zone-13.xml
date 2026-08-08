@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  ACJU zone 13 annual timetable.
+  ACJU zone 13 annual timetable (S1 generated, ADR-0017).
   @author Fahim Farook
 -->
-<timetable authority="ACJU" zone="13" name="Hambantota" source="https://www.acju.lk/prayer-times/" unit="minutes-from-midnight">
+<timetable authority="ACJU" zone="13" name="Hambantota" source="https://www.acju.lk/" unit="minutes-from-midnight">
     <day month="1" day="1" fajr="294" sunrise="377" dhuhr="732" asr="934" maghrib="1085" isha="1159" solar-noon="731"/>
     <day month="1" day="2" fajr="295" sunrise="378" dhuhr="732" asr="934" maghrib="1085" isha="1159" solar-noon="732"/>
     <day month="1" day="3" fajr="295" sunrise="378" dhuhr="732" asr="934" maghrib="1086" isha="1160" solar-noon="732"/>
@@ -36,6 +36,34 @@
     <day month="1" day="29" fajr="305" sunrise="385" dhuhr="741" asr="943" maghrib="1097" isha="1169" solar-noon="741"/>
     <day month="1" day="30" fajr="305" sunrise="385" dhuhr="741" asr="943" maghrib="1097" isha="1169" solar-noon="741"/>
     <day month="1" day="31" fajr="305" sunrise="385" dhuhr="742" asr="944" maghrib="1098" isha="1169" solar-noon="742"/>
+    <day month="2" day="1" fajr="305" sunrise="385" dhuhr="742" asr="944" maghrib="1098" isha="1169" solar-noon="742"/>
+    <day month="2" day="2" fajr="305" sunrise="385" dhuhr="742" asr="944" maghrib="1098" isha="1169" solar-noon="742"/>
+    <day month="2" day="3" fajr="305" sunrise="385" dhuhr="742" asr="944" maghrib="1098" isha="1170" solar-noon="742"/>
+    <day month="2" day="4" fajr="305" sunrise="385" dhuhr="742" asr="944" maghrib="1099" isha="1170" solar-noon="742"/>
+    <day month="2" day="5" fajr="305" sunrise="385" dhuhr="742" asr="944" maghrib="1099" isha="1170" solar-noon="742"/>
+    <day month="2" day="6" fajr="305" sunrise="385" dhuhr="742" asr="944" maghrib="1099" isha="1170" solar-noon="742"/>
+    <day month="2" day="7" fajr="306" sunrise="385" dhuhr="742" asr="944" maghrib="1099" isha="1170" solar-noon="742"/>
+    <day month="2" day="8" fajr="306" sunrise="385" dhuhr="742" asr="944" maghrib="1099" isha="1170" solar-noon="742"/>
+    <day month="2" day="9" fajr="306" sunrise="385" dhuhr="743" asr="944" maghrib="1099" isha="1170" solar-noon="742"/>
+    <day month="2" day="10" fajr="306" sunrise="384" dhuhr="743" asr="944" maghrib="1100" isha="1170" solar-noon="742"/>
+    <day month="2" day="11" fajr="306" sunrise="384" dhuhr="743" asr="944" maghrib="1100" isha="1170" solar-noon="742"/>
+    <day month="2" day="12" fajr="306" sunrise="384" dhuhr="743" asr="944" maghrib="1100" isha="1170" solar-noon="742"/>
+    <day month="2" day="13" fajr="306" sunrise="384" dhuhr="743" asr="944" maghrib="1100" isha="1170" solar-noon="742"/>
+    <day month="2" day="14" fajr="306" sunrise="384" dhuhr="743" asr="943" maghrib="1100" isha="1170" solar-noon="742"/>
+    <day month="2" day="15" fajr="305" sunrise="384" dhuhr="742" asr="943" maghrib="1100" isha="1170" solar-noon="742"/>
+    <day month="2" day="16" fajr="305" sunrise="383" dhuhr="742" asr="943" maghrib="1100" isha="1170" solar-noon="742"/>
+    <day month="2" day="17" fajr="305" sunrise="383" dhuhr="742" asr="943" maghrib="1101" isha="1170" solar-noon="742"/>
+    <day month="2" day="18" fajr="305" sunrise="383" dhuhr="742" asr="943" maghrib="1101" isha="1170" solar-noon="742"/>
+    <day month="2" day="19" fajr="305" sunrise="383" dhuhr="742" asr="942" maghrib="1101" isha="1170" solar-noon="742"/>
+    <day month="2" day="20" fajr="305" sunrise="382" dhuhr="742" asr="942" maghrib="1101" isha="1170" solar-noon="742"/>
+    <day month="2" day="21" fajr="305" sunrise="382" dhuhr="742" asr="942" maghrib="1101" isha="1170" solar-noon="742"/>
+    <day month="2" day="22" fajr="305" sunrise="382" dhuhr="742" asr="942" maghrib="1101" isha="1170" solar-noon="742"/>
+    <day month="2" day="23" fajr="304" sunrise="382" dhuhr="742" asr="941" maghrib="1101" isha="1170" solar-noon="742"/>
+    <day month="2" day="24" fajr="304" sunrise="381" dhuhr="742" asr="941" maghrib="1101" isha="1170" solar-noon="741"/>
+    <day month="2" day="25" fajr="304" sunrise="381" dhuhr="742" asr="941" maghrib="1101" isha="1170" solar-noon="741"/>
+    <day month="2" day="26" fajr="304" sunrise="381" dhuhr="741" asr="940" maghrib="1101" isha="1170" solar-noon="741"/>
+    <day month="2" day="27" fajr="303" sunrise="380" dhuhr="741" asr="940" maghrib="1101" isha="1170" solar-noon="741"/>
+    <day month="2" day="28" fajr="303" sunrise="380" dhuhr="741" asr="939" maghrib="1101" isha="1170" solar-noon="741"/>
     <day month="3" day="1" fajr="302" sunrise="379" dhuhr="741" asr="938" maghrib="1101" isha="1170" solar-noon="740"/>
     <day month="3" day="2" fajr="302" sunrise="379" dhuhr="740" asr="938" maghrib="1101" isha="1169" solar-noon="740"/>
     <day month="3" day="3" fajr="302" sunrise="379" dhuhr="740" asr="937" maghrib="1101" isha="1169" solar-noon="740"/>

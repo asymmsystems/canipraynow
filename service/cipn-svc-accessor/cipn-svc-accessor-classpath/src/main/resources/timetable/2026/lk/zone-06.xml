@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  ACJU zone 06 annual timetable.
+  ACJU zone 06 annual timetable (S1 generated, ADR-0017).
   @author Fahim Farook
 -->
-<timetable authority="ACJU" zone="06" name="Kurunegala" source="https://www.acju.lk/prayer-times/" unit="minutes-from-midnight">
+<timetable authority="ACJU" zone="06" name="Kurunegala" source="https://www.acju.lk/" unit="minutes-from-midnight">
     <day month="1" day="1" fajr="298" sunrise="381" dhuhr="733" asr="934" maghrib="1084" isha="1158" solar-noon="733"/>
     <day month="1" day="2" fajr="299" sunrise="382" dhuhr="734" asr="935" maghrib="1085" isha="1159" solar-noon="734"/>
     <day month="1" day="3" fajr="299" sunrise="382" dhuhr="734" asr="935" maghrib="1085" isha="1159" solar-noon="734"/>
@@ -64,7 +64,6 @@
     <day month="2" day="26" fajr="306" sunrise="383" dhuhr="743" asr="942" maghrib="1102" isha="1171" solar-noon="743"/>
     <day month="2" day="27" fajr="306" sunrise="383" dhuhr="743" asr="942" maghrib="1102" isha="1171" solar-noon="743"/>
     <day month="2" day="28" fajr="305" sunrise="383" dhuhr="743" asr="942" maghrib="1102" isha="1171" solar-noon="743"/>
-    <day month="2" day="29" fajr="305" sunrise="382" dhuhr="742" asr="941" maghrib="1102" isha="1171" solar-noon="742"/>
     <day month="3" day="1" fajr="305" sunrise="382" dhuhr="742" asr="941" maghrib="1102" isha="1171" solar-noon="742"/>
     <day month="3" day="2" fajr="304" sunrise="382" dhuhr="742" asr="940" maghrib="1102" isha="1171" solar-noon="742"/>
     <day month="3" day="3" fajr="304" sunrise="381" dhuhr="742" asr="940" maghrib="1102" isha="1171" solar-noon="742"/>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  ACJU zone 08 annual timetable.
+  ACJU zone 08 annual timetable (S1 generated, ADR-0017).
   @author Fahim Farook
 -->
-<timetable authority="ACJU" zone="08" name="Batticaloa, Ampara" source="https://www.acju.lk/prayer-times/" unit="minutes-from-midnight">
+<timetable authority="ACJU" zone="08" name="Batticaloa, Ampara" source="https://www.acju.lk/" unit="minutes-from-midnight">
     <day month="1" day="1" fajr="293" sunrise="376" dhuhr="728" asr="929" maghrib="1078" isha="1153" solar-noon="727"/>
     <day month="1" day="2" fajr="294" sunrise="377" dhuhr="728" asr="929" maghrib="1079" isha="1153" solar-noon="728"/>
     <day month="1" day="3" fajr="294" sunrise="377" dhuhr="729" asr="929" maghrib="1079" isha="1154" solar-noon="728"/>
@@ -64,7 +64,6 @@
     <day month="2" day="26" fajr="301" sunrise="378" dhuhr="738" asr="937" maghrib="1096" isha="1165" solar-noon="737"/>
     <day month="2" day="27" fajr="301" sunrise="378" dhuhr="738" asr="937" maghrib="1096" isha="1165" solar-noon="737"/>
     <day month="2" day="28" fajr="300" sunrise="378" dhuhr="737" asr="937" maghrib="1096" isha="1165" solar-noon="737"/>
-    <day month="2" day="29" fajr="300" sunrise="377" dhuhr="737" asr="936" maghrib="1096" isha="1165" solar-noon="737"/>
     <day month="3" day="1" fajr="300" sunrise="377" dhuhr="737" asr="936" maghrib="1096" isha="1165" solar-noon="737"/>
     <day month="3" day="2" fajr="299" sunrise="376" dhuhr="737" asr="935" maghrib="1096" isha="1165" solar-noon="736"/>
     <day month="3" day="3" fajr="299" sunrise="376" dhuhr="737" asr="935" maghrib="1096" isha="1165" solar-noon="736"/>

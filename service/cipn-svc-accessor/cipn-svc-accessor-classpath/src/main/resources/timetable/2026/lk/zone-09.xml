@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
-  ACJU zone 09 annual timetable.
+  ACJU zone 09 annual timetable (S1 generated, ADR-0017).
   @author Fahim Farook
 -->
-<timetable authority="ACJU" zone="09" name="Trincomalee" source="https://www.acju.lk/prayer-times/" unit="minutes-from-midnight">
+<timetable authority="ACJU" zone="09" name="Trincomalee" source="https://www.acju.lk/" unit="minutes-from-midnight">
     <day month="1" day="1" fajr="298" sunrise="381" dhuhr="731" asr="930" maghrib="1079" isha="1153" solar-noon="730"/>
     <day month="1" day="2" fajr="299" sunrise="382" dhuhr="731" asr="931" maghrib="1080" isha="1154" solar-noon="731"/>
     <day month="1" day="3" fajr="299" sunrise="382" dhuhr="732" asr="931" maghrib="1080" isha="1154" solar-noon="731"/>
@@ -64,7 +64,6 @@
     <day month="2" day="26" fajr="304" sunrise="382" dhuhr="740" asr="941" maghrib="1098" isha="1168" solar-noon="740"/>
     <day month="2" day="27" fajr="304" sunrise="381" dhuhr="740" asr="940" maghrib="1098" isha="1168" solar-noon="740"/>
     <day month="2" day="28" fajr="304" sunrise="381" dhuhr="740" asr="940" maghrib="1098" isha="1168" solar-noon="740"/>
-    <day month="2" day="29" fajr="303" sunrise="381" dhuhr="740" asr="940" maghrib="1098" isha="1168" solar-noon="740"/>
     <day month="3" day="1" fajr="303" sunrise="380" dhuhr="740" asr="939" maghrib="1098" isha="1168" solar-noon="739"/>
     <day month="3" day="2" fajr="302" sunrise="380" dhuhr="740" asr="939" maghrib="1098" isha="1168" solar-noon="739"/>
     <day month="3" day="3" fajr="302" sunrise="379" dhuhr="739" asr="938" maghrib="1098" isha="1168" solar-noon="739"/>
