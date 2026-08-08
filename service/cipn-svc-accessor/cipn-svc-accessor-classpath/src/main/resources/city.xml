@@ -308,4 +308,5 @@
     <city name="Taiz" country="Yemen" cc="YE" slug="taiz" country-slug="yemen" lat="13.5795" lng="44.0209" tz="Asia/Aden" page="true"/>
     <city name="Nicosia" country="Cyprus" cc="CY" slug="nicosia" country-slug="cyprus" lat="35.1856" lng="33.3823" tz="Asia/Nicosia" page="true"/>
     <city name="Sofia" country="Bulgaria" cc="BG" slug="sofia" country-slug="bulgaria" lat="42.6977" lng="23.3219" tz="Europe/Sofia" page="true"/>
+    <city name="Budapest" country="Hungary" cc="HU" slug="budapest" country-slug="hungary" lat="47.4979" lng="19.0402" tz="Europe/Budapest" page="true"/>
 </cities>
