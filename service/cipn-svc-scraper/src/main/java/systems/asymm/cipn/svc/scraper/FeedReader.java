@@ -19,4 +19,17 @@ interface FeedReader {
      * @throws systems.asymm.cipn.fw.contract.scrape.ScrapeException on a non-success status or I/O failure
      */
     String get(String url);
+
+    /**
+     * POST a {@code application/x-www-form-urlencoded} body (for authorities whose timetable is
+     * behind a form, e.g. a month/town selector). Default: unsupported, so GET-only readers stay
+     * one-method lambdas.
+     *
+     * @param url      the form action URL
+     * @param formBody the url-encoded form body (e.g. {@code "month=8&town=sofia"})
+     * @return the response body as text
+     */
+    default String post(String url, String formBody) {
+        throw new UnsupportedOperationException("POST not supported by this FeedReader");
+    }
 }

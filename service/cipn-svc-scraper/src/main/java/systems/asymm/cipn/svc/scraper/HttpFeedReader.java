@@ -32,23 +32,37 @@ final class HttpFeedReader implements FeedReader {
 
     @Override
     public String get(String url) {
-        HttpRequest request = HttpRequest.newBuilder(URI.create(url))
+        return execute("GET", url, HttpRequest.newBuilder(URI.create(url))
                 .header("User-Agent", USER_AGENT)
                 .header("Accept", "text/html,application/json;q=0.9,*/*;q=0.8")
                 .timeout(REQUEST_TIMEOUT)
                 .GET()
-                .build();
+                .build());
+    }
+
+    @Override
+    public String post(String url, String formBody) {
+        return execute("POST", url, HttpRequest.newBuilder(URI.create(url))
+                .header("User-Agent", USER_AGENT)
+                .header("Accept", "text/html,*/*;q=0.8")
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .timeout(REQUEST_TIMEOUT)
+                .POST(HttpRequest.BodyPublishers.ofString(formBody))
+                .build());
+    }
+
+    private String execute(String method, String url, HttpRequest request) {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() / 100 != 2) {
-                throw new ScrapeException("GET " + url + " returned HTTP " + response.statusCode());
+                throw new ScrapeException(method + " " + url + " returned HTTP " + response.statusCode());
             }
             return response.body();
         } catch (IOException e) {
-            throw new ScrapeException("GET " + url + " failed", e);
+            throw new ScrapeException(method + " " + url + " failed", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new ScrapeException("GET " + url + " was interrupted", e);
+            throw new ScrapeException(method + " " + url + " was interrupted", e);
         }
     }
 }
