@@ -34,7 +34,7 @@ final class HttpFeedReader implements FeedReader {
     public String get(String url) {
         HttpRequest request = HttpRequest.newBuilder(URI.create(url))
                 .header("User-Agent", USER_AGENT)
-                .header("Accept", "application/json")
+                .header("Accept", "text/html,application/json;q=0.9,*/*;q=0.8")
                 .timeout(REQUEST_TIMEOUT)
                 .GET()
                 .build();

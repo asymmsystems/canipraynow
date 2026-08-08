@@ -28,7 +28,6 @@ import systems.asymm.cipn.fw.contract.scrape.AuthorityScraper;
 import systems.asymm.cipn.fw.contract.scrape.ScrapeException;
 import systems.asymm.cipn.wiring.accessor.classpath.ClasspathAccessorWiring;
 import systems.asymm.cipn.wiring.accessor.file.FileAccessorWiring;
-import systems.asymm.cipn.wiring.engine.EngineWiring;
 import systems.asymm.cipn.wiring.scraper.ScraperWiring;
 
 /**
@@ -94,9 +93,9 @@ public final class ScraperApp {
         ContentAccessor writer = FileAccessorWiring.contentAccessor(outputRoot);
         int expectedDays = Year.of(year).length();
 
-        // Solar noon is a computed (E3) enrichment, not published by the authority; the enricher
-        // fills it where the authority did not announce it (ADR-0017).
-        SolarNoonEnricher enricher = new SolarNoonEnricher(EngineWiring.astronomyEngine());
+        // Solar noon is a computed enrichment, not published by the authority; the enricher fills it
+        // (from the published sunrise/sunset midpoint) where the authority did not announce it (ADR-0017).
+        SolarNoonEnricher enricher = new SolarNoonEnricher();
 
         System.out.printf("S1 scrape: %s %d - %d zones, base register from %d%n",
                 cc, year, zones.size(), baseYear);
@@ -107,7 +106,7 @@ public final class ScraperApp {
         for (TimetableZone zone : zones) {
             AuthorityTimetable scraped;
             try {
-                scraped = enricher.enrich(scraper.scrape(zone, year), zone);
+                scraped = enricher.enrich(scraper.scrape(zone, year));
             } catch (ScrapeException e) {
                 System.err.printf("  FAIL zone %s: %s%n", zone.id(), e.getMessage());
                 failures++;

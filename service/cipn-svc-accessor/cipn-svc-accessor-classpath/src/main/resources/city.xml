@@ -306,4 +306,5 @@
     <city name="Aden" country="Yemen" cc="YE" slug="aden" country-slug="yemen" lat="12.7855" lng="45.0187" tz="Asia/Aden" page="true"/>
     <city name="Al Hudaydah" country="Yemen" cc="YE" slug="al-hudaydah" country-slug="yemen" lat="14.7978" lng="42.9545" tz="Asia/Aden" page="true"/>
     <city name="Taiz" country="Yemen" cc="YE" slug="taiz" country-slug="yemen" lat="13.5795" lng="44.0209" tz="Asia/Aden" page="true"/>
+    <city name="Nicosia" country="Cyprus" cc="CY" slug="nicosia" country-slug="cyprus" lat="35.1856" lng="33.3823" tz="Asia/Nicosia" page="true"/>
 </cities>

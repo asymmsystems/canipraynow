@@ -23,13 +23,14 @@ class ClasspathTimetableAccessorTest {
 
     @Test
     void enumeratesCoveredCountriesFromTheManifest() {
-        assertEquals(Set.of("LK", "MY"), accessor.countries());
+        assertEquals(Set.of("LK", "MY", "CY"), accessor.countries());
     }
 
     @Test
     void readsEveryZoneIndex() {
         assertEquals(13, accessor.zones("LK").size());
         assertEquals(60, accessor.zones("MY").size());
+        assertEquals(1, accessor.zones("CY").size());
     }
 
     @Test
@@ -42,7 +43,7 @@ class ClasspathTimetableAccessorTest {
         assertEquals(1, first.month());
         assertEquals(1, first.day());
         assertEquals(300, first.fajr());
-        assertEquals(734, first.solarNoon(), "solar noon (E3 transit) is enriched into the tables");
+        assertEquals(735, first.solarNoon(), "solar noon (sunrise/sunset midpoint) is enriched into the tables");
     }
 
     @Test

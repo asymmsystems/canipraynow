@@ -30,14 +30,18 @@ class SiteGenerationIntegrationTest {
     void wiredPipelineGeneratesEveryCityAndBakesAuthorityTables(@TempDir Path out) throws Exception {
         SiteGenerationResult result = SiteGenerationWiring.siteGenerationManager(out, 2026).generate();
 
-        assertEquals(301, result.pagesWritten(), "one page per bundled city");
-        assertTrue(result.pagesWithTimetable() > 0, "LK/MY cities get a baked authority table");
+        assertEquals(302, result.pagesWritten(), "one page per bundled city");
+        assertTrue(result.pagesWithTimetable() > 0, "LK/MY/CY cities get a baked authority table");
 
         // Kuala Lumpur (MY) snaps to a JAKIM zone -> its table is baked into the page.
         String kl = Files.readString(out.resolve("malaysia/kuala-lumpur.html"));
         assertTrue(kl.contains("authority-timetable"), "MY city should carry a baked table");
         assertTrue(kl.contains("annual timetable 2026"), "the baked year should be labelled");
         assertTrue(kl.contains("city_authority=JAKIM (e-Solat)"), "per-country front-matter is emitted");
+
+        // Nicosia (CY) snaps to the KKTC Lefkoşa zone -> its scraped HTML-takvim table is baked.
+        String nicosia = Files.readString(out.resolve("cyprus/nicosia.html"));
+        assertTrue(nicosia.contains("authority-timetable"), "CY city should carry its scraped baked table");
 
         // Jakarta (ID) has no extracted authority table -> no baked table section.
         String jakarta = Files.readString(out.resolve("indonesia/jakarta.html"));

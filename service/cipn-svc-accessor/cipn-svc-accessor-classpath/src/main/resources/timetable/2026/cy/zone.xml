@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Din İşleri Başkanlığı (Northern Cyprus) zone index, 2026. Single published location (Lefkoşa).
+  @author Fahim Farook
+-->
+<zones authority="KKTC-DIB" authority-name="Din İşleri Başkanlığı (Northern Cyprus)" authority-url="https://www.kktcdinisleri.com/" country="Cyprus">
+    <zone id="LEF" name="Lefkoşa (Nicosia)" lat="35.1856" lng="33.3823"/>
+</zones>

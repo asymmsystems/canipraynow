@@ -44,12 +44,6 @@
             <artifactId>cipn-wiring-accessor-file</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- The astronomy engine (E3), to compute solar noon for the enrichment pass. -->
-        <dependency>
-            <groupId>systems.asymm.cipn</groupId>
-            <artifactId>cipn-wiring-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <!-- Contract types + the timetable XML serializer the entry point references. -->
         <dependency>
@@ -60,11 +54,6 @@
         <dependency>
             <groupId>systems.asymm.cipn</groupId>
             <artifactId>cipn-fw-contract-access</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>systems.asymm.cipn</groupId>
-            <artifactId>cipn-fw-contract-engine</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
