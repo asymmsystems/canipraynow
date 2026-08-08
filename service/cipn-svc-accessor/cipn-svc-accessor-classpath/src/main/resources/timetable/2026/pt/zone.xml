@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  CIL (Portugal) zone index, 2026. CIL publishes one Lisbon reference table for the country.
+  @author Fahim Farook
+-->
+<zones authority="CIL" authority-name="Comunidade Islamica de Lisboa (CIL)" authority-url="https://www.comunidadeislamica.pt/" country="Portugal">
+    <zone id="Lisbon" name="Lisbon" lat="38.7223" lng="-9.1393"/>
+</zones>
