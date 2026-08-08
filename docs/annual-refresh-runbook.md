@@ -57,6 +57,22 @@ make scrape CC=<cc> YEAR=<year>
 Commit the written tree (`timetable/<year>/<cc>/zone-*.xml`, `zone.xml`, `../index.xml`). Describe
 the final state and the diff summary; do not enumerate the debugging.
 
+## Wired authorities (11 served)
+
+| CC | Authority | Feed | Zones | Parser note |
+|---|---|---|---|---|
+| MY | JAKIM (e-Solat) | api (JSON) | ~60 | Malay dates, `period=year` |
+| CY | KKTC Diyanet | html (GET) | 1 | Turkish dates, single Lefkosa takvim |
+| BG | Chief Muftiate | html (POST) | towns | Cyrillic columns, month+town POST |
+| BA | Rijaset (vaktija.ba) | api (JSON) | 3 | `vaktija/v1/{id}/{year}/{MM}`, retry on 503 |
+| LK | ACJU | (pre-existing) | zones | already committed |
+| SG | MUIS | pdf | 1 | row-major 12h, space-separated `H MM` |
+| XK | BIK Takvim | pdf | 1 | 24h row-major, fajr=Imsaku, `.`/`:` minute sep |
+| HU | MME (iszlam.com) | html | 1 | 12 monthly tables, month from heading (not order) |
+| UA | islam.ua | pdf | 1 | column-major, coordinate (x,y) clustering |
+| KZ | DUMK (muftyat.kz) | api (JSON) | 3 | per-settlement coords, `Double.toString` round-trip |
+| PT | CIL (Lisbon) | pdf | 1 | first-8 times, drop Zawal + 2nd isha column |
+
 ## Known authority gotchas
 
 - **JAKIM (MY), e-Solat:** `period=year` serves the current published year (there is no year
@@ -67,6 +83,34 @@ the final state and the diff summary; do not enumerate the debugging.
   fajr/sunrise/dhuhr/asr/maghrib/isha. Cyprus observes **DST** and Diyanet adds a dhuhr temkin, both
   handled automatically by the sunrise/sunset-midpoint solar-noon enrichment. For a brand-new country
   first hand-write its `zone.xml` (geography), then scrape.
+- **PDF parsers:** row-major tables (SG, XK, PT) parse from `PDFTextStripper` text with a regex;
+  column-major tables (UA) need the coordinate (x,y) clustering in `UkrainePdfParser` because the
+  text linearises out of order. Reuse the column-cluster approach for any new column-major PDF.
+- **Multi-zone from one API (KZ):** each zone's centroid must be the API's exact registered
+  coordinate; the scraper builds the URL from `zone.lat()/lng()` via `Double.toString`.
+
+## Deferred authorities (feed exists, needs a decision or a manual step)
+
+Do NOT ship these from a guessed mapping - each needs the noted input first.
+
+- **AL (KMSH):** annual PDF with >6 columns (Agimi/Imsaku dawn pair, Yleja/Pasditja/Iqindia afternoon
+  set) split half-month-per-page over 32 pages. Needs a scholar decision on which dawn = fajr and
+  which afternoon = asr before parsing. See `task/scholar-verification.md`.
+- **BW (BMA):** full-year HTML but ~34 locations and dual-asr columns (Shafi/Hanafi). Needs an
+  asr-madhhab choice and a decision on which locations to onboard as zones/cities.
+- **KR (KMF):** annual PDF, but January is image-only and July never produced a clean read - the
+  source itself is incomplete. Needs OCR for January.
+- **FI (Rabita):** one month of HTML per fetch; needs the month parameter to iterate twelve fetches,
+  and the authority discloses no fajr/isha angle (high-latitude caveat).
+- **ME (vaktija.me):** the annual PDF is behind client-side JS; needs a browser to obtain the file.
+- **SI (Islamska skupnost):** only a Ramadan vaktija PDF is published - no full-year source exists.
+- **Image feeds (AZ, RS, FJ) + scanned PDFs (BD, DZ, AF):** timetable is a JPG/scanned page with no
+  text layer; needs OCR (Tesseract) before parsing.
+- **JS-only / today-only sites (ID, PL, SE, NO, MU, KG, TJ, UZ, IR, HK, HR, LB, MK, JO, TH, IE, GB, ZA):**
+  no reachable full-year machine-readable feed; either the data is injected by client JS (endpoint
+  must be found in the browser Network tab) or the page shows only today.
+- **api placeholders (AE, DE, NL, QA, TR):** no keyless full-year feed - AE/DE/NL are computed
+  presets, QA is today-only behind a bot-WAF, TR is JWT-gated. Left computed.
 
 ## Troubleshooting
 
