@@ -108,6 +108,17 @@ Do NOT ship these from a guessed mapping - each needs the noted input first.
 - **SI (Islamska skupnost):** only a Ramadan vaktija PDF is published - no full-year source exists.
 - **Image feeds (AZ, RS, FJ) + scanned PDFs (BD, DZ, AF):** timetable is a JPG/scanned page with no
   text layer; needs OCR (Tesseract) before parsing.
+- **LK zone 01 (Colombo), June only:** ACJU publishes that one month as a scanned image (no text
+  layer), so `AcjuScraper` fails zone 01 and the committed table keeps its June gap. Every other LK
+  month/zone is text-extracted. Needs OCR for that single PDF.
+
+## Known source data-quality issues
+
+- **JAKIM SBH09 (Sabah), zohor:** e-Solat currently returns **null `zohor` for all 365 days** of
+  SBH09. `JakimFeedParser` fails loudly on a null time, so a re-scrape safely fails that one zone and
+  keeps the committed table (captured when e-Solat still served zohor). Those committed values carry
+  a small (~8 min) JAKIM dhuhr discontinuity at 1 Apr - it is JAKIM's own data, not a parser error.
+  Do not blind-overwrite MY from a fresh scrape without checking SBH09.
 - **JS-only / today-only sites (ID, PL, SE, NO, MU, KG, TJ, UZ, IR, HK, HR, LB, MK, JO, TH, IE, GB, ZA):**
   no reachable full-year machine-readable feed; either the data is injected by client JS (endpoint
   must be found in the browser Network tab) or the page shows only today.
