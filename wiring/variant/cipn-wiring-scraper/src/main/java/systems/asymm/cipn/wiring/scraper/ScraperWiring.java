@@ -16,6 +16,7 @@ import systems.asymm.cipn.svc.scraper.HungaryScraper;
 import systems.asymm.cipn.svc.scraper.JakimScraper;
 import systems.asymm.cipn.svc.scraper.KosovoScraper;
 import systems.asymm.cipn.svc.scraper.SingaporeScraper;
+import systems.asymm.cipn.svc.scraper.UkraineScraper;
 
 /**
  * Plain-Java wiring for the S1 authority scrapers: the sole place that instantiates an
@@ -45,8 +46,9 @@ public final class ScraperWiring {
             case "SG" -> new SingaporeScraper();
             case "XK" -> new KosovoScraper();
             case "HU" -> new HungaryScraper();
+            case "UA" -> new UkraineScraper();
             default -> throw new ScrapeException("No authority scraper wired for country '" + countryCode
-                    + "'. Wired: MY, CY, BG, BA, SG, XK, HU. See ADR-0017 and the T-01 authority register.");
+                    + "'. Wired: MY, CY, BG, BA, SG, XK, HU, UA. See ADR-0017 and the T-01 authority register.");
         };
     }
 }

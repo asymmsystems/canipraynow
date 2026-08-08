@@ -309,4 +309,5 @@
     <city name="Nicosia" country="Cyprus" cc="CY" slug="nicosia" country-slug="cyprus" lat="35.1856" lng="33.3823" tz="Asia/Nicosia" page="true"/>
     <city name="Sofia" country="Bulgaria" cc="BG" slug="sofia" country-slug="bulgaria" lat="42.6977" lng="23.3219" tz="Europe/Sofia" page="true"/>
     <city name="Budapest" country="Hungary" cc="HU" slug="budapest" country-slug="hungary" lat="47.4979" lng="19.0402" tz="Europe/Budapest" page="true"/>
+    <city name="Kyiv" country="Ukraine" cc="UA" slug="kyiv" country-slug="ukraine" lat="50.4501" lng="30.5234" tz="Europe/Kyiv" page="true"/>
 </cities>

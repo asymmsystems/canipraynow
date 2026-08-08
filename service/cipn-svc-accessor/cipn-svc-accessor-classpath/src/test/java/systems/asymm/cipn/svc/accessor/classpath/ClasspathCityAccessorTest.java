@@ -22,7 +22,7 @@ class ClasspathCityAccessorTest {
     @Test
     void readsEveryCityInFileOrder() {
         List<City> cities = accessor.all();
-        assertEquals(304, cities.size());
+        assertEquals(305, cities.size());
         assertEquals("Jakarta", cities.get(0).name());
         assertEquals("ID", cities.get(0).cc());
         assertEquals("indonesia", cities.get(0).countrySlug());
