@@ -40,6 +40,13 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+        <!-- Some authorities publish only a PDF timetable; PDFBox extracts the text deterministically
+             (a real table extractor, never a summarising model). Off-build, so the size is fine. -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.24</version>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>

@@ -32,4 +32,14 @@ interface FeedReader {
     default String post(String url, String formBody) {
         throw new UnsupportedOperationException("POST not supported by this FeedReader");
     }
+
+    /**
+     * GET raw bytes (for authorities whose timetable is a PDF or image). Default: unsupported.
+     *
+     * @param url the feed URL
+     * @return the response body as bytes
+     */
+    default byte[] getBytes(String url) {
+        throw new UnsupportedOperationException("byte fetch not supported by this FeedReader");
+    }
 }

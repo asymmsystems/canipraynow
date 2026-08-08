@@ -37,7 +37,17 @@ final class HttpFeedReader implements FeedReader {
                 .header("Accept", "text/html,application/json;q=0.9,*/*;q=0.8")
                 .timeout(REQUEST_TIMEOUT)
                 .GET()
-                .build());
+                .build(), HttpResponse.BodyHandlers.ofString());
+    }
+
+    @Override
+    public byte[] getBytes(String url) {
+        return execute("GET", url, HttpRequest.newBuilder(URI.create(url))
+                .header("User-Agent", USER_AGENT)
+                .header("Accept", "application/pdf,image/*,*/*;q=0.8")
+                .timeout(REQUEST_TIMEOUT)
+                .GET()
+                .build(), HttpResponse.BodyHandlers.ofByteArray());
     }
 
     @Override
@@ -48,17 +58,17 @@ final class HttpFeedReader implements FeedReader {
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .timeout(REQUEST_TIMEOUT)
                 .POST(HttpRequest.BodyPublishers.ofString(formBody))
-                .build());
+                .build(), HttpResponse.BodyHandlers.ofString());
     }
 
     /** Multi-request scrapers can trip an authority's rate limit; retry transient 5xx/429 with backoff. */
     private static final int MAX_ATTEMPTS = 4;
     private static final long RETRY_BASE_MS = 800;
 
-    private String execute(String method, String url, HttpRequest request) {
+    private <T> T execute(String method, String url, HttpRequest request, HttpResponse.BodyHandler<T> handler) {
         for (int attempt = 1; ; attempt++) {
             try {
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                HttpResponse<T> response = client.send(request, handler);
                 int status = response.statusCode();
                 if (status / 100 == 2) {
                     return response.body();
