@@ -113,9 +113,6 @@ Do NOT ship these from a guessed mapping - each needs the noted input first.
 - **SI (Islamska skupnost):** only a Ramadan vaktija PDF is published - no full-year source exists.
 - **Image feeds (AZ, RS, FJ) + scanned PDFs (BD, DZ, AF):** timetable is a JPG/scanned page with no
   text layer; needs OCR (Tesseract) before parsing.
-- **LK zone 01 (Colombo), June only:** ACJU publishes that one month as a scanned image (no text
-  layer), so `AcjuScraper` fails zone 01 and the committed table keeps its June gap. Every other LK
-  month/zone is text-extracted. Needs OCR for that single PDF.
 
 ## Known source data-quality issues
 
