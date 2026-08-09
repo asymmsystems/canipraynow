@@ -58,6 +58,10 @@
         <xs:attribute name="source-url" type="xs:string" use="optional"/>
         <!-- Free-text note: deviation/obtainability evidence, or the has-authority=false reason. -->
         <xs:attribute name="note" type="xs:string" use="optional"/>
+        <!-- Optional public-facing sentence shown on the country's city pages, explaining a notable
+             method choice (e.g. why times are computed rather than taken from the local authority's
+             own table). Distinct from the internal, technical `note`. -->
+        <xs:attribute name="method-note" type="xs:string" use="optional"/>
     </xs:complexType>
 
     <xs:simpleType name="countryCode">

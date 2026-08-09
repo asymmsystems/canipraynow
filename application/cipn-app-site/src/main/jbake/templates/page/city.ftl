@@ -85,6 +85,9 @@ minute, and follows your madhhab and what you intend to pray.</p>
 <#else>
 <p>In ${countryName}, prayer times generally follow ${content.city_method}. Can I Pray Now computes ${cityName}&rsquo;s times with that convention on your device, so they match what your community prays by; you can switch to any other method in settings.</p>
 </#if>
+<#if (content.city_method_note)?? && content.city_method_note?has_content>
+<p>${content.city_method_note}</p>
+</#if>
 <#if (content.city_madhhab)?? && content.city_madhhab?has_content>
 <p>The school most widely followed in ${countryName} is <strong>${content.city_madhhab}</strong>, which sets the Asr time and shapes some of the restricted-time rulings. The app defaults to the evidence-based ruling for everyone; you can select a school in settings. For the twilight angles behind these times, see <a href="/methods.html">how prayer times work</a> and <a href="/calculation-methods.html">the methods compared</a>.</p>
 <#else>

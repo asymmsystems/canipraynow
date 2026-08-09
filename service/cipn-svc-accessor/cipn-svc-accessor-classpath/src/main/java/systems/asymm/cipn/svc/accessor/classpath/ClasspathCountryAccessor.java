@@ -49,7 +49,7 @@ public class ClasspathCountryAccessor implements CountryAccessor {
                 map.put(c.cc().toUpperCase(Locale.ROOT),
                         new CountryDefaults(c.cc(), nullToEmpty(c.authority()),
                                 nullToEmpty(c.method()), methodKey(c.methodKey()), nullToEmpty(c.madhhab()),
-                                nullToUnknown(c.redistributable())));
+                                nullToUnknown(c.redistributable()), nullToEmpty(c.methodNote())));
             }
         }
         this.byCode = Map.copyOf(map);
@@ -60,7 +60,7 @@ public class ClasspathCountryAccessor implements CountryAccessor {
         CountryDefaults found = byCode.get(countryCode.toUpperCase(Locale.ROOT));
         return found != null
                 ? found
-                : new CountryDefaults(countryCode, "", DEFAULT_METHOD_PHRASE, DEFAULT_METHOD_KEY, "", "unknown");
+                : new CountryDefaults(countryCode, "", DEFAULT_METHOD_PHRASE, DEFAULT_METHOD_KEY, "", "unknown", "");
     }
 
     private static String nullToEmpty(String s) {
@@ -104,6 +104,6 @@ public class ClasspathCountryAccessor implements CountryAccessor {
     record CountryElement(String cc, Boolean hasAuthority, String authority, String authorityUrl,
             String method, String methodKey, String madhhab, String servedBy, String feed,
             String redistributable, String redistributableBasis, String confidence,
-            String sourceUrl, String note) {
+            String sourceUrl, String note, String methodNote) {
     }
 }

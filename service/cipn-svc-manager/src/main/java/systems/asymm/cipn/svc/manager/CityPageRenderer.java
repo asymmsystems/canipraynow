@@ -42,6 +42,7 @@ final class CityPageRenderer {
         model.put("countryMethod", country.method());
         model.put("countryMethodKey", country.methodKey());
         model.put("countryMadhhab", country.madhhab());
+        model.put("countryMethodNote", country.methodNote());
         model.put("nearby", nearbyModel(nearby));
         if (timetable != null) {
             model.putAll(TimetableViewModel.of(timetable));

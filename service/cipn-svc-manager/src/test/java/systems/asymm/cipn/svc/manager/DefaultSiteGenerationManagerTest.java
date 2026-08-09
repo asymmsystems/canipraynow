@@ -87,7 +87,7 @@ class DefaultSiteGenerationManagerTest {
         return cc -> new CountryDefaults(
                 cc, "LK".equals(cc) ? "All Ceylon Jamiyyathul Ulama" : "",
                 "the Muslim World League convention", "MuslimWorldLeague", "Shāfiʿī",
-                "LK".equals(cc) ? lkRedistributable : "unknown");
+                "LK".equals(cc) ? lkRedistributable : "unknown", "");
     }
 
     private SiteGenerationManager manager() {

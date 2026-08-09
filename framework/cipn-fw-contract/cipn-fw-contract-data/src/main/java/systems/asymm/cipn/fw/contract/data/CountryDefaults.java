@@ -20,7 +20,10 @@ package systems.asymm.cipn.fw.contract.data;
  * @param redistributable whether the authority's table may be republished: {@code "yes"}, {@code "no"},
  *                        or {@code "unknown"}. Gates whether S2 bakes the authority table when the
  *                        redistribution flag is enforced (ADR-0017 / T-31)
+ * @param methodNote      an optional public-facing sentence explaining a notable method choice for the
+ *                        country (e.g. why times are computed rather than taken from the local
+ *                        authority's own table); empty when there is nothing to explain
  */
 public record CountryDefaults(String cc, String authority, String method, String methodKey, String madhhab,
-        String redistributable) {
+        String redistributable, String methodNote) {
 }
