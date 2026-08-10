@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  KMSH (Albania) zone index, 2026. KMSH publishes one Tirana reference table for the country.
+  @author Fahim Farook
+-->
+<zones authority="KMSH" authority-name="Komuniteti Mysliman i Shqiperise (KMSH)" authority-url="https://www.kmsh.al/" country="Albania">
+    <zone id="Tirana" name="Tirana" lat="41.3275" lng="19.8189"/>
+</zones>

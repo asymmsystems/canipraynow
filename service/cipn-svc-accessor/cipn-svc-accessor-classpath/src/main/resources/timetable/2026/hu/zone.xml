@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  MME (Hungary) zone index, 2026. iszlam.com publishes one Budapest table for the country.
+  @author Fahim Farook
+-->
+<zones authority="MME" authority-name="Magyarorszagi Muszlimok Egyhaza (MME)" authority-url="https://iszlam.com/iszlam-imaidok/" country="Hungary">
+    <zone id="Budapest" name="Budapest" lat="47.4979" lng="19.0402"/>
+</zones>

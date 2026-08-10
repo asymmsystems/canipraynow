@@ -18,9 +18,21 @@ import systems.asymm.cipn.fw.contract.engine.ZoneResolver;
  * boundaries, but needs only the centroids we already hold - the working strategy until
  * per-country coverage polygons are sourced. Mirrors the site's current snap rule.
  *
- * <p>Pure and I/O-free. Always resolves to some zone unless the zone list is empty.
+ * <p>Pure and I/O-free. Resolves to the nearest zone only when that zone is within
+ * {@link #MAX_SNAP_KM} of the location; a location farther than that from every zone falls back to
+ * computed times (empty result). This keeps a single-city authority table (e.g. Algiers) from being
+ * served to a far-away city of the same country while every real served city today sits well inside
+ * the radius (the farthest is ~75 km).
  */
 public class NearestCentroidZoneResolver implements ZoneResolver {
+
+    /**
+     * Maximum great-circle distance from a location to a zone centroid for that zone's table to
+     * apply. Calibrated above the farthest current served city (~75 km) and well below the gap to
+     * an out-of-area city (hundreds of km), so it changes no existing snap and only excludes cities
+     * a national table was never meant to cover.
+     */
+    static final double MAX_SNAP_KM = 150.0;
 
     private final List<TimetableZone> zones;
 
@@ -42,6 +54,6 @@ public class NearestCentroidZoneResolver implements ZoneResolver {
                 nearest = zone.id();
             }
         }
-        return Optional.ofNullable(nearest);
+        return nearestKm <= MAX_SNAP_KM ? Optional.ofNullable(nearest) : Optional.empty();
     }
 }

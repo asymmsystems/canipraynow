@@ -36,6 +36,16 @@ final class SolarDayCalculator {
     private SolarDayCalculator() {
     }
 
+    /**
+     * Solar noon (transit) only, as a UTC instant - the raw meridian crossing, with no method
+     * offset or rounding. Method-independent (no {@link CalculationParameters}); see
+     * {@link systems.asymm.cipn.fw.contract.engine.AstronomyEngine#solarNoon}.
+     */
+    static Instant solarNoon(Coordinates coordinates, LocalDate date) {
+        SolarTime solarTime = new SolarTime(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), coordinates);
+        return fromFractionalHours(date, solarTime.transit);
+    }
+
     static DayEvents compute(Coordinates coordinates, LocalDate date, CalculationParameters params) {
         SolarTime solarTime = new SolarTime(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), coordinates);
         LocalDate tomorrow = date.plusDays(1);

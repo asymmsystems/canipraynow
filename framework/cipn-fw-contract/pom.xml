@@ -30,5 +30,6 @@
         <module>cipn-fw-contract-engine</module>
         <module>cipn-fw-contract-manager</module>
         <module>cipn-fw-contract-app</module>
+        <module>cipn-fw-contract-scrape</module>
     </modules>
 </project>

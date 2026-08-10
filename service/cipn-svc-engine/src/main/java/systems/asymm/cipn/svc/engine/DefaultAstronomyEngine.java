@@ -5,6 +5,7 @@
  */
 package systems.asymm.cipn.svc.engine;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 import systems.asymm.cipn.fw.contract.data.CalculationParameters;
@@ -25,5 +26,10 @@ public class DefaultAstronomyEngine implements AstronomyEngine {
     @Override
     public DayEvents compute(Coordinates coordinates, LocalDate date, CalculationParameters params) {
         return SolarDayCalculator.compute(coordinates, date, params);
+    }
+
+    @Override
+    public Instant solarNoon(Coordinates coordinates, LocalDate date) {
+        return SolarDayCalculator.solarNoon(coordinates, date);
     }
 }

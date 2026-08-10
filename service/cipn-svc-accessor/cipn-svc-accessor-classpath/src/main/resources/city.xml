@@ -306,4 +306,9 @@
     <city name="Aden" country="Yemen" cc="YE" slug="aden" country-slug="yemen" lat="12.7855" lng="45.0187" tz="Asia/Aden" page="true"/>
     <city name="Al Hudaydah" country="Yemen" cc="YE" slug="al-hudaydah" country-slug="yemen" lat="14.7978" lng="42.9545" tz="Asia/Aden" page="true"/>
     <city name="Taiz" country="Yemen" cc="YE" slug="taiz" country-slug="yemen" lat="13.5795" lng="44.0209" tz="Asia/Aden" page="true"/>
+    <city name="Nicosia" country="Cyprus" cc="CY" slug="nicosia" country-slug="cyprus" lat="35.1856" lng="33.3823" tz="Asia/Nicosia" page="true"/>
+    <city name="Sofia" country="Bulgaria" cc="BG" slug="sofia" country-slug="bulgaria" lat="42.6977" lng="23.3219" tz="Europe/Sofia" page="true"/>
+    <city name="Budapest" country="Hungary" cc="HU" slug="budapest" country-slug="hungary" lat="47.4979" lng="19.0402" tz="Europe/Budapest" page="true"/>
+    <city name="Kyiv" country="Ukraine" cc="UA" slug="kyiv" country-slug="ukraine" lat="50.4501" lng="30.5234" tz="Europe/Kyiv" page="true"/>
+    <city name="Lisbon" country="Portugal" cc="PT" slug="lisbon" country-slug="portugal" lat="38.7223" lng="-9.1393" tz="Europe/Lisbon" page="true"/>
 </cities>

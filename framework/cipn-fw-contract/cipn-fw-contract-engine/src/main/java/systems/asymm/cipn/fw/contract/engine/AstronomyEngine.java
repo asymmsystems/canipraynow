@@ -5,6 +5,7 @@
  */
 package systems.asymm.cipn.fw.contract.engine;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 import systems.asymm.cipn.fw.contract.data.CalculationParameters;
@@ -33,4 +34,20 @@ public interface AstronomyEngine extends Engine {
      * @return the day's events in UTC
      */
     DayEvents compute(Coordinates coordinates, LocalDate date, CalculationParameters params);
+
+    /**
+     * The astronomical solar noon (transit) for a location and date, as a UTC instant.
+     *
+     * <p>Method- and madhab-independent by definition - it is the moment the sun crosses the
+     * local meridian, which no calculation convention alters (unlike the twilight-angle events).
+     * That is exactly why it takes no {@link CalculationParameters}. It is the <em>fallback</em>
+     * source for the zenith window and the baked {@code solar-noon} column; where a national
+     * authority announces its own value, that takes priority over this (ADR-0017). It is never
+     * back-derived from the authority's published dhuhr, which carries a safety margin.
+     *
+     * @param coordinates the observer's location
+     * @param date        the local calendar date
+     * @return the solar transit as a UTC instant
+     */
+    Instant solarNoon(Coordinates coordinates, LocalDate date);
 }

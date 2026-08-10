@@ -14,8 +14,8 @@ and, later, compiled to WASM for the browser (T-15).
 The contract is `AstronomyEngine` (in `cipn-fw-contract-engine`, extending the
 `Engine` marker); `DefaultAstronomyEngine` implements it. `compute(Coordinates,
 LocalDate, CalculationParameters)` returns a `DayEvents` (fajr, sunrise, dhuhr,
-asr, sunset, maghrib, isha). It is a faithful port of the vendored `adhan.js` the
-browser has always used, so both runtimes agree to the minute. The value types
+asr, sunset, maghrib, isha). It is a faithful port of `adhan.js` (which the browser
+used before this engine replaced it), validated to the minute against it. The value types
 (`Coordinates`, `CalculationParameters`, `DayEvents`, the enums) live in
 `cipn-fw-contract-data`; the solar math (`Astronomical`, `SolarCoordinates`,
 `SolarTime`, `SolarDayCalculator`) is package-private impl detail here.
@@ -32,15 +32,11 @@ browser has always used, so both runtimes agree to the minute. The value types
 The accessor + engine are wired and validated together in **`cipn-app-batch`**
 (where S2 will wire them): `AstronomyEngineParityTest` runs the engine over 2688
 reference rows captured from `adhan.js` (16 methods x 2 madhabs x 14 locations x 6
-dates) and asserts every event matches to the minute. The oracle
-(`golden-vectors.json`) and its generator live there. Regenerate only when the
-method registry or `adhan.js` changes:
-
-```
-node application/cipn-app-batch/scripts/gen-golden-vectors.mjs
-```
-
-(needs Node on PATH; the JSON is the committed source of truth).
+dates) and asserts every event matches to the minute. The oracle is the frozen
+`golden-vectors.xml` test resource (in `cipn-app-batch`), captured once from `adhan.js`
+before it was retired - the committed source of truth, read via `StructuredXmlParser`.
+It is regenerated only if the method registry changes, and then in Java: no Node in the
+build (ADR-0002).
 
 ### Deferred (tracked)
 

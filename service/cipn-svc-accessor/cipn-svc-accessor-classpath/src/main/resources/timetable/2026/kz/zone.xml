@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  DUMK (Kazakhstan) zone index, 2026. One zone per served city; each centroid is that city's
+  exact muftyat.kz settlement coordinate (the times API matches on it).
+  @author Fahim Farook
+-->
+<zones authority="DUMK" authority-name="Spiritual Administration of Muslims of Kazakhstan (DUMK)" authority-url="https://www.muftyat.kz/" country="Kazakhstan">
+    <zone id="Almaty" name="Almaty" lat="43.238293" lng="76.945465"/>
+    <zone id="Astana" name="Astana" lat="51.133333" lng="71.433333"/>
+    <zone id="Shymkent" name="Shymkent" lat="42.368009" lng="69.612769"/>
+</zones>

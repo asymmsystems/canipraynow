@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems. All rights reserved.
+  Application: off-build authority scraper (S1, ADR-0017). Thin entry point - depends on the
+  wiring variants it composes (scraper + read/write accessors) and the contracts it references;
+  no svc-* (impl) dependencies. It hits third-party sites, so it is never part of the Maven build
+  (no bound executions); run by hand via `make scrape`.
+  Volatility-based structure - see architecture/module-structure.md.
+
+  @author Fahim Farook
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>systems.asymm.cipn</groupId>
+        <artifactId>canipraynow</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
+    </parent>
+
+    <artifactId>cipn-app-scrape</artifactId>
+    <packaging>jar</packaging>
+
+    <name>cipn-app-scrape</name>
+    <description>Application: off-build authority scraper (S1, ADR-0017). Thin - composes the scraper + accessor wiring.</description>
+
+    <dependencies>
+        <!-- Wiring variants the tool composes (never the svc-* impls directly). -->
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-wiring-scraper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-wiring-accessor-classpath</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-wiring-accessor-file</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Contract types + the timetable XML serializer the entry point references. -->
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-scrape</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-contract-access</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>systems.asymm.cipn</groupId>
+            <artifactId>cipn-fw-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+            </plugin>
+            <!--
+              S1 scrape target (off-build). Run from the reactor root:
+                ./mvnw -pl application/cipn-app-scrape -am -Dmaven.test.skip=true install
+                ./mvnw -pl application/cipn-app-scrape exec:java \
+                    -Dexec.mainClass=systems.asymm.cipn.app.scrape.ScraperApp \
+                    -Dexec.arguments=my,2027,<resources>/timetable/2027
+              `make scrape CC=my YEAR=2027` wraps this. No execution is bound to a build phase.
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec.plugin.version}</version>
+                <configuration>
+                    <mainClass>systems.asymm.cipn.app.scrape.ScraperApp</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

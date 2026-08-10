@@ -11,6 +11,9 @@
 <section class="authority-timetable" data-authority="${authority}" data-authority-code="${authorityCode}" data-authority-url="${url}" data-zone="${zone}">
 <h2>${authority} annual timetable ${year?c} - ${zone}</h2>
 <p class="timetable-note">Published times from ${authority}, served exactly (not computed). Source: <a href="${url}" rel="nofollow">${authorityCode}</a>.</p>
+<#if note??>
+<p class="timetable-caveat" role="note"><strong>Please note:</strong> ${note}</p>
+</#if>
 <#list months as month>
 <details class="timetable-month">
 <summary>${month.name}</summary>

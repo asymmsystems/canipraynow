@@ -38,6 +38,7 @@
         <module>service/cipn-svc-engine</module>
         <module>service/cipn-svc-accessor</module>
         <module>service/cipn-svc-manager</module>
+        <module>service/cipn-svc-scraper</module>
 
         <!-- Layer 2: Application (deployment units) -->
         <module>application/cipn-app-site</module>
@@ -45,6 +46,7 @@
         <module>application/cipn-app-batch</module>
         <module>application/cipn-app-fn</module>
         <module>application/cipn-app-wasm</module>
+        <module>application/cipn-app-scrape</module>
     </modules>
 
     <properties>

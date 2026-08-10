@@ -28,5 +28,6 @@
         <module>cipn-wiring-accessor-classpath</module>
         <module>cipn-wiring-accessor-file</module>
         <module>cipn-wiring-manager</module>
+        <module>cipn-wiring-scraper</module>
     </modules>
 </project>

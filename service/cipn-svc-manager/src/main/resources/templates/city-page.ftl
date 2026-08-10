@@ -18,6 +18,7 @@ city_authority=${countryAuthority}
 city_method=${countryMethod}
 city_method_key=${countryMethodKey}
 city_madhhab=${countryMadhhab}
+city_method_note=${countryMethodNote}
 ~~~~~~
 <#if months??>
 <#include "timetable.ftl">

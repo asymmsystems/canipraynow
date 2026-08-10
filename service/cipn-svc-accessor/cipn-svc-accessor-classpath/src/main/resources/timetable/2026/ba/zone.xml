@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Islamic Community in Bosnia and Herzegovina (Rijaset) zone index, 2026.
+  Zone id = the vaktija.ba location id (77 = Sarajevo).
+  @author Fahim Farook
+-->
+<zones authority="BA-Rijaset" authority-name="Islamic Community in Bosnia and Herzegovina (Rijaset)" authority-url="https://vaktija.ba/" country="Bosnia and Herzegovina">
+    <zone id="77" name="Sarajevo" lat="43.8563" lng="18.4131"/>
+</zones>
