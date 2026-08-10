@@ -22,7 +22,18 @@
  */
 const AUTHORITY_TIMETABLES = {
     LK: { folder: 'lk', name: 'ACJU', url: 'https://www.acju.lk/prayer-times/' },
-    MY: { folder: 'my', name: 'JAKIM', url: 'https://www.e-solat.gov.my/' }
+    MY: { folder: 'my', name: 'JAKIM', url: 'https://www.e-solat.gov.my/' },
+    CY: { folder: 'cy', name: 'KKTC Diyanet', url: 'https://www.kktcdinisleri.com/' },
+    BG: { folder: 'bg', name: 'Chief Muftiate', url: 'https://www.grandmufti.bg/' },
+    BA: { folder: 'ba', name: 'Rijaset', url: 'https://vaktija.ba/' },
+    SG: { folder: 'sg', name: 'MUIS', url: 'https://www.muis.gov.sg/' },
+    XK: { folder: 'xk', name: 'BIK', url: 'https://bislame.net/' },
+    HU: { folder: 'hu', name: 'MME', url: 'https://iszlam.com/iszlam-imaidok/' },
+    UA: { folder: 'ua', name: 'islam.ua', url: 'https://islam.ua/' },
+    KZ: { folder: 'kz', name: 'DUMK', url: 'https://www.muftyat.kz/' },
+    PT: { folder: 'pt', name: 'CIL', url: 'https://www.comunidadeislamica.pt/' },
+    AL: { folder: 'al', name: 'KMSH', url: 'https://www.kmsh.al/' },
+    DZ: { folder: 'dz', name: 'MARW', url: 'https://www.marw.gov.dz/' }
 };
 
 /** Sentinel method value: "serve the country's baked authority timetable". */
@@ -72,7 +83,7 @@ function locMatchesPage(loc) {
  */
 export function authorityDayEvents(date, loc) {
     const section = document.querySelector('.authority-timetable');
-    if (!section || !locMatchesPage(loc)) return null;
+    if (!section || section.dataset.computed === 'true' || !locMatchesPage(loc)) return null;
 
     const key = `${date.getMonth() + 1}-${date.getDate()}`;
     const row = section.querySelector(`tr[data-md="${key}"]`);
