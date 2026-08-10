@@ -9,6 +9,8 @@ import systems.asymm.cipn.fw.contract.access.CityAccessor;
 import systems.asymm.cipn.fw.contract.access.ContentAccessor;
 import systems.asymm.cipn.fw.contract.access.CountryAccessor;
 import systems.asymm.cipn.fw.contract.access.TimetableAccessor;
+import systems.asymm.cipn.fw.contract.access.CalculationMethodAccessor;
+import systems.asymm.cipn.fw.contract.engine.AstronomyEngine;
 import systems.asymm.cipn.fw.contract.engine.NeighbourEngine;
 import systems.asymm.cipn.fw.contract.manager.SiteGenerationManager;
 import systems.asymm.cipn.fw.contract.manager.ZoneResolverProvider;
@@ -28,9 +30,10 @@ public final class ManagerWiring {
             CityAccessor cityAccessor, CountryAccessor countryAccessor,
             TimetableAccessor timetableAccessor, ContentAccessor contentAccessor,
             ZoneResolverProvider resolverProvider, NeighbourEngine neighbourEngine,
+            AstronomyEngine astronomyEngine, CalculationMethodAccessor methodAccessor, int year,
             boolean enforceRedistribution) {
         return new DefaultSiteGenerationManager(
                 cityAccessor, countryAccessor, timetableAccessor, contentAccessor,
-                resolverProvider, neighbourEngine, enforceRedistribution);
+                resolverProvider, neighbourEngine, astronomyEngine, methodAccessor, year, enforceRedistribution);
     }
 }
