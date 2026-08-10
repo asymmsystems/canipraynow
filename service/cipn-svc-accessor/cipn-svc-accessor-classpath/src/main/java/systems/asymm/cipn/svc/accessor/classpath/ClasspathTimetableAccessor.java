@@ -112,7 +112,7 @@ public class ClasspathTimetableAccessor implements TimetableAccessor {
         rows.sort(Comparator.comparingInt(TimetableRow::month).thenComparingInt(TimetableRow::day));
         return Optional.of(new AuthorityTimetable(
                 zone.authority(), meta.authorityName(), meta.authorityUrl(),
-                zoneId, zone.name(), zone.source(), year, List.copyOf(rows)));
+                zoneId, zone.name(), zone.source(), year, List.copyOf(rows), zone.note()));
     }
 
     private String zonesPath(String countryCode) {
@@ -162,7 +162,8 @@ public class ClasspathTimetableAccessor implements TimetableAccessor {
     }
 
     /** XML binding for {@code zone-<id>.xml}. */
-    record Timetable(String authority, String zone, String name, String source, String unit, List<DayElement> day) {
+    record Timetable(String authority, String zone, String name, String source, String unit, String note,
+            List<DayElement> day) {
     }
 
     /** XML binding for one {@code <day .../>} row. */

@@ -57,7 +57,7 @@ make scrape CC=<cc> YEAR=<year>
 Commit the written tree (`timetable/<year>/<cc>/zone-*.xml`, `zone.xml`, `../index.xml`). Describe
 the final state and the diff summary; do not enumerate the debugging.
 
-## Wired authorities (11 served)
+## Wired authorities (13 served)
 
 | CC | Authority | Feed | Zones | Parser note |
 |---|---|---|---|---|
@@ -65,13 +65,37 @@ the final state and the diff summary; do not enumerate the debugging.
 | CY | KKTC Diyanet | html (GET) | 1 | Turkish dates, single Lefkosa takvim |
 | BG | Chief Muftiate | html (POST) | towns | Cyrillic columns, month+town POST |
 | BA | Rijaset (vaktija.ba) | api (JSON) | 3 | `vaktija/v1/{id}/{year}/{MM}`, retry on 503 |
-| LK | ACJU | (pre-existing) | zones | already committed |
+| LK | ACJU | pdf (monthly) | 13 | hrefs off the page, 12 PDFs/zone, explicit AM/PM |
 | SG | MUIS | pdf | 1 | row-major 12h, space-separated `H MM` |
 | XK | BIK Takvim | pdf | 1 | 24h row-major, fajr=Imsaku, `.`/`:` minute sep |
 | HU | MME (iszlam.com) | html | 1 | 12 monthly tables, month from heading (not order) |
 | UA | islam.ua | pdf | 1 | column-major, coordinate (x,y) clustering |
 | KZ | DUMK (muftyat.kz) | api (JSON) | 3 | per-settlement coords, `Double.toString` round-trip |
 | PT | CIL (Lisbon) | pdf | 1 | first-8 times, drop Zawal + 2nd isha column |
+| AL | KMSH (Tirana) | pdf | 1 | column-major coordinate clustering, half-month/page |
+| DZ | MARW (Algiers) | pdf (scanned, OCR) | 1 | OCR-derived; see "OCR-derived tables" below |
+
+## OCR-derived served tables (no live Java scraper)
+
+Some authorities publish only a **scanned image / image-only PDF** (no text layer), so there is no
+live scraper - the committed table was produced off-line by OCR and is refreshed by re-running that
+pass. The pipeline is deterministic (a real OCR engine, never a summarising model): render the PDF to
+a raster with PDFBox, OCR with `rapidocr-onnxruntime` (ASCII digits) restricting to time tokens,
+reconstruct rows by (x, y) cell position, then validate hard - ordering, day-over-day smoothness,
+solar-noon symmetry, and a cross-check against a second independent read - before committing.
+
+- **DZ (MARW, Algiers)** - two Hijri-year PDFs (`marw.gov.dz/media/calendrier/{1447,1448}/Alger.pdf`)
+  carry an explicit Gregorian date column, so 2026 rows are selected directly (no Hijri conversion).
+  Columns (RTL): date, Fajr, Sunrise, Qibla (dropped), Dhuhr, Asr, Maghrib, Isha; the Qibla column is
+  empty (`//://`) in winter, so rows are reconstructed by column position, not a fixed token count.
+  Served with a city-page `note` about the Ministry's Feb/Apr isha anomaly (shown as published).
+- **LK zone 01 (Colombo), June** - the one ACJU month published as a scanned image; OCR-filled and
+  cross-verified against an independent read (0 cell disagreements) and the committed May/July.
+
+Serving a **single-city national table** (e.g. Algiers) is kept from leaking to a far-away city of
+the same country by `NearestCentroidZoneResolver.MAX_SNAP_KM` (150 km): a location farther than that
+from every zone falls back to computed. Every real served city today is within ~75 km of its zone, so
+this changes no existing snap; it keeps Oran/Constantine/Annaba computed while Algiers is served.
 
 ## Known authority gotchas
 

@@ -59,7 +59,11 @@ public final class TimetableXml {
                 .append("\" zone=\"").append(esc(timetable.zoneId()))
                 .append("\" name=\"").append(esc(timetable.zoneName()))
                 .append("\" source=\"").append(esc(timetable.source()))
-                .append("\" unit=\"").append(UNIT).append("\">\n");
+                .append("\" unit=\"").append(UNIT).append("\"");
+        if (timetable.note() != null && !timetable.note().isBlank()) {
+            sb.append(" note=\"").append(esc(timetable.note())).append("\"");
+        }
+        sb.append(">\n");
         for (TimetableRow r : timetable.rows()) {
             sb.append("    <day month=\"").append(r.month())
                     .append("\" day=\"").append(r.day())

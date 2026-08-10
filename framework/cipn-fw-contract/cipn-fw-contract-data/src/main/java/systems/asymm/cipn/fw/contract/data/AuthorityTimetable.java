@@ -20,6 +20,8 @@ import java.util.List;
  * @param source        the specific source the rows were scraped from
  * @param year          the Gregorian year this annual table is for
  * @param rows          the annual rows, one per day, in calendar order
+ * @param note          an optional reader-facing caveat about this table (e.g. a known source
+ *                      data quirk), or {@code null}
  */
 public record AuthorityTimetable(
         String authority,
@@ -29,5 +31,12 @@ public record AuthorityTimetable(
         String zoneName,
         String source,
         int year,
-        List<TimetableRow> rows) {
+        List<TimetableRow> rows,
+        String note) {
+
+    /** A table with no reader-facing note (the common case for a freshly scraped table). */
+    public AuthorityTimetable(String authority, String authorityName, String authorityUrl,
+            String zoneId, String zoneName, String source, int year, List<TimetableRow> rows) {
+        this(authority, authorityName, authorityUrl, zoneId, zoneName, source, year, rows, null);
+    }
 }
