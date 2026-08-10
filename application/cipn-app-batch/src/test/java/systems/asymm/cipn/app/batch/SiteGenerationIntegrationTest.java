@@ -43,8 +43,11 @@ class SiteGenerationIntegrationTest {
         String nicosia = Files.readString(out.resolve("cyprus/nicosia.html"));
         assertTrue(nicosia.contains("authority-timetable"), "CY city should carry its scraped baked table");
 
-        // Jakarta (ID) has no extracted authority table -> no baked table section.
+        // Jakarta (ID) has no extracted authority table -> it bakes a COMPUTED annual table instead,
+        // so no city page is left without a full-year table for SEO (ADR-0009).
         String jakarta = Files.readString(out.resolve("indonesia/jakarta.html"));
-        assertFalse(jakarta.contains("authority-timetable"), "ID has no extracted table");
+        assertFalse(jakarta.contains("annual timetable"), "ID has no authority (served) table");
+        assertTrue(jakarta.contains("data-computed=\"true\""), "ID bakes a computed table");
+        assertTrue(jakarta.contains("<tr data-md=\"6-15\""), "the computed table covers the whole year");
     }
 }

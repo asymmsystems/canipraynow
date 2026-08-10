@@ -35,6 +35,9 @@ final class TimetableViewModel {
         model.put("url", table.authorityUrl());
         model.put("zone", table.zoneName());
         model.put("year", table.year());
+        if (DefaultSiteGenerationManager.COMPUTED.equals(table.authority())) {
+            model.put("computed", true);
+        }
         if (table.note() != null && !table.note().isBlank()) {
             model.put("note", table.note());
         }

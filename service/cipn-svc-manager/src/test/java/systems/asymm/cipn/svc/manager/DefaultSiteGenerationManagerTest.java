@@ -22,6 +22,18 @@ import systems.asymm.cipn.fw.contract.data.City;
 import systems.asymm.cipn.fw.contract.data.CountryDefaults;
 import systems.asymm.cipn.fw.contract.data.TimetableRow;
 import systems.asymm.cipn.fw.contract.data.TimetableZone;
+import systems.asymm.cipn.fw.contract.data.CalculationParameters;
+import systems.asymm.cipn.fw.contract.data.Coordinates;
+import systems.asymm.cipn.fw.contract.data.DayEvents;
+import systems.asymm.cipn.fw.contract.data.EventOffsets;
+import systems.asymm.cipn.fw.contract.data.HighLatitudeRule;
+import systems.asymm.cipn.fw.contract.data.Madhab;
+import systems.asymm.cipn.fw.contract.data.Rounding;
+import systems.asymm.cipn.fw.contract.data.Shafaq;
+import systems.asymm.cipn.fw.contract.access.CalculationMethodAccessor;
+import systems.asymm.cipn.fw.contract.engine.AstronomyEngine;
+import java.time.Instant;
+import java.time.LocalDate;
 import systems.asymm.cipn.fw.contract.engine.NeighbourEngine;
 import systems.asymm.cipn.fw.contract.manager.SiteGenerationManager;
 import systems.asymm.cipn.fw.contract.manager.SiteGenerationResult;
@@ -98,8 +110,40 @@ class DefaultSiteGenerationManagerTest {
         CityAccessor cities = () -> List.of(COLOMBO, LONDON);
         ZoneResolverProvider resolvers = cc -> (lat, lng) -> "LK".equals(cc) ? Optional.of("01") : Optional.empty();
         NeighbourEngine neighbours = (origin, candidates, count) -> List.of();
+        CalculationParameters params = new CalculationParameters("stub", 18.0, 18.0, 0.0, 0.0,
+                Madhab.SHAFI, HighLatitudeRule.TWILIGHT_ANGLE, Rounding.NEAREST, Shafaq.GENERAL,
+                new EventOffsets(0, 0, 0, 0, 0, 0));
+        AstronomyEngine engine = new AstronomyEngine() {
+            @Override
+            public DayEvents compute(Coordinates c, LocalDate d, CalculationParameters p) {
+                return new DayEvents(
+                        Instant.parse("2026-01-01T05:00:00Z"), Instant.parse("2026-01-01T08:00:00Z"),
+                        Instant.parse("2026-01-01T12:00:00Z"), Instant.parse("2026-01-01T14:00:00Z"),
+                        Instant.parse("2026-01-01T16:00:00Z"), Instant.parse("2026-01-01T16:00:00Z"),
+                        Instant.parse("2026-01-01T18:00:00Z"));
+            }
+            @Override
+            public Instant solarNoon(Coordinates c, LocalDate d) {
+                return Instant.parse("2026-01-01T12:00:00Z");
+            }
+        };
+        CalculationMethodAccessor methods = new CalculationMethodAccessor() {
+            @Override
+            public Optional<CalculationParameters> parameters(String key, Madhab madhab) {
+                return Optional.of(params);
+            }
+            @Override
+            public CalculationParameters parametersOrDefault(String key, Madhab madhab) {
+                return params;
+            }
+            @Override
+            public Set<String> methodKeys() {
+                return Set.of();
+            }
+        };
         return new DefaultSiteGenerationManager(
-                cities, countryAccessor, TIMETABLES, content, resolvers, neighbours, enforceRedistribution);
+                cities, countryAccessor, TIMETABLES, content, resolvers, neighbours,
+                engine, methods, 2026, enforceRedistribution);
     }
 
     @Test
@@ -119,7 +163,9 @@ class DefaultSiteGenerationManagerTest {
 
         String london = written.get("united-kingdom/london.html");
         assertTrue(london.contains("generated_by=SiteGenerator"));
-        assertFalse(london.contains("authority-timetable"), "GB has no baked table");
+        assertTrue(london.contains("data-computed=\"true\""),
+                "GB (computed) now bakes a computed annual table for SEO (ADR-0009)");
+        assertTrue(london.contains("<tr data-md=\"1-1\""), "the computed table has day rows");
     }
 
     @Test
@@ -135,8 +181,11 @@ class DefaultSiteGenerationManagerTest {
 
         assertEquals(2, result.pagesWritten());
         assertEquals(0, result.pagesWithTimetable());
-        assertFalse(written.get("sri-lanka/colombo.html").contains("authority-timetable"),
-                "an unknown-rights table must not be baked when redistribution is enforced");
+        String colombo = written.get("sri-lanka/colombo.html");
+        assertFalse(colombo.contains("All Ceylon Jamiyyathul Ulama annual timetable"),
+                "the authority table must not be baked when redistribution is enforced");
+        assertTrue(colombo.contains("data-computed=\"true\""),
+                "but the city still bakes a computed table so no page is left without one");
     }
 
     @Test

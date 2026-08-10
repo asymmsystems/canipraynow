@@ -7,10 +7,12 @@ package systems.asymm.cipn.wiring.assembly.standard;
 
 import java.nio.file.Path;
 
+import systems.asymm.cipn.fw.contract.access.CalculationMethodAccessor;
 import systems.asymm.cipn.fw.contract.access.CityAccessor;
 import systems.asymm.cipn.fw.contract.access.ContentAccessor;
 import systems.asymm.cipn.fw.contract.access.CountryAccessor;
 import systems.asymm.cipn.fw.contract.access.TimetableAccessor;
+import systems.asymm.cipn.fw.contract.engine.AstronomyEngine;
 import systems.asymm.cipn.fw.contract.engine.NeighbourEngine;
 import systems.asymm.cipn.fw.contract.manager.SiteGenerationManager;
 import systems.asymm.cipn.fw.contract.manager.ZoneResolverProvider;
@@ -44,10 +46,13 @@ public final class SiteGenerationWiring {
         ContentAccessor contentAccessor = FileAccessorWiring.contentAccessor(outputRoot);
         ZoneResolverProvider resolverProvider = EngineWiring.centroidZoneResolverProvider(timetableAccessor);
         NeighbourEngine neighbourEngine = EngineWiring.neighbourEngine();
+        AstronomyEngine astronomyEngine = EngineWiring.astronomyEngine();
+        CalculationMethodAccessor methodAccessor = ClasspathAccessorWiring.calculationMethodAccessor();
         // Off by default (disobey): we republish every held authority table regardless of its
         // redistribution answer. Set -Dcipn.enforce.redistribution=true to bake only "yes" tables.
         boolean enforceRedistribution = Boolean.getBoolean("cipn.enforce.redistribution");
         return ManagerWiring.siteGenerationManager(cityAccessor, countryAccessor, timetableAccessor,
-                contentAccessor, resolverProvider, neighbourEngine, enforceRedistribution);
+                contentAccessor, resolverProvider, neighbourEngine, astronomyEngine, methodAccessor, year,
+                enforceRedistribution);
     }
 }
