@@ -19,6 +19,7 @@ import systems.asymm.cipn.svc.scraper.HungaryScraper;
 import systems.asymm.cipn.svc.scraper.JakimScraper;
 import systems.asymm.cipn.svc.scraper.KazakhstanScraper;
 import systems.asymm.cipn.svc.scraper.KosovoScraper;
+import systems.asymm.cipn.svc.scraper.KyrgyzstanScraper;
 import systems.asymm.cipn.svc.scraper.PortugalScraper;
 import systems.asymm.cipn.svc.scraper.SingaporeScraper;
 import systems.asymm.cipn.svc.scraper.UkraineScraper;
@@ -53,12 +54,13 @@ public final class ScraperWiring {
             case "HU" -> new HungaryScraper();
             case "UA" -> new UkraineScraper();
             case "KZ" -> new KazakhstanScraper();
+            case "KG" -> new KyrgyzstanScraper();
             case "PT" -> new PortugalScraper();
             case "LK" -> new AcjuScraper();
             case "AL" -> new AlbaniaScraper();
             case "BW" -> new BotswanaScraper();
             default -> throw new ScrapeException("No authority scraper wired for country '" + countryCode
-                    + "'. Wired: MY, CY, BG, BA, SG, XK, HU, UA, KZ, PT, LK, AL, BW. See ADR-0017 and the T-01 authority register.");
+                    + "'. Wired: MY, CY, BG, BA, SG, XK, HU, UA, KZ, PT, LK, AL, BW, KG. See ADR-0017 and the T-01 authority register.");
         };
     }
 }

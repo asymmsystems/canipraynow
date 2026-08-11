@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  KMDB (Kyrgyzstan) zone index, 2026. muftiyat.kg publishes the Bishkek calendar; Osh (far west)
+  stays computed (beyond the zone's snap radius).
+  @author Fahim Farook
+-->
+<zones authority="KMDB" authority-name="Spiritual Administration of Muslims of Kyrgyzstan (KMDB)" authority-url="https://muftiyat.kg/" country="Kyrgyzstan">
+    <zone id="Bishkek" name="Bishkek" lat="42.8746" lng="74.5698"/>
+</zones>

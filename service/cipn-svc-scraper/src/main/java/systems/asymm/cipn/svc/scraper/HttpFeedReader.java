@@ -25,9 +25,12 @@ final class HttpFeedReader implements FeedReader {
     private static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(60);
     private static final String USER_AGENT = "canipraynow-scraper/1.0 (+https://canipraynow.com)";
 
+    // A cookie handler so a GET that establishes a session (e.g. muftiyat.kg) carries that cookie
+    // into the next GET on this reader instance.
     private final HttpClient client = HttpClient.newBuilder()
             .connectTimeout(CONNECT_TIMEOUT)
             .followRedirects(HttpClient.Redirect.NORMAL)
+            .cookieHandler(new java.net.CookieManager())
             .build();
 
     @Override
