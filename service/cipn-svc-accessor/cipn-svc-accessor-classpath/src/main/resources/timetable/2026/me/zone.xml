@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  vaktija.me (Montenegro) zone index, 2026. Zone id is the vaktija.me city-name parameter.
+  @author Fahim Farook
+-->
+<zones authority="Vaktija.me" authority-name="Islamska zajednica u Crnoj Gori (vaktija.me)" authority-url="https://vaktija.me/" country="Montenegro">
+    <zone id="Podgorica" name="Podgorica" lat="42.4304" lng="19.2594"/>
+</zones>
