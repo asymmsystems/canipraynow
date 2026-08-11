@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Asymm Systems (Pvt) Ltd. All rights reserved.
+  Rabita (Finland) zone index, 2026. One Helsinki/Espoo/Vantaa table. High-latitude: the live app
+  keeps computing (Rabita discloses no angle); the baked table is Rabita's own published times.
+  @author Fahim Farook
+-->
+<zones authority="Rabita" authority-name="Suomen Islamilainen Yhdyskunta (Rabita)" authority-url="https://www.rabita.fi/" country="Finland">
+    <zone id="Helsinki" name="Helsinki" lat="60.1699" lng="24.9384"/>
+</zones>
