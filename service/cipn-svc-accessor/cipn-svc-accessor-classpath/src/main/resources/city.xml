@@ -312,4 +312,5 @@
     <city name="Kyiv" country="Ukraine" cc="UA" slug="kyiv" country-slug="ukraine" lat="50.4501" lng="30.5234" tz="Europe/Kyiv" page="true"/>
     <city name="Lisbon" country="Portugal" cc="PT" slug="lisbon" country-slug="portugal" lat="38.7223" lng="-9.1393" tz="Europe/Lisbon" page="true"/>
     <city name="Podgorica" country="Montenegro" cc="ME" slug="podgorica" country-slug="montenegro" lat="42.4304" lng="19.2594" tz="Europe/Podgorica" page="true"/>
+    <city name="Helsinki" country="Finland" cc="FI" slug="helsinki" country-slug="finland" lat="60.1699" lng="24.9384" tz="Europe/Helsinki" page="true"/>
 </cities>
