@@ -311,4 +311,5 @@
     <city name="Budapest" country="Hungary" cc="HU" slug="budapest" country-slug="hungary" lat="47.4979" lng="19.0402" tz="Europe/Budapest" page="true"/>
     <city name="Kyiv" country="Ukraine" cc="UA" slug="kyiv" country-slug="ukraine" lat="50.4501" lng="30.5234" tz="Europe/Kyiv" page="true"/>
     <city name="Lisbon" country="Portugal" cc="PT" slug="lisbon" country-slug="portugal" lat="38.7223" lng="-9.1393" tz="Europe/Lisbon" page="true"/>
+    <city name="Podgorica" country="Montenegro" cc="ME" slug="podgorica" country-slug="montenegro" lat="42.4304" lng="19.2594" tz="Europe/Podgorica" page="true"/>
 </cities>

@@ -33,7 +33,9 @@ const AUTHORITY_TIMETABLES = {
     KZ: { folder: 'kz', name: 'DUMK', url: 'https://www.muftyat.kz/' },
     PT: { folder: 'pt', name: 'CIL', url: 'https://www.comunidadeislamica.pt/' },
     AL: { folder: 'al', name: 'KMSH', url: 'https://www.kmsh.al/' },
-    DZ: { folder: 'dz', name: 'MARW', url: 'https://www.marw.gov.dz/' }
+    DZ: { folder: 'dz', name: 'MARW', url: 'https://www.marw.gov.dz/' },
+    KG: { folder: 'kg', name: 'KMDB', url: 'https://muftiyat.kg/' },
+    ME: { folder: 'me', name: 'Vaktija.me', url: 'https://vaktija.me/' }
 };
 
 /** Sentinel method value: "serve the country's baked authority timetable". */
