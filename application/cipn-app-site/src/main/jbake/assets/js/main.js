@@ -28,7 +28,7 @@ import { hasAuthorityTimetable, authorityDayEvents, AUTHORITY_METHOD } from './t
 const state = {
     location: null,      // {name, lat, lng, tz, cc}
     method: null,        // derived from the location's baked country method (country.xml)
-    madhhab: 'hanafi',
+    madhhab: 'evidence',   // the documented default (DEFAULT_RULESET); resolveDefaults still coerces a stored/absent value
     clock24: false,
     makkah: false,
     prayerType: 'pureNafl',
