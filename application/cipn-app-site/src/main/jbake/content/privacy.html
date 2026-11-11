@@ -1,22 +1,22 @@
 title=Privacy
-description=Can I Pray Now stores your settings on your device only. No accounts, no analytics, no fingerprinting, no IP storage, and exactly what the advertising does.
+description=Can I Pray Now keeps no account and runs no first-party analytics; your settings stay on your device. This page explains the advertising, the cookies it uses, and how to limit them.
 type=page
 status=published
 ~~~~~~
 <span class="kicker">Privacy</span>
 <h1>Privacy</h1>
-<p>This site answers one question and keeps nothing about you while doing it.</p>
+<p>This site answers one question and keeps almost nothing about you while doing it. The one exception is the advertising, which is third-party code; this page explains exactly what it does.</p>
 <h2>What stays on your device</h2>
-<p>Your location, calculation method, madhhab, and display preferences are stored in your browser's local storage under <code>cipn.*</code> keys. They never leave your device. Clearing your browser data removes them.</p>
+<p>Your location, calculation method, ruling basis, and display preferences are stored in your browser's local storage under <code>cipn.*</code> keys. They never leave your device. Clearing your browser data removes them.</p>
 <h2>Location</h2>
 <p>If you use "Use my location", the coordinates are read by your browser and used locally to compute prayer windows - they are not sent to us. The fallback <code>/api/geo</code> endpoint returns the approximate city Cloudflare already derives from the connection; we do not store your IP address or any identifier.</p>
-<h2>We do not track you</h2>
-<p>We run no analytics of any kind: no analytics cookies, no fingerprinting, and no profile of you across sites or visits. We do not know who you are. If a sponsor card is shown it is a static, clearly labelled card served from this site; clicking it passes through a counter that records only that a click happened - no cookies, no user IDs.</p>
+<h2>What we collect</h2>
+<p>We run no first-party analytics: no account, no first-party analytics cookies, and we build no profile of you ourselves. We do not know who you are, and your location, ruling basis, and settings are never sent anywhere. If a sponsor card is shown it is a static, clearly labelled card served from this site; clicking it passes through a counter that records only that a click happened - no cookies, no user IDs. The one place cookies and third-party code enter is the advertising, described next.</p>
 <h2>Advertising</h2>
-<p>The advertising on this site is served by <strong>HalalSpark</strong>. Showing an ad means loading a script from their servers, and that script is the one third-party code on this site. We checked what it does before enabling it: it does <strong>not</strong> fingerprint you, and it does <strong>not</strong> read or write cookies from the page. It does use session storage and an intersection observer to tell whether the ad was actually seen, it makes requests to fetch the ad, and the server it loads from sets its own bot-protection cookie (<code>__cf_bm</code>) on its own domain.</p>
-<p>Your location, your madhhab, and your settings are never sent to it. Ads never block the page and never load before your answer, and they sit below the content so they can never cover the verdict. If you would rather it were not there at all, we understand; it is what keeps the tool free.</p>
+<p>The site carries advertising from the <strong>Muslim Ad Network</strong>, a halal-focused ad network. Showing an ad loads a script from the network's servers, which is the one piece of third-party code on the page. Like most ad networks, that script and the ads it serves can set their own cookies and measure whether an ad was actually seen, in order to deliver and count ads; your location, your ruling basis, and your settings are never shared with it. Ads load only after your answer is on screen, sit below the content so they can never cover the verdict, and a kill-switch lets us remove them instantly.</p>
+<p>To publish with the network we also verify the site using its Google (DoubleClick) tag. That tag sets a Google advertising cookie and confirms the site and its ad activity to the network. You can limit or clear these ad cookies through your browser's site-data controls or <a href="https://adssettings.google.com" rel="noopener">Google's Ads Settings</a>. If you would rather none of it were there, we understand; the advertising is what keeps the tool free.</p>
 <h2>Affiliate links</h2>
-<p>Some sponsor cards are affiliate links. As an Amazon Associate we earn from qualifying purchases: if you buy through one, we may receive a small commission at no extra cost to you. This changes nothing about what the site stores about you, which is still nothing.</p>
+<p>Some sponsor cards are affiliate links. As an Amazon Associate we earn from qualifying purchases: if you buy through one, we may receive a small commission at no extra cost to you. This changes nothing about what we store about you.</p>
 <h2>Offline</h2>
 <p>The app caches its own files so it works offline. All prayer-time computation happens in your browser.</p>
 <p><em>Operated by Asymm Systems (Pvt) Ltd, Sri Lanka. Questions: <a href="mailto:salam@canipraynow.com">salam@canipraynow.com</a>.</em></p>
