@@ -37,6 +37,24 @@
 <#assign canonicalUrl = config.site_host + "/" + pageUri>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<#-- Muslim Ads Network site verification: Google (DoubleClick DC-16361189) global tag, on every
+     page. Wrapped in noparse so FreeMarker emits the vendor snippet verbatim. -->
+<#noparse>
+<!--
+Start of global snippet: Please do not remove
+Place this snippet between the <head> and </head> tags on every page of your site.
+-->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=DC-16361189"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'DC-16361189');
+</script>
+<!-- End of global snippet: Please do not remove -->
+</#noparse>
 <title>${metaTitle}</title>
 <meta name="description" content="${metaDescription}">
 <link rel="canonical" href="${canonicalUrl}">
