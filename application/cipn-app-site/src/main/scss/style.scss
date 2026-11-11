@@ -862,6 +862,21 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
     &[hidden] { display: none; }
 }
 
+/* The network's required "Ads By ..." attribution line, rendered by us (see
+   ui/ads.js) as a plain muted label beneath the unit. */
+.ad-attribution {
+    text-align: center;
+    font-size: 0.72rem;
+    line-height: 1.4;
+
+    a {
+        color: var(--text-muted);
+        text-decoration: none;
+
+        &:hover { text-decoration: underline; }
+    }
+}
+
 /* ---------------------------------------------------------------- settings */
 
 .settings-btn {
