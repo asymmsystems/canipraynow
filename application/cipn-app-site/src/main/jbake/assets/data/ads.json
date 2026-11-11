@@ -1,6 +1,14 @@
 {
   "enabled": true,
-  "provider": "HalalSpark",
+  "provider": "Muslim Ad Network",
   "delayMs": 3000,
-  "src": "https://ads.halalspark.co.uk/get-ad-script-banner?placement_id=3c26e888-cba5-4cb4-90c5-d9785ec59d6d&domain=https://canipraynow.com&_v=3.0"
+  "src": "https://cdn77.aj2742.top/dcfc6ab7.js",
+  "ins": {
+    "class": "bbbac5e5",
+    "dataKey": "fabe513c8fa100eb358177977a8b5605"
+  },
+  "attribution": {
+    "text": "Ads By Muslim Ad Network",
+    "url": "https://muslimadnetwork.com/?pub=canipraynow.com"
+  }
 }

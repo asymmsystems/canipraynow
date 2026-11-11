@@ -37,11 +37,33 @@ export async function renderAd(host) {
     const delay = Number(cfg.delayMs) > 0 ? Number(cfg.delayMs) : 3000;
 
     const inject = () => {
+        host.hidden = false;
+        // Some networks fill a placeholder element the loader finds by key (e.g. Muslim Ad
+        // Network's <ins data-key>), rather than writing into the script's own parent. Create it
+        // BEFORE the script so the loader sees it on first scan.
+        if (cfg.ins && cfg.ins.dataKey) {
+            const ins = document.createElement('ins');
+            if (cfg.ins.class) ins.className = cfg.ins.class;
+            ins.setAttribute('data-key', cfg.ins.dataKey);
+            host.appendChild(ins);
+        }
         const tag = document.createElement('script');
         tag.src = cfg.src;
         tag.async = true;
-        host.hidden = false;
         host.appendChild(tag);
+        // Optional attribution line the network requires beneath the unit. Rendered by us (not the
+        // tag) so it is a plain labelled link, marked rel="sponsored" and opened in a new tab.
+        if (cfg.attribution && cfg.attribution.url && cfg.attribution.text) {
+            const p = document.createElement('p');
+            p.className = 'ad-attribution';
+            const a = document.createElement('a');
+            a.href = cfg.attribution.url;
+            a.textContent = cfg.attribution.text;
+            a.rel = 'noopener nofollow sponsored';
+            a.target = '_blank';
+            p.appendChild(a);
+            host.appendChild(p);
+        }
     };
 
     // Hold the tag back past the point the answer is on screen, then wait for an
