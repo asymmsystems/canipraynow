@@ -1301,11 +1301,7 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
     min-height: calc(100dvh - 5rem);   /* less the nav above it */
     display: flex;
     flex-direction: column;
-    /* "safe": centre a short answer, but fall back to top-alignment when the content is tall
-       enough that centring would overflow it down into the absolutely-pinned scroll cue below. */
-    justify-content: safe center;
-    position: relative;
-    padding-bottom: calc(var(--space-2xl) + 3rem);   /* clearance for the cue */
+    padding-bottom: var(--space-xl);
 }
 
 .q-hero .q-lead { margin-top: var(--space-lg); }
@@ -1313,10 +1309,9 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
 /* Down-chevron affordance: a link (so it also works as a jump), pinned to the
    hero's foot, gently bouncing. prefers-reduced-motion stills it globally. */
 .scroll-cue {
-    position: absolute;
-    left: 50%;
-    bottom: var(--space-xl);
-    transform: translateX(-50%);
+    margin-top: auto;            /* in normal flow, pushed to the hero foot - never under the text */
+    align-self: center;
+    padding-top: var(--space-xl);
     display: inline-flex;
     flex-direction: column;
     align-items: center;
