@@ -8,7 +8,7 @@
 <head>
 <#include "/partial/header.ftl">
 </head>
-<body class="state-neutral">
+<body class="state-neutral" data-router>
 <h1 class="visually-hidden">Can I pray now? Live prohibited prayer times, and today&rsquo;s salah (salat, namaz) times, for your location</h1>
 <#include "/partial/app.ftl">
 ${content.body}

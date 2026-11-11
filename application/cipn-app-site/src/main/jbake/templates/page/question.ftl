@@ -57,11 +57,13 @@ ${parts[0]}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
 </a>
 </article>
-<#include "/partial/app.ftl">
+<#-- Citations sit directly under the written answer (ADR-0009): the evidence stays with the
+     answer it supports, and the interactive live app is the last section. -->
 <#if parts?size gt 1>
 <section class="page-wrap q-sources">
 <h2>Sources</h2>${parts[1]}
 </section>
 </#if>
+<#include "/partial/app.ftl">
 </body>
 </html>
