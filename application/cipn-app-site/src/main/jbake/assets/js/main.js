@@ -150,7 +150,15 @@ async function boot() {
         renderNeutral();
         const detected = await autoLocate();
         if (detected) {
-            route(detected);   // navigates to the nearest city page, or adopts + computes off-grid
+            // Only the home page auto-routes to a city page (ADR-0016). Any other page that embeds
+            // the app keeps the reader on it: adopt inline (transient, not saved, so the home page
+            // still routes next visit) and compute.
+            if (document.body.hasAttribute('data-router')) {
+                route(detected);
+            } else {
+                state.location = detected;
+                await recompute();
+            }
             return;
         }
         initLocationSlot(document.getElementById('location-slot-canvas'), pick, { openNow: true });
