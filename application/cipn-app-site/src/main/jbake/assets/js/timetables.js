@@ -14,6 +14,8 @@
  * @author Fahim Farook
  */
 
+import { wallClockInstant } from './utils.js';
+
 /**
  * Countries with a baked authority timetable, by ISO2. Small synchronous registry used for the
  * method dropdown (it offers "{name} published timetable" as that country's default) and to know
@@ -79,13 +81,20 @@ function locMatchesPage(loc) {
  * (caller then computes).
  *
  * @param {Date} date  any instant of the civil day (used for month/day and the y/m/d base)
- * @param {{lat:number, lng:number, cc:string}} loc
+ * @param {{lat:number, lng:number, cc:string, tz:string}} loc  tz is the city's IANA zone (ADR-0019)
  * @returns {{source:string, sourceUrl:string, zone:string,
  *   events:{fajr:Date,sunrise:Date,dhuhr:Date,asr:Date,maghrib:Date,isha:Date}}|null}
  */
 export function authorityDayEvents(date, loc) {
     const section = document.querySelector('.authority-timetable');
     if (!section || section.dataset.computed === 'true' || !locMatchesPage(loc)) return null;
+
+    // The baked table belongs to its build year, and its times are wall-clock in the city's zone.
+    // Without a city zone, or when the table's year is not the civil year being asked for (a stale
+    // next-year page), fall back to the computed path rather than serving wrong or last-year times
+    // as "today" (ADR-0019).
+    const tableYear = Number(section.dataset.year);
+    if (!loc.tz || (tableYear && tableYear !== date.getFullYear())) return null;
 
     const key = `${date.getMonth() + 1}-${date.getDate()}`;
     const row = section.querySelector(`tr[data-md="${key}"]`);
@@ -97,8 +106,9 @@ export function authorityDayEvents(date, loc) {
     const mins = [1, 2, 3, 4, 5, 6].map((i) => minutesOf(cells[i].textContent));
     if (mins.some((m) => !Number.isFinite(m))) return null;
 
-    // Build Dates in the civil day, from minutes-of-local-midnight (matches the computed path).
-    const at = (m) => new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, m, 0);
+    // Anchor each published wall-clock time in the CITY's zone, not the device's, so a visitor on
+    // any device reads the authority's real local time and the verdict uses the right instant (ADR-0019).
+    const at = (m) => wallClockInstant(date.getFullYear(), date.getMonth(), date.getDate(), m, loc.tz);
     const [fajr, sunrise, dhuhr, asr, maghrib, isha] = mins;
     return {
         source: section.dataset.authority,

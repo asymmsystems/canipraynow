@@ -271,7 +271,7 @@ async function recompute() {
  */
 async function dayEvents(date, coords) {
     if (state.method === AUTHORITY_METHOD && hasAuthorityTimetable(state.location.cc)) {
-        const auth = await authorityDayEvents(date, { ...coords, cc: state.location.cc });
+        const auth = await authorityDayEvents(date, { ...coords, cc: state.location.cc, tz: state.location.tz });
         if (auth) {
             const result = assembleAuthorityEvents(auth.events, date, coords.lng);
             if (result.valid) return { result, source: auth };

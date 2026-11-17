@@ -8,7 +8,7 @@
   baked table (R1, ADR-0015) via data-md="month-day", so no timetable JSON is fetched. The
   section data-* attributes carry the authority attribution the app shows.
 -->
-<section class="authority-timetable"<#if computed??> data-computed="true"</#if> data-authority="${authority}" data-authority-code="${authorityCode}" data-authority-url="${url}" data-zone="${zone}">
+<section class="authority-timetable"<#if computed??> data-computed="true"</#if> data-authority="${authority}" data-authority-code="${authorityCode}" data-authority-url="${url}" data-zone="${zone}" data-year="${year?c}">
 <#if computed??>
 <h2>${zone} prayer times for ${year?c}</h2>
 <p class="timetable-note">Computed with ${authority}, tabulated for the whole year. The live &ldquo;now&rdquo; is calculated on your device from your exact location; this baked table lets search engines and readers without JavaScript see every day. See the <a href="${url}">methodology</a>.</p>
