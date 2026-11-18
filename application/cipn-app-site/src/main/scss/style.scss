@@ -286,6 +286,11 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
 
     .sidebar {
         flex: 0 0 var(--layout-sidebar-split);
+        /* A flex item's automatic minimum width is its content's min-content width, which
+           outranks the flex-basis above: one child that cannot shrink (a fixed-size ad unit)
+           would widen the pane past its share and the document past the viewport. Zero pins
+           the pane to the split, whatever it holds. */
+        min-width: 0;
         max-width: none;
         margin: 0;
         padding: var(--space-2xl) var(--space-xl);
@@ -839,32 +844,52 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
     span { opacity: 0.75; }
 }
 
-/* No reserved height: this slot is the LAST element in the sidebar, so a
-   late-loading unit pushes nothing and cannot shift layout (spec §9 CLS budget
-   is satisfied by position, not by reservation). Reserving a height here only
-   produced an empty box on the days the unit was shorter than the reserve.
-   If the slot is ever moved above other content, reserve a height again. */
+/* The slot is as wide as the sidebar and as tall as the unit LOOKS. The network
+   serves a fixed-size unit (a 728x90 leaderboard) that knows nothing of the
+   slot's width, so ui/ads.js lays it out at its natural size in .ad-unit, scales
+   it down to the slot, and gives .ad-frame the scaled height. That height is
+   reserved from the unit's configured size before the tag is requested, so the
+   creative arrives into a box that is already there (spec §9: reserved height,
+   zero CLS). */
 .ad-slot {
     display: grid;
-    place-items: center;
+    /* One track that takes the slot's width and may shrink to nothing. The
+       implicit `auto` track sizes to its widest item instead, so a wide unit
+       would set the slot's content width rather than the other way round. */
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2xs);
+    /* Padded so the unit sits clear of the rounded corners: flush against the
+       border, the radius would cut the creative's own corners off. */
+    padding: var(--space-xs);
     border-radius: var(--radius-lg);
     /* Solid, matching the sponsor card: a dashed frame reads as an empty
        placeholder now that the slot is actually filled. */
     border: 1px solid var(--border-subtle);
     overflow: hidden;
 
-    /* The ad tag hardcodes `margin: 10px auto` inline on its own container.
-       The slot already positions the unit (grid centring replaces the auto
-       margins), so drop it; beating an inline style needs !important. Direct
-       children only, so the tag's internal spacing is left alone. */
-    > * { margin: 0 !important; }
-
     &[hidden] { display: none; }
+}
+
+/* Slot-wide box that carries the scaled height: a transform does not change
+   the unit's layout box, so without it the slot would stay as tall as the
+   unscaled unit. Clips only a unit that has not been fitted yet. */
+.ad-frame { overflow: hidden; }
+
+/* The unit at its natural size, whatever the slot's width: max-content keeps
+   the network's fixed-size markup from being squeezed, and flow-root keeps any
+   margin the tag sets on its own container inside the measured box. Scaled
+   from its top-left corner; centred when the slot is the wider of the two. */
+.ad-unit {
+    display: flow-root;
+    width: max-content;
+    margin: 0 auto;
+    transform-origin: 0 0;
 }
 
 /* The network's required "Ads By ..." attribution line, rendered by us (see
    ui/ads.js) as a plain muted label beneath the unit. */
 .ad-attribution {
+    margin: 0;
     text-align: center;
     font-size: 0.72rem;
     line-height: 1.4;

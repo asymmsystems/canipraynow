@@ -80,9 +80,10 @@
         <section id="sponsor" hidden aria-label="Sponsored"></section>
         <#-- Ad slot (spec §9 Phase B): below the fold on mobile, below the
              prayer list on desktop - never above or inside the Status Canvas.
-             Deliberately the LAST element in the sidebar: with nothing beneath
-             it, a late-loading unit shifts no layout and needs no reserved
-             height. Keep it last if the sidebar is ever reordered. -->
+             Deliberately the LAST element in the sidebar, and ui/ads.js lays
+             it out at the unit's scaled size before the tag is requested, so
+             a late-loading unit shifts no layout. Keep it last if the sidebar
+             is ever reordered. -->
         <div class="ad-slot" id="ad-slot-1" data-ad-slot hidden aria-label="Advertisement"></div>
     </aside>
 </div>
