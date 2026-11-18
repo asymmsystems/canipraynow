@@ -36,8 +36,8 @@ const ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
  */
 
 /**
- * Today's prayers as a message: the city, the date, the source line when the times are an
- * authority's own published ones, the six rows exactly as the list shows them, then the page URL.
+ * Today's prayers as a message: the city, the date, the source line (the authority's name, or
+ * that the times are computed), the six rows exactly as the list shows them, then the page URL.
  *
  * @param {import('../engine/windows.js').DayEvents} events
  * @param {Date} now
@@ -47,10 +47,13 @@ const ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
  */
 export function timesShare(events, now, ctx, url) {
     const title = t('share.HEADING', { city: ctx.city });
+    // Every message says where its times come from, as the list does: the authority and its zone
+    // when the rows are the authority's own, and otherwise that they are computed (a city with no
+    // published table, or a method the visitor chose in the settings).
     const head = [title, fmtDate(now, ctx.tz)];
-    if (ctx.timesSource) {
-        head.push(`${t('sidebar.SOURCE', { authority: ctx.timesSource.source })} ${ctx.timesSource.zone}`);
-    }
+    head.push(ctx.timesSource
+        ? `${t('sidebar.SOURCE', { authority: ctx.timesSource.source })} ${ctx.timesSource.zone}`
+        : t('share.COMPUTED', { city: ctx.city }));
     const rows = ROWS.map((key) => `${t('prayer.' + key)} ${fmtTime(events[key], ctx.tz, ctx.clock24)}`);
     return { title, text: [head.join('\n'), rows.join('\n'), url].join('\n\n'), url };
 }
@@ -103,20 +106,27 @@ export function initShare(host, opts) {
         show(false);
     }
 
+    let sharing = false;   // a share sheet is open: the browser allows one at a time
+
     btn.addEventListener('click', async () => {
+        if (sharing) return;
         if (!options.hidden) {
             show(false);
             return;
         }
         if (hasSheet) {
             const { title, text } = opts.content();
+            sharing = true;
             try {
                 // The URL travels inside the text, not as a separate url field, so every share
                 // target receives the one whole message however it combines the fields.
                 await navigator.share({ title, text });
                 return;
             } catch (e) {
-                if (e && e.name === 'AbortError') return;   // the sheet was dismissed: not a failure
+                // The sheet was dismissed, or one is already open: neither is a failure.
+                if (e && (e.name === 'AbortError' || e.name === 'InvalidStateError')) return;
+            } finally {
+                sharing = false;
             }
         }
         show(true);

@@ -107,6 +107,7 @@
   "sidebar.SOURCE_COMPUTED": "Times computed astronomically for your location.",
   "share.BUTTON": "Share",
   "share.HEADING": "Prayer times in {city}",
+  "share.COMPUTED": "Times computed astronomically for {city}.",
   "share.WHATSAPP": "WhatsApp",
   "share.COPY": "Copy link",
   "share.COPIED": "Link copied.",
