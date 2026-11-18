@@ -20,7 +20,7 @@
 
 // Bump on any release that must invalidate old caches. The activate handler
 // deletes every cache that is not this version.
-const VERSION = 'cipn-v23';
+const VERSION = 'cipn-v24';
 
 const SHELL = [
     '/',
@@ -38,6 +38,7 @@ const SHELL = [
     '/js/ui/chips.js',
     '/js/ui/ruler.js',
     '/js/ui/prayers.js',
+    '/js/ui/share.js',
     '/js/ui/settings.js',
     '/js/ui/sponsor.js',
     '/js/strings/en.json',

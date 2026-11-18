@@ -808,6 +808,43 @@ body.state-degraded   { --state-ring: var(--signal-muted); }
     font-variant-numeric: tabular-nums;
 }
 
+/* ---------------------------------------------------------------- share */
+
+/* The prayer list and the share control under it are one widget, so they sit
+   closer together than two separate sidebar widgets do. */
+.prayers-widget {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+/* The share control (ui/share.js) uses the chips' own pill, so it reads as a
+   control in the same language as the rest of the page. The two choices of
+   the no-share-sheet fallback open inline beside it. */
+.share {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+
+    &:empty { display: none; }
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+
+    svg { width: 1em; height: 1em; flex: 0 0 auto; }
+}
+
+.share-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+
+    &[hidden] { display: none; }
+}
+
 /* ---------------------------------------------------------------- sponsor + ad slot */
 
 .sponsor-card {

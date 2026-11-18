@@ -19,6 +19,7 @@ import { renderStatus, renderDegraded, renderNeutral, renderCountdown } from './
 import { renderChips } from './ui/chips.js';
 import { renderRuler, updateCursor, rulerSummary, rulerA11yList, bindRulerTooltip } from './ui/ruler.js';
 import { renderPrayers } from './ui/prayers.js';
+import { initShare, timesShare, pageShare } from './ui/share.js';
 import { renderSponsor } from './ui/sponsor.js';
 import { renderAd } from './ui/ads.js';
 import { initSettings, syncSettings, initLocationSlot, autoLocate } from './ui/settings.js';
@@ -138,6 +139,7 @@ async function boot() {
     const pick = (loc) => route(loc);
     initLocationSlot(document.getElementById('location-slot-canvas'), pick);
     initLocationSlot(document.getElementById('location-slot-sidebar'), pick);
+    initShare(document.getElementById('share'), { content: shareContent, notify: toast });
     renderSponsor(document.getElementById('sponsor'));
     renderAd(document.getElementById('ad-slot-1'));
     registerSw();
@@ -390,6 +392,28 @@ function renderFooter() {
     el.textContent = isVerified(ruleSet)
         ? t('footer.VERIFIED', { scholar: ruleSet.verified_by, date: ruleSet.verified_at, version: ruleSet.version })
         : t('footer.PROVENANCE', { version: ruleSet.version });
+}
+
+/**
+ * What the share control sends (ui/share.js), read from live state at the moment of the click.
+ * On a city page showing that city's times it is the prayer list as it is on screen. Anywhere
+ * else (the home page, a question page, a degraded day, or a location that is not this page's
+ * city) it is the page itself, so a message never carries one place's times under another
+ * page's address. The address is the canonical URL, the clean form the page declares.
+ *
+ * @returns {import('./ui/share.js').ShareContent}
+ */
+function shareContent() {
+    const canonical = document.querySelector('link[rel="canonical"]');
+    const url = canonical ? canonical.href : window.location.href;
+    const loc = state.location;
+    if (!loc || !loc.preset || !state.today) return pageShare(document.title, url);
+    return timesShare(state.today, new Date(), {
+        city: loc.name,
+        tz: loc.tz,
+        clock24: state.clock24,
+        timesSource: state.timesSource
+    }, url);
 }
 
 /** The city drives every number on screen, so it is named in every slot. */

@@ -69,7 +69,16 @@
         </figure>
 
         <@locationSlot id="location-slot-sidebar" extra="location-slot-sidebar"/>
-        <section id="prayers" aria-label="Today's prayers"></section>
+        <#-- The prayer list and its share control are one widget: the control sits
+             directly under the list's source line and shares that list (ui/share.js).
+             It is a sibling of #prayers, not a child: ui/prayers.js re-renders
+             #prayers every minute, which would take the control's focus and open
+             state with it. Sharing belongs here with the times - nothing is added
+             to the Status Canvas or the Sun Ruler. -->
+        <div class="prayers-widget">
+            <section id="prayers" aria-label="Today's prayers"></section>
+            <div class="share" id="share"></div>
+        </div>
         <#-- The ruling basis and site nav sit directly under the prayer list,
              above the commercial slots: the provenance of the answer belongs
              next to the answer, not below an ad. -->

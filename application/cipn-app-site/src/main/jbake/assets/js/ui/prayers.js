@@ -10,7 +10,8 @@
 import { t } from '../strings.js';
 import { fmtTime, fmtRelative, esc } from '../utils.js';
 
-const ROWS = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
+/** The list's six rows, in order. Exported so a shared message (ui/share.js) lists exactly these. */
+export const ROWS = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
 /**
  * @param {HTMLElement} host

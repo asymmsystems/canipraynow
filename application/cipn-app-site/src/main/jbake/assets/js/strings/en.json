@@ -105,5 +105,11 @@
   "sidebar.NEXT_IN": "in",
   "sidebar.SOURCE": "Times: {authority} -",
   "sidebar.SOURCE_COMPUTED": "Times computed astronomically for your location.",
+  "share.BUTTON": "Share",
+  "share.HEADING": "Prayer times in {city}",
+  "share.WHATSAPP": "WhatsApp",
+  "share.COPY": "Copy link",
+  "share.COPIED": "Link copied.",
+  "share.COPY_FAILED": "Could not copy the link.",
   "device.CLOCK_NOTE": "Times follow your device clock."
 }

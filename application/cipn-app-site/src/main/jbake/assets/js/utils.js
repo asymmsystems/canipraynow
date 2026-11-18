@@ -22,6 +22,16 @@ export function fmtTime(date, tz, clock24) {
     }
 }
 
+/** Format a Date as the civil date in a timezone, weekday first: "Wednesday, 18 November 2026". */
+export function fmtDate(date, tz) {
+    const parts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+    try {
+        return new Intl.DateTimeFormat('en-GB', { ...parts, timeZone: tz }).format(date);
+    } catch (e) {
+        return new Intl.DateTimeFormat('en-GB', parts).format(date);
+    }
+}
+
 /**
  * The absolute instant at which the clock in IANA zone `tz` reads `minutes` past local midnight on
  * the civil date y-mo-d (mo is 0-based, matching Date). Published authority times are wall-clock in

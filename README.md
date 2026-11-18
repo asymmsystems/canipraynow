@@ -101,7 +101,7 @@ application/cipn-app-site/src/main/
 │  ├─ templates/       # page/app|page|question|city|cities.ftl, partial/header|app.ftl, sitemap
 │  └─ assets/
 │     ├─ js/engine/    # pure fiqh engine: windows.js, verdict.js (zero DOM)
-│     ├─ js/ui/        # status, chips, ruler (the Sun Ruler), prayers, settings, sponsor
+│     ├─ js/ui/        # status, chips, ruler (the Sun Ruler), prayers, share, settings, sponsor
 │     ├─ js/           # main.js boot+loop, engine.js (WASM), astronomy.js, timetables.js, location, storage, strings
 │     ├─ data/         # rule_sets/{evidence,hanafi,shafii}.json, ads.json, sponsors.json  (no cities/method-defaults/timetables JSON)
 │     ├─ wasm/         # prayer-times.wasm + runtime + calculation-method.xml  (staged by `make wasm`, git-ignored)
