@@ -62,8 +62,18 @@ Place this snippet between the <head> and </head> tags on every page of your sit
 <meta property="og:description" content="${metaDescription}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${canonicalUrl}">
-<meta property="og:image" content="${config.site_host}/images/og-sun-ruler.svg">
+<#-- Link-preview image. WhatsApp, Facebook and X do not render an SVG preview, so the declared
+     image is a PNG: a 1200x630 raster of images/og-sun-ruler.svg (the design source), committed
+     as a static asset. The build has no rasterisation step; rasterise again by hand if the SVG
+     changes. -->
+<#assign ogImage = config.site_host + "/images/og-sun-ruler.png">
+<meta property="og:image" content="${ogImage}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="Can I pray now? YES. A timeline of the day with the restricted prayer times marked.">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${ogImage}">
 <meta name="theme-color" content="#064e3b">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
